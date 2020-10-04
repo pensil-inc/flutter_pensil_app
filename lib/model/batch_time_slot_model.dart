@@ -6,8 +6,10 @@ class BatchTimeSlotModel extends Equatable{
   String endTime;
   int index;
   int dayOfWeek;
+  bool isValidStartEntry;
+  bool isValidEndEntry;
 
-  BatchTimeSlotModel({this.day, this.startTime, this.endTime, this.index,this.dayOfWeek});
+  BatchTimeSlotModel({this.day, this.startTime, this.endTime, this.index,this.dayOfWeek,this.isValidStartEntry = true, this.isValidEndEntry = true});
   factory BatchTimeSlotModel.initial(){
     return BatchTimeSlotModel(
       index:0,

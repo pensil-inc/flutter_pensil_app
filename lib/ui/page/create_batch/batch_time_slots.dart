@@ -73,7 +73,8 @@ class BatchTimeSlotWidget extends StatelessWidget {
         )),
         SizedBox(width: 5),
         Expanded(
-          child: _day(context, model.startTime, onPressed: () async {
+          child: _day(context, model.startTime, isStartTime: true,
+              onPressed: () async {
             final time = await getTime(context);
             if (time != null) {
               model.startTime = time;
@@ -84,7 +85,8 @@ class BatchTimeSlotWidget extends StatelessWidget {
         ),
         SizedBox(width: 5),
         Expanded(
-          child: _day(context, model.endTime, onPressed: () async {
+          child: _day(context, model.endTime, isStartTime: false,
+              onPressed: () async {
             final time = await getTime(context);
             if (time != null) {
               model.endTime = time;
@@ -93,23 +95,26 @@ class BatchTimeSlotWidget extends StatelessWidget {
             }
           }),
         ),
-        SizedBox(height: 40,)
+        SizedBox(
+          height: 40,
+        )
       ],
     );
   }
 
   Widget _day(BuildContext context, String text,
-      {Function onPressed, Widget child}) {
+      {Function onPressed, Widget child, bool isStartTime}) {
     final theme = Theme.of(context);
     return Container(
       height: 50,
       padding: EdgeInsets.symmetric(horizontal: 10),
-      decoration: AppTheme.outline(context),
+      decoration: decoration(context, isStartTime),
       child: child != null
           ? child
           : Row(
               children: <Widget>[
                 Text(text),
+                Spacer(),
                 SizedBox(
                   height: 50,
                   child: Stack(
@@ -130,18 +135,33 @@ class BatchTimeSlotWidget extends StatelessWidget {
                           ))
                     ],
                   ),
-                )
+                ),
+                SizedBox(width: 4)
               ],
             ),
     ).ripple(onPressed);
   }
 
+  Decoration decoration(context, isStartTime) {
+    if (isStartTime == null) {
+      return AppTheme.outline(context);
+    } else if (isStartTime) {
+      return model.isValidStartEntry
+          ? AppTheme.outline(context)
+          : AppTheme.outlineError(context);
+    } else {
+      return model.isValidEndEntry
+          ? AppTheme.outline(context)
+          : AppTheme.outlineError(context);
+    }
+  }
+
   Future<String> getTime(BuildContext context) async {
     final time =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
-        if(time == null){
-          return null;
-        }
+    if (time == null) {
+      return null;
+    }
     TimeOfDay selectedTime = time;
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
     String formattedTime = localizations.formatTimeOfDay(selectedTime,

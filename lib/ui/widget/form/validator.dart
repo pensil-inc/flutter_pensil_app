@@ -98,7 +98,7 @@ class PValidator {
     };
     Function(String) canNotEmptyTextValidator = (String value) {
       if (value.isEmpty) {
-        return "Invalid fieldEmptyText";
+        return "Field can not be empty";
       }
       // else if (value.length < 8) {
       //   return "Invalid passwordLessThan";

@@ -5,7 +5,7 @@ class BatchRepository {
   final ApiGateway gatway;
 
   BatchRepository(this.gatway);
-  Future<dynamic> createBatch(BatchModel model){
+  Future<bool> createBatch(BatchModel model){
     return gatway.createBatch(model); 
   }
 }

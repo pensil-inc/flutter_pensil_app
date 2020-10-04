@@ -16,7 +16,7 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future createBatch(BatchModel model)async {
+  Future<bool> createBatch(BatchModel model)async {
     try{
        final data = model.toJson();
        print(data);
@@ -24,10 +24,7 @@ class ApiGatewayImpl implements ApiGateway {
       final header = {"Authorization": "Bearer " + token};
       var response = await _dioClient.post(Constants.createBatch,
           data: data, options: Options(headers: header));
-     
-
-      final json = _dioClient.getJsonBody(response);
-     
+     return true;
     }catch(error){
       throw error;
     }

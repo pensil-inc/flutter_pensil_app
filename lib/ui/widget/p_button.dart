@@ -27,7 +27,7 @@ class PFlatButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            color: !isColored ? null : Theme.of(context).cardColor,
+            color: !isColored ? null : Theme.of(context).primaryColor,
             splashColor: Theme.of(context).colorScheme.background,
             textColor: PColors.onPrimary,
             onPressed: loading ? null : onPressed,
@@ -47,7 +47,7 @@ class PFlatButton extends StatelessWidget {
         },
         child: Text(
           label,
-          style: Theme.of(context).textTheme.button
+          style: Theme.of(context).textTheme.button.copyWith(color: Colors.white)
         ),
       ),
     );

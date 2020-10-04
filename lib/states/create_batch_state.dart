@@ -23,7 +23,9 @@ class CreateBatchStates extends ChangeNotifier {
 
   /// selected student's contact list from availavle students
   List<String> selectedStudentsListTemp;
-  List<BatchTimeSlotModel> timeSlots;
+  List<BatchTimeSlotModel> timeSlots = [
+    BatchTimeSlotModel.initial()
+  ];
 
   /// Total available previous students list from api
   List<StudentModel> studentsList = StudentModel.dummyList();
@@ -38,7 +40,7 @@ class CreateBatchStates extends ChangeNotifier {
   }
   void setTimeSlots(BatchTimeSlotModel model) {
     if (timeSlots == null) timeSlots = List<BatchTimeSlotModel>();
-    model.index = timeSlots.length + 1;
+    model.index = timeSlots.length;
     timeSlots.add(model);
     notifyListeners();
   }
@@ -63,6 +65,7 @@ class CreateBatchStates extends ChangeNotifier {
   void updateTimeSlots(BatchTimeSlotModel model) {
     var data = timeSlots.firstWhere((e) => e.index == e.index);
     data = model;
+    checkSlotsModel(model);
     notifyListeners();
   }
 
@@ -78,7 +81,7 @@ class CreateBatchStates extends ChangeNotifier {
     contactList.remove(contact);
     notifyListeners();
   }
-
+  /// Add stuent contact no. from available list
   set setStudentsFromList(List<String> contacts) {
     if (selectedStudentsList == null) {
       selectedStudentsList = [];
@@ -93,21 +96,44 @@ class CreateBatchStates extends ChangeNotifier {
     });
     notifyListeners();
   }
-
-  Future<Null> createBatch() async {
+  bool checkSlotsVAlidations(){
+    bool allGood = true;
+    timeSlots.forEach((model) {
+      checkSlotsModel(model);
+    });
+    notifyListeners();
+    return allGood;
+  }
+  void checkSlotsModel(BatchTimeSlotModel model){
+    if(model.startTime =="Start time"){
+        model.isValidStartEntry = false;
+      }else{
+        model.isValidStartEntry = true;
+      }
+      if(model.endTime =="End time"){
+        model.isValidEndEntry = false;
+      }else{
+        model.isValidEndEntry = true;
+      }
+  }
+  /// Create batch by calling api
+  Future<bool> createBatch() async {
     try {
-      final getit = GetIt.instance;
-      final repo = getit.get<BatchRepository>();
+      List<String> contacts = new List.from(contactList ?? List<String>())..addAll(selectedStudentsListTemp ?? List<String>());
       final model = BatchModel(
           name: batchName,
           description: description,
           classes: timeSlots,
           subject: selectedSubjects,
-          students: [...contactList, ...selectedStudentsListTemp]);
+          students:contacts);
           // print(model.toJson());
-      await repo.createBatch(model);
+      final getit = GetIt.instance;
+      final repo = getit.get<BatchRepository>();
+     return await repo.createBatch(model);
+
     } catch (error, strackTrace){
       log("createBatch", error:error, stackTrace:strackTrace);
+      return false;
     }
   }
 }
