@@ -10,12 +10,16 @@ class PTextField extends StatelessWidget {
       this.label,
       @required this.type,
       this.maxLines = 1,
-      this.hintText = ''})
+      this.hintText = '',
+      this.height = 70,
+      this.padding = const EdgeInsets.all(0)})
       : super(key: key);
   final TextEditingController controller;
   final String label, hintText;
   final Type type;
   final int maxLines;
+  final double height;
+  final EdgeInsetsGeometry padding;
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,7 +27,8 @@ class PTextField extends StatelessWidget {
         Text(label ?? "", style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, fontSize: 16)),
         SizedBox(height: 5),
         Container(
-          height: 70,
+          height: height,
+
           child: TextFormField(
             autocorrect: false,
             obscureText: (type == Type.password || type == Type.confirmPassword)
