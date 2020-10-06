@@ -78,7 +78,7 @@ class PValidator {
 
     Function(String) passwordValidators = (String value) {
       if (value.isEmpty) {
-        return "Invalid fieldEmptyText";
+        return "Password field is required";
       }
       // else if (value.length < 8) {
       //   return "Invalid passwordLessThan";

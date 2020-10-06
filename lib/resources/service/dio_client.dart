@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -83,8 +84,13 @@ class DioClient {
 
   Exception _handleError(DioError e) {
     final apiResponse = getJsonBody(e.response);
-    final String message = apiResponse["message"];
-
+    String message ;
+    if(e.response.statusCode != 422){
+      message = apiResponse["message"];
+    }else{
+      message = json.encode(apiResponse["errors"]);
+    }
+    
     switch (e.response.statusCode) {
       case 500:
         return ApiInternalServerException();

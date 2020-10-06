@@ -15,7 +15,7 @@ class AnnouncementState extends ChangeNotifier{
     try{
       assert(title != null);
       var model = CreateAnnouncementModel(
-        title:title,
+        // title:title,
         batches: [""],
         description: description,
         isForAll: isForAll

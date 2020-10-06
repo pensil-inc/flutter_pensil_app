@@ -80,3 +80,8 @@ class InvalidInputException extends HttpException {
           "Invalid Input: $message",
         );
 }
+
+class ApiUnauthorizedException extends HttpException {
+  ApiUnauthorizedException(String message) : super(message);
+  
+}

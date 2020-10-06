@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class PColors {
   PColors._();
 
-  static const Color disableButtonColor = Color(0XFFfefefe);
+  static const Color disableButtonColor = Color(0XFF848d95);
   static const Color primaryDarkColor = Color(0XFFfefefe);
   static const Color primaryExtraDarkColor = Color(0XFFfefefe);
   static const Color onPrimary = Color(0XFFffffff);
   static const Color appBarColor = Color(0XFFfafafa);
-  // static const Color white = Color(0XFFffffff);
+  static const Color secondary = Color(0XFF0545FF);
   
   static const Color primary = Color(0XFF0084ff);
   static const Color primaryLight = Color(0xFFfBCDFFF);

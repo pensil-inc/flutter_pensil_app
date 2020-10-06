@@ -7,6 +7,7 @@ class PFlatButton extends StatelessWidget {
       this.onPressed,
       this.label,
       this.isLoading,
+      this.color,
       this.isWraped = false,
       this.isColored = true})
       : super(key: key);
@@ -15,6 +16,7 @@ class PFlatButton extends StatelessWidget {
   final ValueNotifier<bool> isLoading;
   final bool isWraped;
   final bool isColored;
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +29,7 @@ class PFlatButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            color: !isColored ? null : Theme.of(context).primaryColor,
+            color: !isColored ? null : color ?? Theme.of(context).primaryColor,
             splashColor: Theme.of(context).colorScheme.background,
             textColor: PColors.onPrimary,
             onPressed: loading ? null : onPressed,
@@ -38,7 +40,7 @@ class PFlatButton extends StatelessWidget {
                     child: FittedBox(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation(
-                            PColors.primaryExtraDarkColor),
+                            color ?? PColors.primary),
                       ),
                     ),
                   )
