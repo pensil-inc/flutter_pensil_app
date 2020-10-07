@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_pensil_app/config/config.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
+import 'package:flutter_pensil_app/resources/repository/teacher/teacher_repository.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway_impl.dart';
 import 'package:flutter_pensil_app/resources/service/dio_client.dart';
@@ -32,5 +33,8 @@ void setUpDependency(Config config) {
     GetIt.instance<ApiGateway>(),
     GetIt.instance<SessionService>(),
   ));
-
+  serviceLocator.registerSingleton(TeacherRepository(
+    GetIt.instance<ApiGateway>(),
+    GetIt.instance<SessionService>(),
+  ));
 }

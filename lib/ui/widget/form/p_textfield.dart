@@ -24,11 +24,13 @@ class PTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(label ?? "", style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, fontSize: 16)),
-        SizedBox(height: 5),
+        if(label != null)
+        ...[
+          Text(label ?? "", style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, fontSize: 16)),
+          SizedBox(height: 5),
+        ],
         Container(
           height: height,
-
           child: TextFormField(
             autocorrect: false,
             obscureText: (type == Type.password || type == Type.confirmPassword)

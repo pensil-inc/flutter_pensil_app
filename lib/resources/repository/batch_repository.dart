@@ -19,4 +19,8 @@ class BatchRepository {
     await sessionService.saveSession(actor);
     return true;
   }
+
+  Future<List<BatchModel>> getBatch(){
+    return gatway.getBatches(); 
+  }
 }

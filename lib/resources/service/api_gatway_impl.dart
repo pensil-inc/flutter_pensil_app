@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/model/poll_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/dio_client.dart';
 import 'package:flutter_pensil_app/states/auth/actor_model.dart';
@@ -56,6 +57,31 @@ class ApiGatewayImpl implements ApiGateway {
       var map = _dioClient.getJsonBody(response);
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<BatchModel>> getBatches() async{
+     try {
+      String token = Constants.token;
+      final header = {"Authorization": "Bearer " + token};
+      var response = await _dioClient.get(Constants.login, options: Options(headers: header));
+      var map = _dioClient.getJsonBody(response);
+      var actor = map["batches"];
+      return [];
+    } catch (error) {
+      throw error;
+    }
+  }
+  Future<bool> createPoll(PollModel model)async{
+    try {
+      final data = model.toJson();
+      String token = Constants.token;
+      final header = {"Authorization": "Bearer " + token};
+      await _dioClient.post(Constants.createPoll, data: data, options: Options(headers: header));
+      return true;
     } catch (error) {
       throw error;
     }
