@@ -1,7 +1,26 @@
 import 'dart:convert';
-
+import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 
+class BatchResponseModel {
+    BatchResponseModel({
+        this.batches,
+    });
+
+    final List<BatchModel> batches;
+
+    factory BatchResponseModel.fromRawJson(String str) => BatchResponseModel.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory BatchResponseModel.fromJson(Map<String, dynamic> json) => BatchResponseModel(
+        batches: json["batches"] == null ? null : List<BatchModel>.from(json["batches"].map((x) => BatchModel.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "batches": batches == null ? null : List<dynamic>.from(batches.map((x) => x.toJson())),
+    };
+}
 class BatchModel {
     BatchModel({
         this.name,
@@ -9,6 +28,7 @@ class BatchModel {
         this.classes,
         this.subject,
         this.students,
+        this.studentModel
     });
 
     final String name;
@@ -16,6 +36,7 @@ class BatchModel {
     final List<BatchTimeSlotModel> classes;
     final String subject;
     final List<String> students;
+    final List<ActorModel> studentModel;
 
     factory BatchModel.fromRawJson(String str) => BatchModel.fromJson(json.decode(str));
 
@@ -26,7 +47,7 @@ class BatchModel {
         description: json["description"] == null ? null : json["description"],
         classes: json["classes"] == null ? null : List<BatchTimeSlotModel>.from(json["classes"].map((x) => BatchTimeSlotModel.fromJson(x))),
         subject: json["subject"] == null ? null : json["subject"],
-        students: json["students"] == null ? null : List<String>.from(json["students"].map((x) => x)),
+        studentModel: json["students"] == null ? null : List<ActorModel>.from(json["students"].map((x) => ActorModel.fromJson(json))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -36,6 +57,4 @@ class BatchModel {
         "subject": subject == null ? null : subject,
         "students": students == null ? null : List<String>.from(students.map((x) => x),)
     };
-
-    
 }

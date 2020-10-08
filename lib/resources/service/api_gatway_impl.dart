@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/dio_client.dart';
-import 'package:flutter_pensil_app/states/auth/actor_model.dart';
-import 'package:flutter_pensil_app/states/create_announcement_model.dart';
+import 'package:flutter_pensil_app/model/actor_model.dart';
 
 class ApiGatewayImpl implements ApiGateway {
   final DioClient _dioClient;
@@ -25,7 +25,7 @@ class ApiGatewayImpl implements ApiGateway {
       print(data);
       String token = Constants.token;
       final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.post(Constants.createBatch,
+      var response = await _dioClient.post(Constants.batch,
           data: data, options: Options(headers: header));
       return true;
     } catch (error) {
@@ -34,7 +34,7 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<bool> createAnnouncement(CreateAnnouncementModel model) async {
+  Future<bool> createAnnouncement(AnnouncementModel model) async {
     try {
       final data = model.toJson();
       String token = Constants.token;
@@ -67,10 +67,10 @@ class ApiGatewayImpl implements ApiGateway {
      try {
       String token = Constants.token;
       final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.get(Constants.login, options: Options(headers: header));
-      var map = _dioClient.getJsonBody(response);
-      var actor = map["batches"];
-      return [];
+      var response = await _dioClient.get(Constants.batch, options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final list = BatchResponseModel.fromJson(json);
+      return list.batches;
     } catch (error) {
       throw error;
     }
@@ -80,8 +80,36 @@ class ApiGatewayImpl implements ApiGateway {
       final data = model.toJson();
       String token = Constants.token;
       final header = {"Authorization": "Bearer " + token};
-      await _dioClient.post(Constants.createPoll, data: data, options: Options(headers: header));
+      await _dioClient.post(Constants.poll, data: data, options: Options(headers: header));
       return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<AnnouncementModel>> getAnnouncemantList() async{
+    try {
+      String token = Constants.token;
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.createAnnouncement,options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = AnnouncementListResponse.fromJson(json);
+      return model.announcements;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<PollModel>> getPollList()async{
+    try {
+      String token = Constants.token;
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.poll,options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = PollResponseModel.fromJson(json);
+      return model.polls;
     } catch (error) {
       throw error;
     }

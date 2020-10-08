@@ -1,7 +1,5 @@
-import 'package:filter_list/filter_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pensil_app/states/announcement.dart';
 import 'package:flutter_pensil_app/states/teacher/poll_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/page/poll/poll_option_widget.dart';
@@ -47,23 +45,20 @@ class _CreateBatchState extends State<CreatePoll> {
     _description.dispose();
     super.dispose();
   }
+
   Widget _secondaryButton(BuildContext context,
       {String label, Function onPressed}) {
     final theme = Theme.of(context);
-    return Wrap(
-      alignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: <Widget>[
-        Icon(Icons.add_circle, color: PColors.primary, size: 17),
-        SizedBox(width: 10),
-        Text(
+    return OutlineButton.icon(
+        onPressed: onPressed,
+        icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
+        label: Text(
           label,
           style: theme.textTheme.button
               .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
-        )
-      ],
-    ).vP8.ripple(onPressed);
+        ));
   }
+
   Widget _title(context, String name) {
     return Text(name,
         style: Theme.of(context)
@@ -71,6 +66,7 @@ class _CreateBatchState extends State<CreatePoll> {
             .bodyText1
             .copyWith(fontWeight: FontWeight.bold, fontSize: 16));
   }
+
   void createPoll() async {
     final state = Provider.of<PollState>(context, listen: false);
     // validate batch name and batch description
@@ -116,7 +112,7 @@ class _CreateBatchState extends State<CreatePoll> {
                   hintText: "Enter question",
                 ),
                 SizedBox(height: 10),
-                _title(context,"Options"),
+                _title(context, "Options"),
                 SizedBox(height: 5),
                 Consumer<PollState>(
                   builder: (context, state, child) {
@@ -127,9 +123,9 @@ class _CreateBatchState extends State<CreatePoll> {
                     }).toList());
                   },
                 ),
-                SizedBox(height: 10),
-                _secondaryButton(context,label:"Add option", onPressed:(){
-                  Provider.of<PollState>(context, listen: false).addPollOptions();
+                _secondaryButton(context, label: "Add option", onPressed: () {
+                  Provider.of<PollState>(context, listen: false)
+                      .addPollOptions();
                 }),
                 SizedBox(height: 150),
                 PFlatButton(

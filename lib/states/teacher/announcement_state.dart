@@ -1,12 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
-import 'package:flutter_pensil_app/states/create_announcement_model.dart';
 import 'package:get_it/get_it.dart';
 
 class AnnouncementState extends ChangeNotifier{
   bool isForAll = false;
+  
   void setIsForAll(bool value){
     isForAll = value;
     notifyListeners();
@@ -14,7 +15,7 @@ class AnnouncementState extends ChangeNotifier{
   Future<bool> createAnnouncement({String title,String description})async{
     try{
       assert(title != null);
-      var model = CreateAnnouncementModel(
+      var model = AnnouncementModel(
         // title:title,
         batches: [""],
         description: description,

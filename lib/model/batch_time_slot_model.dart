@@ -43,6 +43,20 @@ class BatchTimeSlotModel extends Equatable{
         default: return 0;
       }
     }
+    String toshortDay(){
+      switch (this.dayOfWeek) {
+        case 1 : return  "Mon";
+        case 2 : return  "Tue";
+        case 3 : return  "Wed";
+        case 4 : return  "Thu";
+        case 5 : return  "Fri";
+        case 6 : return  "Sat";
+        case 7 : return  "Sun";
+          
+          break;
+        default: return "N/A";
+      }
+    }
   @override
   List<Object> get props => [index];
 }

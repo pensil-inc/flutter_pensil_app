@@ -2,7 +2,7 @@ import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/resources/exceptions/exceptions.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/session/session.dart';
-import 'package:flutter_pensil_app/states/auth/actor_model.dart';
+import 'package:flutter_pensil_app/model/actor_model.dart';
 
 class SessionServiceImpl implements SessionService {
   final ApiGateway _apiGateway;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
+import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,7 @@ class _PensilAppState extends State<PensilApp> {
     return MultiProvider(
               providers: [
                 ChangeNotifierProvider<AuthState>(create: (_) => AuthState()),
+                ChangeNotifierProvider<HomeState>(create: (_) => HomeState()),
               ],
               child: MaterialApp(
                 debugShowCheckedModeBanner: false,

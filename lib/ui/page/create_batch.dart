@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 import 'package:flutter_pensil_app/resources/contact_service.dart';
-import 'package:flutter_pensil_app/states/create_batch_state.dart';
+import 'package:flutter_pensil_app/states/teacher/create_batch_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/page/create_batch/add_students_widget.dart';
 import 'package:flutter_pensil_app/ui/page/create_batch/batch_time_slots.dart';
@@ -98,22 +98,34 @@ class _CreateBatchState extends State<CreateBatch> {
             .copyWith(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
+  // Widget _secondaryButton(BuildContext context,
+  //     {String label, Function onPressed}) {
+  //   final theme = Theme.of(context);
+  //   return Wrap(
+  //     alignment: WrapAlignment.center,
+  //     crossAxisAlignment: WrapCrossAlignment.center,
+  //     children: <Widget>[
+  //       Icon(Icons.add_circle, color: PColors.primary, size: 17),
+  //       SizedBox(width: 10),
+  //       Text(
+  //         label,
+  //         style: theme.textTheme.button
+  //             .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
+  //       )
+  //     ],
+  //   ).vP8.ripple(onPressed);
+  // }
   Widget _secondaryButton(BuildContext context,
       {String label, Function onPressed}) {
     final theme = Theme.of(context);
-    return Wrap(
-      alignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: <Widget>[
-        Icon(Icons.add_circle, color: PColors.primary, size: 17),
-        SizedBox(width: 10),
-        Text(
+    return OutlineButton.icon(
+        onPressed: onPressed,
+        icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
+        label: Text(
           label,
           style: theme.textTheme.button
               .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
-        )
-      ],
-    ).vP8.ripple(onPressed);
+        ));
   }
 
   void displayStudentsList() async {
@@ -138,40 +150,43 @@ class _CreateBatchState extends State<CreateBatch> {
   }
 
   void createBatch() async {
-      final state = Provider.of<CreateBatchStates>(context, listen: false);
-      // validate batch name and batch description
-      final isTrue = _formKey.currentState.validate();
-      //validate timeSlots
-      var isValidTimeSlots = state.checkSlotsVAlidations();
-      if (!isTrue) {
-        return;
-      }
-      if (!isValidTimeSlots) {
-        return;
-      }
-      //validate Subjects
-     if(state.selectedSubjects == null){
-       Utility.displaySnackbar(context,msg: "Please select a subject",key:scaffoldKey);
-       return;
-     }
-      //validate Students
-     if(state.selectedStudentsListTemp == null && state.contactList == null){
-       Utility.displaySnackbar(context,msg: "Please Add students to batch",key:scaffoldKey);
-       return;
-     }
+    final state = Provider.of<CreateBatchStates>(context, listen: false);
+    // validate batch name and batch description
+    final isTrue = _formKey.currentState.validate();
+    //validate timeSlots
+    var isValidTimeSlots = state.checkSlotsVAlidations();
+    if (!isTrue) {
+      return;
+    }
+    if (!isValidTimeSlots) {
+      return;
+    }
+    //validate Subjects
+    if (state.selectedSubjects == null) {
+      Utility.displaySnackbar(context,
+          msg: "Please select a subject", key: scaffoldKey);
+      return;
+    }
+    //validate Students
+    if (state.selectedStudentsListTemp == null && state.contactList == null) {
+      Utility.displaySnackbar(context,
+          msg: "Please Add students to batch", key: scaffoldKey);
+      return;
+    }
 
-      isLoading.value = true;
-      state.setBatchName = _name.text;
-      state.setBatchdescription = _description.text;
-      final isBatchCreated = await state.createBatch();
-      isLoading.value = false;
+    isLoading.value = true;
+    state.setBatchName = _name.text;
+    state.setBatchdescription = _description.text;
+    final isBatchCreated = await state.createBatch();
+    isLoading.value = false;
     if (isBatchCreated) {
       Alert.sucess(context,
           message: "Batch is sucessfully created!!", title: "Message");
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",
-          title: "Message", height:170);
+          title: "Message",
+          height: 170);
     }
   }
 
@@ -182,13 +197,14 @@ class _CreateBatchState extends State<CreateBatch> {
       key: scaffoldKey,
       appBar: CustomAppBar("Create Batch"),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16, ),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                SizedBox(height:16),
                 PTextField(
                   type: Type.text,
                   controller: _name,
@@ -263,7 +279,8 @@ class _CreateBatchState extends State<CreateBatch> {
                   label: "Create",
                   isLoading: isLoading,
                   onPressed: createBatch,
-                )
+                ),
+                SizedBox(height:16),
               ],
             ),
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
-import 'package:flutter_pensil_app/states/create_batch_state.dart';
+import 'package:flutter_pensil_app/states/teacher/create_batch_state.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 

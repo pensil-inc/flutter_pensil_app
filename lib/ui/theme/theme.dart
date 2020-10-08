@@ -37,10 +37,24 @@ class AppTheme {
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Theme.of(context).dividerColor, width: 2),
       );
+  static BoxDecoration outlinePrimary(context) => BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+      );
   static BoxDecoration outlineError(context) => BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Theme.of(context).errorColor, width: 2),
       );
+    
+  static BoxDecoration decoration(context) => BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Theme.of(context).colorScheme.onPrimary,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Color(0xffeaeaea),
+                  blurRadius: 10,
+                  offset: Offset(4, 4))
+            ]);
   // Return a scaling factor between 0.0 and 1.0 for screens heights ranging
   // from a fixed short to tall range.
   double contentScale(BuildContext context) {

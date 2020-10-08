@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_pensil_app/states/auth/actor_model.dart';
+import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefrenceHelper {

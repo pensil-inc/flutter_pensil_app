@@ -12,7 +12,7 @@ class PColors {
   
   static const Color primary = Color(0XFF0084ff);
   static const Color primaryLight = Color(0xFFfBCDFFF);
-  static const Color background = Color(0XFFeff0f4);
+  static const Color background = Color(0XFFffffff);
   static const Color cardColor = Color(0XFFededed);
   static const Color surfaceColor = Color(0XFFf8f8f8);
   static const Color onSurfaceLightColor = Color(0XFFfbfbfc);

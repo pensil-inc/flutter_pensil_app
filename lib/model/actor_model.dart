@@ -7,7 +7,10 @@ class ActorModel {
         this.password,
         this.role,
         this.mobile,
-        this.token
+        this.token,
+        this.id,
+        this.isVerified,
+        this.lastLoginDate
     });
 
     final String name;
@@ -16,21 +19,30 @@ class ActorModel {
     final String role;
     final String mobile;
     final String token;
+    final bool isVerified;
+    final DateTime lastLoginDate;
+    final String id;
 
     factory ActorModel.fromRawJson(String str) => ActorModel.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
     factory ActorModel.fromJson(Map<String, dynamic> json) => ActorModel(
-        name: json["name"] == null ? null : json["name"],
-        email: json["email"] == null ? null : json["email"],
-        password: json["password"] == null ? null : json["password"],
-        role: json["role"] == null ? null : json["role"],
-        mobile: json["mobile"] == null ? null : json["mobile"],
-        token: json["token"] == null ? null : json["token"],
+      isVerified: json["isVerified"] == null ? null : json["isVerified"],
+      lastLoginDate: json["lastLoginDate"] == null ? null : DateTime.parse(json["lastLoginDate"]),
+      id: json["id"] == null ? null : json["id"],
+      name: json["name"] == null ? null : json["name"],
+      email: json["email"] == null ? null : json["email"],
+      password: json["password"] == null ? null : json["password"],
+      role: json["role"] == null ? null : json["role"],
+      mobile: json["mobile"] == null ? null : json["mobile"],
+      token: json["token"] == null ? null : json["token"],
     );
     
     Map<String, dynamic> toJson() => {
+       "isVerified": isVerified == null ? null : isVerified,
+        "lastLoginDate": lastLoginDate == null ? null : lastLoginDate.toIso8601String(),
+        "id": id == null ? null : id,
         "name": name == null ? null : name,
         "email": email == null ? null : email,
         "password": password == null ? null : password,
@@ -42,6 +54,7 @@ class ActorModel {
     factory ActorModel.fromError(Map<String,dynamic> json) => ActorModel(
        password:json.containsKey("password") ? json["password"][0] : null,
        email: json.containsKey("email") ? json["email"][0] : null,
-       mobile: json.containsKey("mobile") ? json["mobile"][0] : null
+       mobile: json.containsKey("mobile") ? json["mobile"][0] : null,
+       isVerified: json.containsKey("isVerified") ? json["isVerified"][0] : null
     );
 }

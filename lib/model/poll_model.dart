@@ -1,5 +1,23 @@
 import 'dart:convert';
+class PollResponseModel {
+    PollResponseModel({
+        this.polls,
+    });
 
+    final List<PollModel> polls;
+
+    factory PollResponseModel.fromRawJson(String str) => PollResponseModel.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory PollResponseModel.fromJson(Map<String, dynamic> json) => PollResponseModel(
+        polls: json["polls"] == null ? null : List<PollModel>.from(json["polls"].map((x) => PollModel.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "polls": polls == null ? null : List<dynamic>.from(polls.map((x) => x.toJson())),
+    };
+}
 class PollModel {
     PollModel({
         this.question,
@@ -7,6 +25,7 @@ class PollModel {
         this.endTime,
         this.isForAll,
         this.batches,
+        this.createdAt
     });
 
     final String question;
@@ -14,6 +33,7 @@ class PollModel {
     final String endTime;
     final bool isForAll;
     final List<String> batches;
+    final DateTime createdAt;
 
     factory PollModel.fromRawJson(String str) => PollModel.fromJson(json.decode(str));
 
@@ -25,6 +45,7 @@ class PollModel {
         endTime: json["endTime"] == null ? null : json["endTime"],
         isForAll: json["isForAll"] == null ? null : json["isForAll"],
         batches: json["batches"] == null ? null : List<String>.from(json["batches"].map((x) => x)),
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -33,5 +54,6 @@ class PollModel {
         "endTime": endTime == null ? null : endTime,
         "isForAll": isForAll == null ? null : isForAll,
         "batches": batches == null ? null : List<dynamic>.from(batches.map((x) => x)),
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
     };
 }

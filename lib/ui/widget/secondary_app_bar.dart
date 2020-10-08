@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/helper/images.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -17,7 +18,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
       leading: IconButton(
-        icon: Icon(Icons.cancel),
+        icon: Image.asset(Images.cross),
         onPressed: () {
           Navigator.pop(context);
         },
