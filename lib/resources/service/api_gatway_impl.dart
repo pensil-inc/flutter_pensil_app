@@ -114,4 +114,18 @@ class ApiGatewayImpl implements ApiGateway {
       throw error;
     }
   }
+
+  @override
+  Future<List<ActorModel>> getStudentList()async{
+      try {
+      String token = Constants.token;
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.getAllStudentList,options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = StudentResponseModel.fromJson(json);
+      return model.students;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

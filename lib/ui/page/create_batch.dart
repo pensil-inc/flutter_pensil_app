@@ -1,18 +1,18 @@
-import 'package:filter_list/filter_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
+import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
-import 'package:flutter_pensil_app/resources/contact_service.dart';
+import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/create_batch_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/page/create_batch/add_students_widget.dart';
 import 'package:flutter_pensil_app/ui/page/create_batch/batch_time_slots.dart';
+import 'package:flutter_pensil_app/ui/page/create_batch/search_student_delegate.dart';
 import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';
-import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
 import 'package:flutter_pensil_app/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -36,14 +36,19 @@ class _CreateBatchState extends State<CreateBatch> {
   TextEditingController _contactController;
   TextEditingController _name;
   TextEditingController _description;
+  TextEditingController _subject;
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
+  ValueNotifier<bool> addSubjectLoading = ValueNotifier<bool>(false);
+  ValueNotifier<List<ActorModel>> student = ValueNotifier<List<ActorModel>>([]);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     _contactController = TextEditingController();
     _name = TextEditingController();
     _description = TextEditingController();
+    _subject = TextEditingController();
+    Provider.of<CreateBatchStates>(context, listen: false).getStudentList();
     super.initState();
   }
 
@@ -98,23 +103,6 @@ class _CreateBatchState extends State<CreateBatch> {
             .copyWith(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
-  // Widget _secondaryButton(BuildContext context,
-  //     {String label, Function onPressed}) {
-  //   final theme = Theme.of(context);
-  //   return Wrap(
-  //     alignment: WrapAlignment.center,
-  //     crossAxisAlignment: WrapCrossAlignment.center,
-  //     children: <Widget>[
-  //       Icon(Icons.add_circle, color: PColors.primary, size: 17),
-  //       SizedBox(width: 10),
-  //       Text(
-  //         label,
-  //         style: theme.textTheme.button
-  //             .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
-  //       )
-  //     ],
-  //   ).vP8.ripple(onPressed);
-  // }
   Widget _secondaryButton(BuildContext context,
       {String label, Function onPressed}) {
     final theme = Theme.of(context);
@@ -129,24 +117,53 @@ class _CreateBatchState extends State<CreateBatch> {
   }
 
   void displayStudentsList() async {
-    await FilterListDialog.display(context,
-        allTextList: Provider.of<CreateBatchStates>(context, listen: false)
-            .studentsList
-            .map((e) => e.name)
-            .toList(),
-        height: 480,
-        borderRadius: 20,
-        headlineText: "Select Students",
-        searchFieldHintText: "Search Here",
-        hidecloseIcon: true,
-        selectedTextList: Provider.of<CreateBatchStates>(context, listen: false)
-            .selectedStudentsListTemp, onApplyButtonClick: (list) {
-      if (list != null && list.isNotEmpty) {
-        Provider.of<CreateBatchStates>(context, listen: false)
-            .setStudentsFromList = list;
-      }
+    final list =
+        Provider.of<CreateBatchStates>(context, listen: false).studentsList;
+    if (!(list != null && list.isNotEmpty)) {
+      return;
+    }
+    print(list.length);
+    await showSearch(
+        context: context,
+        delegate: StudentSearch(list,
+            Provider.of<CreateBatchStates>(context, listen: false), student));
+  }
+
+  void addSubjects() async {
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+                height: 200,
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Column(
+                  children: <Widget>[
+                    _title(context, "Add new subject"),
+                    SizedBox(height: 30),
+                    PTextField(type: Type.text, controller: _subject),
+                    PFlatButton(
+                      label: "Add",
+                      isLoading: addSubjectLoading,
+                      onPressed: saveSubject,
+                    )
+                  ],
+                )).cornerRadius(10),
+          );
+        });
+  }
+
+  void saveSubject() async {
+    if (_subject.text != null && _subject.text.isNotEmpty) {
+      addSubjectLoading.value = true;
+      final state = Provider.of<CreateBatchStates>(context, listen: false);
+      state.addNewSubject(_subject.text);
+      addSubjectLoading.value = false;
+      _subject.clear();
       Navigator.pop(context);
-    });
+    }
   }
 
   void createBatch() async {
@@ -168,7 +185,8 @@ class _CreateBatchState extends State<CreateBatch> {
       return;
     }
     //validate Students
-    if (state.selectedStudentsListTemp == null && state.contactList == null) {
+    if (!state.studentsList.any((element) => element.isSelected) &&
+        state.contactList == null) {
       Utility.displaySnackbar(context,
           msg: "Please Add students to batch", key: scaffoldKey);
       return;
@@ -177,11 +195,13 @@ class _CreateBatchState extends State<CreateBatch> {
     isLoading.value = true;
     state.setBatchName = _name.text;
     state.setBatchdescription = _description.text;
-    final isBatchCreated = await state.createBatch();
+    final newBatch = await state.createBatch();
     isLoading.value = false;
-    if (isBatchCreated) {
+    if (newBatch != null) {
       Alert.sucess(context,
           message: "Batch is sucessfully created!!", title: "Message");
+      final homeState = Provider.of<HomeState>(context, listen: false);
+      homeState.getBatchList();
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",
@@ -197,14 +217,16 @@ class _CreateBatchState extends State<CreateBatch> {
       key: scaffoldKey,
       appBar: CustomAppBar("Create Batch"),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, ),
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height:16),
+                SizedBox(height: 16),
                 PTextField(
                   type: Type.text,
                   controller: _name,
@@ -217,7 +239,14 @@ class _CreateBatchState extends State<CreateBatch> {
                   label: "Description",
                   hintText: "Description",
                 ),
-                _title(context, "Pick Subject"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _title(context, "Pick Subject"),
+                    _secondaryButton(context,
+                        label: "Add Subject", onPressed: addSubjects),
+                  ],
+                ),
                 _subjects(context),
                 SizedBox(height: 10),
                 _title(context, "Add Class"),
@@ -254,12 +283,13 @@ class _CreateBatchState extends State<CreateBatch> {
                       color: theme.textTheme.subtitle2.color),
                 ).vP8,
                 SizedBox(height: 4),
-                Consumer<CreateBatchStates>(
-                  builder: (context, state, child) {
-                    return state.selectedStudentsList == null
-                        ? SizedBox()
-                        : Wrap(
-                            children: state.selectedStudentsList
+                if (student != null)
+                  ValueListenableBuilder<List<ActorModel>>(
+                      valueListenable: student,
+                      builder: (context, listenableList, chils) {
+                        return Wrap(
+                            children: listenableList
+                                .where((element) => element.isSelected)
                                 .map((e) => CircleAvatar(
                                     radius: 15,
                                     child: Text(
@@ -269,9 +299,7 @@ class _CreateBatchState extends State<CreateBatch> {
                                           color: theme.colorScheme.onPrimary),
                                     )).p(5))
                                 .toList());
-                  },
-                ),
-                // SizedBox(height: 10),
+                      }),
                 _secondaryButton(context,
                     label: "PIck Student", onPressed: displayStudentsList),
                 SizedBox(height: 10),
@@ -280,7 +308,7 @@ class _CreateBatchState extends State<CreateBatch> {
                   isLoading: isLoading,
                   onPressed: createBatch,
                 ),
-                SizedBox(height:16),
+                SizedBox(height: 16),
               ],
             ),
           ),

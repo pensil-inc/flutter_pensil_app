@@ -12,4 +12,5 @@ abstract class ApiGateway {
   Future<bool> createPoll(PollModel model);
   Future<List<AnnouncementModel>> getAnnouncemantList();
   Future<List<PollModel>> getPollList();
+  Future<List<ActorModel>> getStudentList();
 }

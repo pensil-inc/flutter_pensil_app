@@ -1,5 +1,23 @@
 import 'dart:convert';
+class StudentResponseModel {
+    StudentResponseModel({
+        this.students,
+    });
 
+    final List<ActorModel> students;
+
+    factory StudentResponseModel.fromRawJson(String str) => StudentResponseModel.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory StudentResponseModel.fromJson(Map<String, dynamic> json) => StudentResponseModel(
+        students: json["students"] == null ? null : List<ActorModel>.from(json["students"].map((x) => ActorModel.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "students": students == null ? null : List<dynamic>.from(students.map((x) => x.toJson())),
+    };
+}
 class ActorModel {
     ActorModel({
         this.name,
@@ -10,7 +28,8 @@ class ActorModel {
         this.token,
         this.id,
         this.isVerified,
-        this.lastLoginDate
+        this.lastLoginDate,
+        this.isSelected = false,
     });
 
     final String name;
@@ -22,6 +41,7 @@ class ActorModel {
     final bool isVerified;
     final DateTime lastLoginDate;
     final String id;
+    bool isSelected;
 
     factory ActorModel.fromRawJson(String str) => ActorModel.fromJson(json.decode(str));
 
@@ -49,6 +69,12 @@ class ActorModel {
         "role": role == null ? null : role,
         "mobile": mobile == null ? null : mobile,
         "token": token == null ? null : token,
+    };
+
+    Map<String, dynamic> toJson1() => {
+        "name": name == null ? null : name,
+        "mobile": mobile == null ? null : mobile,
+        "isSelected":isSelected == null ? null :isSelected
     };
 
     factory ActorModel.fromError(Map<String,dynamic> json) => ActorModel(

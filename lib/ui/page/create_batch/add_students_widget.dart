@@ -10,6 +10,8 @@ class AddStudentsWidget extends StatelessWidget {
   Widget _enterContactNo(BuildContext context) {
     return TextField(
       controller: controller,
+      keyboardType: TextInputType.phone,
+      keyboardAppearance: Brightness.light,
       decoration: InputDecoration(
           border: InputBorder.none, hintText: "Enter contact no.."),
       onSubmitted: (contact) {

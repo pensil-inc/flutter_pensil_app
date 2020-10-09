@@ -29,7 +29,7 @@ class HomeState extends ChangeNotifier {
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
       announcementList = await repo.getAnnouncemantList();
-      announcementList.sort((a,b) => a.createdAt.compareTo(b.createdAt));
+      announcementList.sort((a,b) => b.createdAt.compareTo(a.createdAt));
       notifyListeners();
     }catch(error,strackTrace){
       log("createBatch", error:error, stackTrace:strackTrace);
@@ -41,7 +41,7 @@ class HomeState extends ChangeNotifier {
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
       polls = await repo.getPollList();
-      polls.sort((a,b) => a.createdAt.compareTo(b.createdAt));
+      polls.sort((a,b) => b.createdAt.compareTo(a.createdAt));
       notifyListeners();
     }catch(error,strackTrace){
       log("createBatch", error:error, stackTrace:strackTrace);

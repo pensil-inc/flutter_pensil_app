@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/poll_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/page/poll/poll_option_widget.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';
 import 'package:flutter_pensil_app/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_pensil_app/ui/theme/theme.dart';
 
 class CreatePoll extends StatefulWidget {
   CreatePoll({Key key}) : super(key: key);
@@ -78,11 +78,13 @@ class _CreateBatchState extends State<CreatePoll> {
 
     isLoading.value = true;
 
-    final isBatchCreated = await state.createPoll(_question.text);
+    final newPoll = await state.createPoll(_question.text);
     isLoading.value = false;
-    if (isBatchCreated) {
+    if (newPoll != null) {
       Alert.sucess(context,
           message: "Poll created sucessfully!!", title: "Message");
+      final homeState = Provider.of<HomeState>(context, listen: false);
+      homeState.getPollList();
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",

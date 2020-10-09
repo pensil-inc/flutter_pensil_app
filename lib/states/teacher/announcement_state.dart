@@ -12,7 +12,7 @@ class AnnouncementState extends ChangeNotifier{
     isForAll = value;
     notifyListeners();
   }
-  Future<bool> createAnnouncement({String title,String description})async{
+  Future<AnnouncementModel> createAnnouncement({String title,String description})async{
     try{
       assert(title != null);
       var model = AnnouncementModel(
@@ -23,10 +23,11 @@ class AnnouncementState extends ChangeNotifier{
       );
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
-     return await repo.createAnnouncement(model);
+      await repo.createAnnouncement(model);
+      return model;
     }catch (error, strackTrace){
       log("createBatch", error:error, stackTrace:strackTrace);
-      return false;
+      return null;
     }
   }
 }

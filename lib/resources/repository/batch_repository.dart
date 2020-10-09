@@ -1,6 +1,7 @@
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
+import 'package:flutter_pensil_app/model/student_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/session/session.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
@@ -29,5 +30,9 @@ class BatchRepository {
   }
   Future<List<PollModel>> getPollList(){
     return gatway.getPollList();
+  }
+
+  Future<List<ActorModel>> getStudentList(){
+    return gatway.getStudentList();
   }
 }

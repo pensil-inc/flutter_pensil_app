@@ -1,6 +1,7 @@
 import 'package:filter_list/filter_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
@@ -55,12 +56,14 @@ class _CreateBatchState extends State<CreateAnnouncement> {
 
     isLoading.value = true;
 
-    final isBatchCreated = await state.createAnnouncement(
+    final addNewAnnouncment = await state.createAnnouncement(
         title: _title.text, description: _description.text);
     isLoading.value = false;
-    if (isBatchCreated) {
+    if (addNewAnnouncment != null) {
       Alert.sucess(context,
           message: "Announcement created sucessfully!!", title: "Message");
+      final homeState = Provider.of<HomeState>(context, listen: false);
+      homeState.getAnnouncemantList();
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 import 'package:flutter_pensil_app/model/student_model.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
 import 'package:get_it/get_it.dart';
 
 class CreateBatchStates extends ChangeNotifier {
+  final getit = GetIt.instance;
   String batchName;
   String description;
   // List<String> availableSubjects;
@@ -21,23 +23,23 @@ class CreateBatchStates extends ChangeNotifier {
 
   List<String> contactList;
 
-  /// selected student's contact list from availavle students
-  List<String> selectedStudentsListTemp;
-  List<BatchTimeSlotModel> timeSlots = [
-    BatchTimeSlotModel.initial()
-  ];
+  /// selected student's mobile list from availavle students
+  // List<ActorModel> selectedStudentsListTemp;
+  List<BatchTimeSlotModel> timeSlots = [BatchTimeSlotModel.initial()];
 
   /// Total available previous students list from api
-  List<StudentModel> studentsList = StudentModel.dummyList();
+  List<ActorModel> studentsList;
 
   /// List of students selected from Total avilable students list
-  List<StudentModel> selectedStudentsList;
-  set setBatchName(String value){
-    batchName = value; 
+  List<ActorModel> selectedStudentsList;
+  set setBatchName(String value) {
+    batchName = value;
   }
-  set setBatchdescription(String value){
-    description = value; 
+
+  set setBatchdescription(String value) {
+    description = value;
   }
+
   void setTimeSlots(BatchTimeSlotModel model) {
     if (timeSlots == null) timeSlots = List<BatchTimeSlotModel>();
     model.index = timeSlots.length;
@@ -46,19 +48,12 @@ class CreateBatchStates extends ChangeNotifier {
   }
 
   set setSelectedSubjects(String name) {
-   
     var model = availableSubjects.firstWhere((element) => element.name == name);
     availableSubjects.forEach((element) {
       element.isSelected = false;
     });
     model.isSelected = true;
-    // if (model.isSelected) {
-    //   model.isSelected = false;
-      
-    // } else {
-    //   model.isSelected = true;
-    // }
-    selectedSubjects = name;
+     selectedSubjects = name;
     notifyListeners();
   }
 
@@ -69,34 +64,50 @@ class CreateBatchStates extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addContact(String contact) {
+  void addContact(String mobile) {
     if (contactList == null) {
       contactList = [];
     }
-    contactList.add(contact);
+    contactList.add(mobile);
     notifyListeners();
   }
 
-  void removeContact(String contact) {
-    contactList.remove(contact);
+  void removeContact(String mobile) {
+    contactList.remove(mobile);
     notifyListeners();
   }
-  /// Add stuent contact no. from available list
-  set setStudentsFromList(List<String> contacts) {
+
+  /// Add stuent mobile no. from available list
+  set setStudentsFromList(ActorModel value) {
     if (selectedStudentsList == null) {
       selectedStudentsList = [];
-      selectedStudentsListTemp = [];
     }
-    selectedStudentsList.clear();
-    selectedStudentsListTemp.clear();
-    contacts.forEach((name) {
-      var model = studentsList.firstWhere((element) => element.name == name);
-      selectedStudentsList.add(model);
-      selectedStudentsListTemp.add(model.contact);
-    });
+    var model = studentsList
+        .firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
+    model.isSelected = true;
+    // selectedStudentsList.add(model);
     notifyListeners();
   }
-  bool checkSlotsVAlidations(){
+
+  void removeStudentFromList(value) {
+    var model = studentsList
+        .firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
+    model.isSelected = false;
+    notifyListeners();
+  }
+
+  void addNewSubject(String value) {
+    if (availableSubjects == null) {
+      availableSubjects = List<Subject>()
+        ..add(Subject(index: 0, name: value, isSelected: true));
+    } else {
+      availableSubjects.add(Subject(
+          index: availableSubjects.length, name: value, isSelected: false));
+    }
+    notifyListeners();
+  }
+
+  bool checkSlotsVAlidations() {
     bool allGood = true;
     timeSlots.forEach((model) {
       checkSlotsModel(model);
@@ -104,36 +115,57 @@ class CreateBatchStates extends ChangeNotifier {
     notifyListeners();
     return allGood;
   }
-  void checkSlotsModel(BatchTimeSlotModel model){
-    if(model.startTime =="Start time"){
-        model.isValidStartEntry = false;
-      }else{
-        model.isValidStartEntry = true;
-      }
-      if(model.endTime =="End time"){
-        model.isValidEndEntry = false;
-      }else{
-        model.isValidEndEntry = true;
-      }
+
+  void checkSlotsModel(BatchTimeSlotModel model) {
+    if (model.startTime == "Start time") {
+      model.isValidStartEntry = false;
+    } else {
+      model.isValidStartEntry = true;
+    }
+    if (model.endTime == "End time") {
+      model.isValidEndEntry = false;
+    } else {
+      model.isValidEndEntry = true;
+    }
   }
+
   /// Create batch by calling api
-  Future<bool> createBatch() async {
+  Future<BatchModel> createBatch() async {
     try {
-      List<String> contacts = new List.from(contactList ?? List<String>())..addAll(selectedStudentsListTemp ?? List<String>());
+      final mobile = studentsList
+          .where((element) => element.isSelected)
+          .map((e) => e.mobile);
+      List<String> contacts = new List.from(contactList ?? List<String>())
+        ..addAll(mobile ?? List<String>());
       final model = BatchModel(
           name: batchName,
           description: description,
           classes: timeSlots,
           subject: selectedSubjects,
-          students:contacts);
-          // print(model.toJson());
-      final getit = GetIt.instance;
+          students: contacts);
+      // print(model.toJson());
       final repo = getit.get<BatchRepository>();
-     return await repo.createBatch(model);
+      await repo.createBatch(model);
+      return model;
+    } catch (error, strackTrace) {
+      log("createBatch", error: error, stackTrace: strackTrace);
+      return null;
+    }
+  }
 
-    } catch (error, strackTrace){
-      log("createBatch", error:error, stackTrace:strackTrace);
-      return false;
+  Future getStudentList() async {
+    try {
+      final repo = getit.get<BatchRepository>();
+      studentsList = await repo.getStudentList();
+      studentsList.toSet().toList();
+
+      final ids = studentsList.map((e) => e.mobile).toSet();
+      studentsList.retainWhere((x) => ids.remove(x.mobile));
+
+      notifyListeners();
+    } catch (error, strackTrace) {
+      log("getStudentList", error: error, stackTrace: strackTrace);
+      return null;
     }
   }
 }

@@ -17,7 +17,7 @@ class PollState extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<bool> createPoll(String question)async{
+  Future<PollModel> createPoll(String question)async{
     try{
       pollOptions.removeWhere((element) => element.isEmpty);
       assert(pollOptions.isNotEmpty);
@@ -31,10 +31,11 @@ class PollState extends ChangeNotifier{
       );
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-     return await repo.createPoll(model);
+      await repo.createPoll(model);
+      return model;
     }catch (error, strackTrace){
       log("createBatch", error:error, stackTrace:strackTrace);
-      return false;
+      return null;
     }
   }
 }
