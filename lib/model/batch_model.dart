@@ -23,26 +23,31 @@ class BatchResponseModel {
 }
 class BatchModel {
     BatchModel({
+        this.id,
         this.name,
         this.description,
         this.classes,
         this.subject,
         this.students,
-        this.studentModel
+        this.studentModel,
+        this.isSelected = false,
     });
 
+    final String id;
     final String name;
     final String description;
     final List<BatchTimeSlotModel> classes;
     final String subject;
     final List<String> students;
     final List<ActorModel> studentModel;
+    bool isSelected;
 
     factory BatchModel.fromRawJson(String str) => BatchModel.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
     factory BatchModel.fromJson(Map<String, dynamic> json) => BatchModel(
+        id: json["id"] == null ? null : json["id"],
         name: json["name"] == null ? null : json["name"],
         description: json["description"] == null ? null : json["description"],
         classes: json["classes"] == null ? null : List<BatchTimeSlotModel>.from(json["classes"].map((x) => BatchTimeSlotModel.fromJson(x))),
@@ -51,6 +56,7 @@ class BatchModel {
     );
 
     Map<String, dynamic> toJson() => {
+       "id": id == null ? null :id,
         "name": name == null ? null : name,
         "description": description == null ? null : description,
         "classes": classes == null ? null : List<dynamic>.from(classes.map((x) => x.toJson()),),

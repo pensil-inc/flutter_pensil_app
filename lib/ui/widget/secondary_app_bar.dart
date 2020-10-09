@@ -27,7 +27,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       title: Title(
         color: Theme.of(context).colorScheme.onPrimary,
         child: Text(
-          "Create Batch",
+          title ?? "",
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
           ),
