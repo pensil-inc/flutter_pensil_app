@@ -54,13 +54,18 @@ class SharedPrefrenceHelper {
   }
   Future<void> saveUserProfile(ActorModel user) async {
    return (await SharedPreferences.getInstance())
-         .setString(UserPreferenceKey.UserProfile.toString(), user.toJson().toString());
+         .setString(UserPreferenceKey.UserProfile.toString(),json.encode(user.toJson()));
   }
 
   Future<ActorModel> getUserProfile() async {
     final jsonString = (await SharedPreferences.getInstance())
         .getString(UserPreferenceKey.UserProfile.toString());
     return ActorModel.fromJson(json.decode(jsonString));
+  }
+  Future<bool> isStudent() async {
+    final jsonString = (await SharedPreferences.getInstance())
+        .getString(UserPreferenceKey.UserProfile.toString());
+    return ActorModel.fromJson(json.decode(jsonString)).isStudent;
   }
 }
 

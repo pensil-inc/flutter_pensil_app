@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_pensil_app/helper/constants.dart';
+import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
@@ -9,8 +10,8 @@ import 'package:flutter_pensil_app/model/actor_model.dart';
 
 class ApiGatewayImpl implements ApiGateway {
   final DioClient _dioClient;
-
-  ApiGatewayImpl(this._dioClient);
+  final SharedPrefrenceHelper pref;
+  ApiGatewayImpl(this._dioClient,{this.pref});
 
   @override
   Future getUser() {
@@ -23,7 +24,7 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       final data = model.toJson();
       print(data);
-      String token = Constants.token;
+      String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       var response = await _dioClient.post(Constants.batch,
           data: data, options: Options(headers: header));
@@ -37,7 +38,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<bool> createAnnouncement(AnnouncementModel model) async {
     try {
       final data = model.toJson();
-      String token = Constants.token;
+      String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       var response = await _dioClient.post(Constants.createAnnouncement,
           data: data, options: Options(headers: header));
@@ -51,9 +52,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<ActorModel> login(ActorModel model)async {
     try {
       final data = model.toJson();
-      String token = Constants.token;
-      final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.post(Constants.login, data: data, options: Options(headers: header));
+      var response = await _dioClient.post(Constants.login, data: data,);
       var map = _dioClient.getJsonBody(response);
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
@@ -65,7 +64,7 @@ class ApiGatewayImpl implements ApiGateway {
   @override
   Future<List<BatchModel>> getBatches() async{
      try {
-      String token = Constants.token;
+      String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       var response = await _dioClient.get(Constants.batch, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
@@ -78,7 +77,7 @@ class ApiGatewayImpl implements ApiGateway {
   Future<bool> createPoll(PollModel model)async{
     try {
       final data = model.toJson();
-      String token = Constants.token;
+      String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       await _dioClient.post(Constants.poll, data: data, options: Options(headers: header));
       return true;
@@ -90,7 +89,7 @@ class ApiGatewayImpl implements ApiGateway {
   @override
   Future<List<AnnouncementModel>> getAnnouncemantList() async{
     try {
-      String token = Constants.token;
+      String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       final response = await _dioClient.get(Constants.createAnnouncement,options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
@@ -104,7 +103,7 @@ class ApiGatewayImpl implements ApiGateway {
   @override
   Future<List<PollModel>> getPollList()async{
     try {
-      String token = Constants.token;
+      String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       final response = await _dioClient.get(Constants.poll,options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
@@ -118,7 +117,7 @@ class ApiGatewayImpl implements ApiGateway {
   @override
   Future<List<ActorModel>> getStudentList()async{
       try {
-      String token = Constants.token;
+      String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       final response = await _dioClient.get(Constants.getAllStudentList,options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);

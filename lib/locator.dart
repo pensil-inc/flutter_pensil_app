@@ -21,6 +21,7 @@ void setUpDependency(Config config) {
   serviceLocator.registerSingleton<ApiGateway>(
     ApiGatewayImpl(
       DioClient(Dio(), baseEndpoint: config.apiBaseUrl, logging: true),
+      pref:GetIt.instance<SharedPrefrenceHelper>(),
     ),
   );
   serviceLocator.registerFactory<SessionService>(

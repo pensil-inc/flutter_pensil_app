@@ -3,6 +3,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
+import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
@@ -183,21 +184,21 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                         width: 150,
                         child: Divider(
-                          color: Colors.black,
+                          color:theme.colorScheme.onPrimary,
                           thickness: 1,
                         ),
                       ),
-                      SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text("Already have an account ?",
                               style: theme.textTheme.bodyText2
                                   .copyWith(color: Colors.white60)),
-                          SizedBox(width: 10),
-                          Text("SIGN IN",
+                          Text("SIGN IP",
                               style: theme.textTheme.bodyText2
-                                  .copyWith(fontWeight: FontWeight.bold, color:Colors.white)),
+                                  .copyWith(fontWeight: FontWeight.bold, color:theme.colorScheme.onPrimary)).p16.ripple((){
+                                    Navigator.pop(context);
+                                  }),
                         ],
                       ),
                       SizedBox(width: 40)

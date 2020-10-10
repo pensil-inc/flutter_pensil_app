@@ -5,6 +5,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart';
+import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/create_batch/create_batch.dart';
 import 'package:flutter_pensil_app/ui/page/home/student_list_preview.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
@@ -16,17 +17,17 @@ import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+class TeacherHomePage extends StatefulWidget {
+  const TeacherHomePage({Key key}) : super(key: key);
   static MaterialPageRoute getRoute() {
-    return MaterialPageRoute(builder: (_) => HomePage());
+    return MaterialPageRoute(builder: (_) => TeacherHomePage());
   }
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _TeacherHomePageState createState() => _TeacherHomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderStateMixin {
   AnimationController _controller;
   bool isOpened = false;
   AnimationController _animationController;
@@ -261,7 +262,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Title(color: PColors.black, child: Text("Home page")),
+        title: Title(color: PColors.black, child: Text("Teacher Home page")),
+        actions:<Widget>[
+          Center(
+            child: SizedBox(
+              height:40,
+              child: OutlineButton(
+                onPressed: (){
+                  Navigator.pushReplacement(context, LoginPage.getRoute());
+                },
+                child:Text("Sign out")
+              ),
+            ),
+          ).hP16,
+
+        ]
       ),
       floatingActionButton: _floatingActionButton(),
       body: Stack(
@@ -323,7 +338,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           return _announcement(
                               state.announcementList[index - 1]);
                         },
-                        childCount: state.batchList.length + 1,
+                        childCount: state.announcementList.length + 1,
                       ),
                     ),
                 ],

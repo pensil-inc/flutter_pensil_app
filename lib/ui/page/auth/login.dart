@@ -3,6 +3,8 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
+import 'package:flutter_pensil_app/ui/page/auth/signup.dart';
+import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';
@@ -64,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
       if (!isValidate) {
         return;
       }
+      FocusManager.instance.primaryFocus.unfocus();
       final state = Provider.of<AuthState>(context, listen: false);
       state.setEmail = email.text;
       state.setPassword = password.text;
@@ -72,6 +75,8 @@ class _LoginPageState extends State<LoginPage> {
       if (isSucess) {
         Alert.sucess(context,
             message: "Announcement created sucessfully!!", title: "Message");
+        Navigator.of(context)
+          .pushAndRemoveUntil(TeacherHomePage.getRoute(), (_) => false,);
       } else {
         Alert.sucess(context,
             message: "Some error occured. Please try again in some time!!",
@@ -137,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: PFlatButton(
-                  label: "Create",
+                  label: "Login",
                   isLoading: isLoading,
                   onPressed: () {
                     _submit(context);
@@ -207,17 +212,19 @@ class _LoginPageState extends State<LoginPage> {
                           thickness: 1,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      // SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text("Don't have an account ?",
                               style: theme.textTheme.bodyText2
                                   .copyWith(color: Colors.grey)),
-                          SizedBox(width: 10),
+                          // SizedBox(width: 10),
                           Text("SIGN UP",
                               style: theme.textTheme.bodyText2
-                                  .copyWith(fontWeight: FontWeight.bold)),
+                                  .copyWith(fontWeight: FontWeight.bold)).p16.ripple((){
+                                    Navigator.push(context, SignUp.getRoute());
+                                  }),
                         ],
                       ),
                     ],

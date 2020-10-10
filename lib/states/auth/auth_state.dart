@@ -35,11 +35,13 @@ class AuthState extends ChangeNotifier{
       final repo = getit.get<BatchRepository>();
      return await repo.login(model);
     } on ApiException catch (error, strackTrace){
-      
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
       log("Login", error:error.message, stackTrace:strackTrace);
       throw(Exception( model.email ?? model.password ?? model.mobile));
+    } on UnauthorisedException catch(error,strackTrace){
+      log("Login", error:error.message, stackTrace:strackTrace);
+      throw(Exception( error.message));
     }
     catch (error, strackTrace){
       log("error", error:error, stackTrace:strackTrace);

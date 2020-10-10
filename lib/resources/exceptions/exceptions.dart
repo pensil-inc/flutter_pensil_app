@@ -64,7 +64,8 @@ class BadUrlException extends HttpException {
 }
 
 class UnauthorisedException extends HttpException {
-  UnauthorisedException(String message) : super("Unauthorised: $message");
+  String message;
+  UnauthorisedException(this.message) : super("Unauthorised: $message");
 }
 
 class ResourceNotFoundException extends HttpException {

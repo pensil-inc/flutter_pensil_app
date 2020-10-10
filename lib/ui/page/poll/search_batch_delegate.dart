@@ -68,7 +68,7 @@ class BatchSearch extends SearchDelegate<BatchModel> {
                     ),
                     textAlign: TextAlign.start,
                   ),
-                  subtitle: Text(model.description ?? "N/A"),
+                  subtitle: Text(model.subject ?? "N/A"),
                   trailing: isSelected(model, listenableList)
                       ? Icon(Icons.check_box)
                       : null,
