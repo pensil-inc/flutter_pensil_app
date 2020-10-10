@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "680271036691",
+    "firebase_url": "https://pensil-teaching-app.firebaseio.com",
+    "project_id": "pensil-teaching-app",
+    "storage_bucket": "pensil-teaching-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680271036691:android:3fe1313421b1a0cb619ae6",
+        "android_client_info": {
+          "package_name": "com.pensil.pensilapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680271036691-48s384oggpmp6cp59a8dgsg0aplng95b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvhdfnReuUbbGGHdxah1CNHIVo7R1Mf54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680271036691-48s384oggpmp6cp59a8dgsg0aplng95b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

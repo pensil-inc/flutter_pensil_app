@@ -36,6 +36,7 @@ dependencies:
   filter_list: ^0.0.5
   image_picker: ^0.6.7+11
   contacts_service: ^0.4.6
+  firebase_messaging: ^7.0.3
   shared_preferences: ^0.5.12
   permission_handler: ^5.0.1+1
   cached_network_image: ^2.2.0+1

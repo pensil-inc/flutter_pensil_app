@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_pensil_app/config/config.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_pensil_app/resources/repository/teacher/teacher_reposito
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway_impl.dart';
 import 'package:flutter_pensil_app/resources/service/dio_client.dart';
+import 'package:flutter_pensil_app/resources/service/notification_service.dart';
 import 'package:flutter_pensil_app/resources/service/session/session.dart';
 import 'package:flutter_pensil_app/resources/service/session/session_impl.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
@@ -17,6 +19,11 @@ void setUpDependency(Config config) {
 
   // serviceLocator.registerSingleton<ErrorsProducer>(ErrorsProducer());
   serviceLocator.registerSingleton<SharedPrefrenceHelper>(SharedPrefrenceHelper());
+  serviceLocator.registerSingleton(NotificationService(FirebaseMessaging()));
+
+  /// Initilise nitificaion plugin
+  final notifcationService = serviceLocator<NotificationService>();
+    notifcationService.initializeMessages();
 
   serviceLocator.registerSingleton<ApiGateway>(
     ApiGatewayImpl(
