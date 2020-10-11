@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
-import 'package:flutter_pensil_app/model/student_model.dart';
 import 'package:flutter_pensil_app/model/subject.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
 import 'package:get_it/get_it.dart';

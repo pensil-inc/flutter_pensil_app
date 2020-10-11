@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
-import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 
 class PollWidget extends StatelessWidget {

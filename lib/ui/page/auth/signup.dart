@@ -3,8 +3,6 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
-import 'package:flutter_pensil_app/ui/page/auth/login.dart';
-import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';

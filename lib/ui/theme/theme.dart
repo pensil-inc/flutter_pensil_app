@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 part 'extentions.dart';
+part 'light_color.dart';
 enum ThemeType { LIGHT, DARK }
 
 class AppTheme {

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'theme.dart';
 
 class PColors {
   PColors._();

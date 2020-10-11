@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 
 class Ploader extends StatelessWidget {
   final double stroke;
@@ -12,7 +11,7 @@ class Ploader extends StatelessWidget {
     return Center(
       child: Platform.isAndroid
           ? CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(PColors.blue),
+              valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
               strokeWidth: stroke,
             )
           : CupertinoActivityIndicator(),

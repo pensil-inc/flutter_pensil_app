@@ -4,7 +4,6 @@ import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
-import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:get_it/get_it.dart';
 

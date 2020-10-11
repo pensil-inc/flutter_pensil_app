@@ -7,7 +7,6 @@ import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/page/auth/signup.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
-import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';

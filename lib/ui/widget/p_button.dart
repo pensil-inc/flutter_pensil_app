@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 
 class PFlatButton extends StatelessWidget {
   const PFlatButton(
@@ -25,13 +24,13 @@ class PFlatButton extends StatelessWidget {
         valueListenable: isLoading ?? ValueNotifier(false),
         builder: (context, loading, child) {
           return FlatButton(
-            disabledColor: PColors.disableButtonColor,
+            disabledColor: Theme.of(context).disabledColor,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             color: !isColored ? null : color ?? Theme.of(context).primaryColor,
             splashColor: Theme.of(context).colorScheme.background,
-            textColor: PColors.onPrimary,
+            textColor: Theme.of(context).colorScheme.onPrimary,
             onPressed: loading ? null : onPressed,
             child: loading
                 ? SizedBox(
@@ -40,7 +39,7 @@ class PFlatButton extends StatelessWidget {
                     child: FittedBox(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation(
-                            color ?? PColors.primary),
+                            color ?? Theme.of(context).primaryColor),
                       ),
                     ),
                   )

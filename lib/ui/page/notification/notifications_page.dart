@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/states/notificaion/notification_state.dart';
-import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
 import 'package:flutter_pensil_app/ui/widget/secondary_app_bar.dart';
