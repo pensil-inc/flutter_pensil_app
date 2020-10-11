@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 class BatchMasterDetailPage extends StatefulWidget {
   BatchMasterDetailPage({Key key}) : super(key: key);
+  static MaterialPageRoute getRoute() {
+    return MaterialPageRoute(builder: (_) => BatchMasterDetailPage());
+  }
 
   @override
   _BatchMasterDetailPageState createState() => _BatchMasterDetailPageState();
