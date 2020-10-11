@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
@@ -52,5 +53,7 @@ class HomeState extends ChangeNotifier {
     batchList = null;
     polls = null;
     announcementList = null;
+    final pref = GetIt.instance<SharedPrefrenceHelper>();
+    pref.cleaPrefrenceValues();
   }
 }

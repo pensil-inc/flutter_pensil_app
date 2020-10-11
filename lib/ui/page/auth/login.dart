@@ -102,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget _form(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      height: AppTheme.fullHeight(context) * .65,
       width: AppTheme.fullWidth(context) - 32,
       margin: EdgeInsets.symmetric(vertical: 32) + EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
@@ -131,14 +130,13 @@ class _LoginPageState extends State<LoginPage> {
               label: "Email ID/Mobile No.",
               hintText: "Enter email/mobile no.",
             ).hP16,
-            SizedBox(height: 10),
+            // SizedBox(height: 10),
             PTextField(
               type: Type.password,
               controller: password,
               label: "Password",
               hintText: "Enter password here",
             ).hP16,
-            SizedBox(height: 10),
             Align(
               alignment: Alignment.centerRight,
               child: Text("Forgot password?",
@@ -146,9 +144,9 @@ class _LoginPageState extends State<LoginPage> {
                           .copyWith(color: PColors.secondary, fontSize: 12))
                   .hP16,
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 14),
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: PFlatButton(
                   label: "Login",
                   color: PColors.secondary,

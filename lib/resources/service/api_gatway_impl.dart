@@ -5,6 +5,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
+import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/dio_client.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
@@ -143,6 +144,19 @@ class ApiGatewayImpl implements ApiGateway {
       var json = _dioClient.getJsonBody(response);
       final model = NotificationResponseModel.fromJson(json);
       return model.notifications;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<bool> addVideo(VideoModel model)async {
+     try {
+      final data = model.toJson();
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      await _dioClient.post(Constants.video, data: data, options: Options(headers: header));
+      return true;
     } catch (error) {
       throw error;
     }

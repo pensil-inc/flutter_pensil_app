@@ -22,6 +22,15 @@ class Utility{
   static String toformattedDate2(DateTime date) {
     return DateFormat('dd-MMM-yyyy hh:mm a').format(date);
   }
+  static String toTimeOfDay(DateTime date) {
+    return DateFormat('hh:mm a').format(date);
+  }
+  static String timeFrom24(String date) {
+    final hr = date.split(":")[0];
+    final mm = date.split(":")[1];
+    final time = DateTime(2020,1,1,int.parse(hr), int.parse(mm));
+    return DateFormat('hh:mm a').format(time);
+  }
 
   static String getPassedTime(String date) {
     if (date == null || date.isEmpty) {

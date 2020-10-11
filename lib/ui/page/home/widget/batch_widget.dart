@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/ui/page/batch/batch_master_page.dart';
 import 'package:flutter_pensil_app/ui/page/home/student_list_preview.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
@@ -15,7 +16,6 @@ class BatchWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: AppTheme.decoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +42,9 @@ class BatchWidget extends StatelessWidget {
             ],
           )
         ],
-      ),
+      ).p16.ripple(() {
+        Navigator.push(context, BatchMasterDetailPage.getRoute(model));
+      }),
     );
   }
 }

@@ -95,7 +95,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
   List<Widget> _floatingButtons() {
     return <Widget>[
       FabButton(
-        icon: Images.people,
+        icon: Images.peopleWhite,
         text: 'Create Batch',
         animationValue: 2,
         translateButton: _translateButton,
