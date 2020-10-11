@@ -185,8 +185,8 @@ class _CreateBatchState extends State<CreateBatch> {
       return;
     }
     //validate Students
-    if (!state.studentsList.any((element) => element.isSelected) &&
-        state.contactList == null) {
+    if(!(state.contactList != null && state.contactList.isNotEmpty))
+    if (state.studentsList.every((element) => !element.isSelected)) {
       Utility.displaySnackbar(context,
           msg: "Please Add students to batch", key: scaffoldKey);
       return;

@@ -11,7 +11,6 @@ import 'package:flutter_pensil_app/resources/service/dio_client.dart';
 import 'package:flutter_pensil_app/resources/service/notification_service.dart';
 import 'package:flutter_pensil_app/resources/service/session/session.dart';
 import 'package:flutter_pensil_app/resources/service/session/session_impl.dart';
-import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:get_it/get_it.dart';
 
 void setUpDependency(Config config) {
@@ -24,6 +23,7 @@ void setUpDependency(Config config) {
   /// Initilise nitificaion plugin
   final notifcationService = serviceLocator<NotificationService>();
     notifcationService.initializeMessages();
+    notifcationService.configure();
 
   serviceLocator.registerSingleton<ApiGateway>(
     ApiGatewayImpl(

@@ -9,6 +9,7 @@ import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/create_batch/create_batch.dart';
 import 'package:flutter_pensil_app/ui/page/home/student_list_preview.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
+import 'package:flutter_pensil_app/ui/page/notification/notifications_page.dart';
 import 'package:flutter_pensil_app/ui/page/poll/create_poll.dart';
 import 'package:flutter_pensil_app/ui/theme/light_color.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
@@ -88,7 +89,7 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
 
   Widget _floatingActionButton() {
     return FloatingActionButton(
-      backgroundColor: Color(0xff6c79dc),
+      backgroundColor: Theme.of(context).primaryColor,
       onPressed: animate,
       tooltip: 'Toggle',
       child: AnimatedIcon(
@@ -103,22 +104,22 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        _smallFabButton(
-          Images.people,
-          text: 'Create Batch',
-          animationValue: 2,
-          onPressed: () {
-            animate();
-             Navigator.push(context, CreateBatch.getRoute());
-          },
-        ),
+        // _smallFabButton(
+        //   Images.people,
+        //   text: 'Create Batch',
+        //   animationValue: 2,
+        //   onPressed: () {
+        //     animate();
+        //      Navigator.push(context, CreateBatch.getRoute());
+        //   },
+        // ),
         _smallFabButton(
           Images.announcements,
-          text: 'Create Announcement',
+          text: 'Notifications',
           animationValue: 1,
           onPressed: () {
             animate();
-            Navigator.push(context, CreateAnnouncement.getRoute());
+            Navigator.push(context, NotificationPage.getRoute());
           },
         ),
       ],
@@ -261,6 +262,7 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: _floatingActionButton(),
       appBar: AppBar(
         title: Title(color: PColors.black, child: Text("Student Home page")),
         actions:<Widget>[
@@ -275,10 +277,8 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
               ),
             ),
           ).hP16,
-
         ]
       ),
-      floatingActionButton: _floatingActionButton(),
       body: Stack(
         children: <Widget>[
           Consumer<HomeState>(
@@ -286,55 +286,56 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
               if (state.batchList == null) return Ploader();
               return CustomScrollView(
                 slivers: <Widget>[
+                  if (!(state.batchList != null && state.batchList.isNotEmpty))
+                   SliverList(
+                    delegate: SliverChildListDelegate([
+                      _title("My Batches"),
+                      SizedBox(height:20),
+                      Container(
+                        height:100,
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        decoration:AppTheme.outline(context),
+                        width: AppTheme.fullWidth(context),
+                        alignment: Alignment.center,
+                        child:Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                          Text("You have no batch",style:Theme.of(context).textTheme.headline6.copyWith(color:PColors.gray, )),
+                          SizedBox(height:10),
+                          Text("Ask your teacher to add you in a batch!!",style:Theme.of(context).textTheme.bodyText1),
+                        ],)
+                      )
+                    ],),),
+                  if (state.batchList != null && state.batchList.isNotEmpty)
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         if (index == 0)
-                          return _title("${state.batchList.length} Batches");
+                          return _title("My Batches");
                         return _batch(state.batchList[index - 1]);
                       },
                       childCount: state.batchList.length + 1,
                     ),
                   ),
-                  if (state.polls != null)
+                  if (state.polls != null && state.polls.isNotEmpty)
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           if (index == 0)
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                _title("Today's Poll"),
-                                OutlineButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context, CreatePoll.getRoute());
-                                  },
-                                  textColor: Theme.of(context).primaryColor,
-                                  highlightedBorderColor:
-                                      Theme.of(context).primaryColor,
-                                  borderSide: BorderSide(
-                                      color: Theme.of(context).primaryColor),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4)),
-                                  child: Text("Create Poll"),
-                                ).hP16
-                              ],
-                            );
+                            return  _title("Today's Poll");
 
                           return PollWidget(model: state.polls[index - 1]);
                         },
                         childCount: state.polls.length + 1,
                       ),
                     ),
-                  if (state.announcementList != null)
+                  if (state.announcementList != null && state.announcementList.isNotEmpty)
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           if (index == 0)
                             return _title(
-                                "${state.announcementList.length} Announcement");
+                                "Announcement");
                           return _announcement(
                               state.announcementList[index - 1]);
                         },

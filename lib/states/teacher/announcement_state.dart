@@ -18,9 +18,9 @@ class AnnouncementState extends ChangeNotifier{
       assert(title != null);
       var model = AnnouncementModel(
         // title:title,
-        batches:batches == null ? null : batches.map((e) => e.id).toList(),
+        batches:batches == null ? null : batches.where((element) => element.isSelected).map((e) => e.id).toList(),
         description: description,
-        isForAll: batches == null ? true : isForAll
+        isForAll: batches == null ? true : batches.every((element) => !element.isSelected)  ? true : isForAll
       );
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();

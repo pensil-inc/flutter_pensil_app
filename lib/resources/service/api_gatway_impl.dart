@@ -3,10 +3,13 @@ import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
+import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/dio_client.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
+import 'package:flutter_pensil_app/resources/service/notification_service.dart';
+import 'package:get_it/get_it.dart';
 
 class ApiGatewayImpl implements ApiGateway {
   final DioClient _dioClient;
@@ -51,6 +54,9 @@ class ApiGatewayImpl implements ApiGateway {
   @override
   Future<ActorModel> login(ActorModel model)async {
     try {
+      final getit = GetIt.instance<NotificationService>();
+      final fcmToken = await getit.getDeviceToken();
+      model.fcmToken = fcmToken;
       final data = model.toJson();
       var response = await _dioClient.post(Constants.login, data: data,);
       var map = _dioClient.getJsonBody(response);
@@ -116,13 +122,27 @@ class ApiGatewayImpl implements ApiGateway {
 
   @override
   Future<List<ActorModel>> getStudentList()async{
-      try {
+    try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       final response = await _dioClient.get(Constants.getAllStudentList,options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = StudentResponseModel.fromJson(json);
       return model.students;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<NotificationModel>> getStudentNotificationsList() async{
+    try {
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.studentNotificationList,options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = NotificationResponseModel.fromJson(json);
+      return model.notifications;
     } catch (error) {
       throw error;
     }

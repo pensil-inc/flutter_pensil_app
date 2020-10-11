@@ -32,6 +32,7 @@ class ActorModel {
       this.isVerified,
       this.lastLoginDate,
       this.isSelected = false,
+      this.fcmToken,
   });
 
   final String name;
@@ -39,6 +40,7 @@ class ActorModel {
   final String password;
   final String role;
   final String mobile;
+  String fcmToken;
   final String token;
   final bool isVerified;
   final DateTime lastLoginDate;
@@ -59,6 +61,7 @@ class ActorModel {
     role: json["role"] == null ? null : json["role"],
     mobile: json["mobile"] == null ? null : json["mobile"],
     token: json["token"] == null ? null : json["token"],
+    fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
   );
   
   Map<String, dynamic> toJson() => {
@@ -71,6 +74,7 @@ class ActorModel {
       "role": role == null ? null : role,
       "mobile": mobile == null ? null : mobile,
       "token": token == null ? null : token,
+      "fcmToken": fcmToken == null ? null : fcmToken
   };
 
   Map<String, dynamic> toJson1() => {

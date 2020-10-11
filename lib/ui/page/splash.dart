@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
+import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
 import 'package:flutter_pensil_app/ui/theme/light_color.dart';
@@ -31,6 +32,8 @@ class _SplashPageState extends State<SplashPage> {
       Navigator.of(context).pushAndRemoveUntil(
           isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
           (_) => false,);
+    }else{
+      Navigator.pushReplacement(context,LoginPage.getRoute());
     }
   }
 

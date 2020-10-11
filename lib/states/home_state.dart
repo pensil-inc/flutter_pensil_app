@@ -47,4 +47,10 @@ class HomeState extends ChangeNotifier {
       log("createBatch", error:error, stackTrace:strackTrace);
     }
   }
+
+  void logout(){
+    batchList = null;
+    polls = null;
+    announcementList = null;
+  }
 }

@@ -120,13 +120,14 @@ class _CreateBatchState extends State<CreateAnnouncement> {
       key: scaffoldKey,
       appBar: CustomAppBar("Create Announcement"),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: EdgeInsets.only(left:16,right:16),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                SizedBox(height: 16),
                 // PTextField(
                 //   type: Type.text,
                 //   controller: _title,
@@ -189,7 +190,8 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                   label: "Create",
                   isLoading: isLoading,
                   onPressed: createAnnouncement,
-                )
+                ),
+                SizedBox(height: 16),
               ],
             ),
           ),

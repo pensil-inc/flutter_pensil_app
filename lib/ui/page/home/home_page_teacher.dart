@@ -88,7 +88,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
 
   Widget _floatingActionButton() {
     return FloatingActionButton(
-      backgroundColor: Color(0xff6c79dc),
+      backgroundColor: Theme.of(context).primaryColor,
       onPressed: animate,
       tooltip: 'Toggle',
       child: AnimatedIcon(
@@ -269,6 +269,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
               height:40,
               child: OutlineButton(
                 onPressed: (){
+                  Provider.of<HomeState>(context, listen: false).logout();
                   Navigator.pushReplacement(context, LoginPage.getRoute());
                 },
                 child:Text("Sign out")
@@ -286,6 +287,27 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
               if (state.batchList == null) return Ploader();
               return CustomScrollView(
                 slivers: <Widget>[
+                  // if (!(state.batchList != null && state.batchList.isNotEmpty))
+                  //  SliverList(
+                  //   delegate: SliverChildListDelegate([
+                  //     _title("Batches"),
+                  //     SizedBox(height:20),
+                  //     Container(
+                  //       height:100,
+                  //       margin: EdgeInsets.symmetric(horizontal: 16),
+                  //       decoration:AppTheme.outline(context),
+                  //       width: AppTheme.fullWidth(context),
+                  //       alignment: Alignment.center,
+                  //       child:Column(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: <Widget>[
+                  //         Text("You haven't created any batch yet",style:Theme.of(context).textTheme.headline6.copyWith(color:PColors.gray, )),
+                  //         SizedBox(height:10),
+                  //         Text("Tap on below fab button to create new",style:Theme.of(context).textTheme.bodyText1),
+                  //       ],)
+                  //     )
+                  //   ],),),
+                  if (state.batchList != null && state.batchList.isNotEmpty)
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -296,7 +318,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
                       childCount: state.batchList.length + 1,
                     ),
                   ),
-                  if (state.polls != null)
+                   if (state.polls != null)
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
@@ -322,13 +344,12 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
                                 ).hP16
                               ],
                             );
-
                           return PollWidget(model: state.polls[index - 1]);
                         },
                         childCount: state.polls.length + 1,
                       ),
                     ),
-                  if (state.announcementList != null)
+                  if (state.announcementList != null && state.announcementList.isNotEmpty)
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
