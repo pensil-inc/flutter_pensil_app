@@ -5,6 +5,7 @@ import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_assignment_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_study_material_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/detail/batch_detail_page.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/material/upload_material.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/add_video_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/batch_videos_page.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
@@ -126,13 +127,13 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
           },
         ),
         FabButton(
-          icon: Images.peopleWhite,
-          text: 'Create Batch',
+          icon: Images.upload,
+          text: 'Upload Material',
           animationValue: 2,
           translateButton: _translateButton,
           onPressed: () {
             animate();
-            // Navigator.push(context, CreateBatch.getRoute());
+            Navigator.push(context, UploadMaterialPage.getRoute(model.subject));
           },
         ),
         FabButton(

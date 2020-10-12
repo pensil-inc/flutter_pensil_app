@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
@@ -15,7 +17,7 @@ import 'package:get_it/get_it.dart';
 class ApiGatewayImpl implements ApiGateway {
   final DioClient _dioClient;
   final SharedPrefrenceHelper pref;
-  ApiGatewayImpl(this._dioClient,{this.pref});
+  ApiGatewayImpl(this._dioClient, {this.pref});
 
   @override
   Future getUser() {
@@ -30,8 +32,7 @@ class ApiGatewayImpl implements ApiGateway {
       print(data);
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.post(Constants.batch,
-          data: data, options: Options(headers: header));
+      var response = await _dioClient.post(Constants.batch, data: data, options: Options(headers: header));
       return true;
     } catch (error) {
       throw error;
@@ -44,8 +45,7 @@ class ApiGatewayImpl implements ApiGateway {
       final data = model.toJson();
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.post(Constants.createAnnouncement,
-          data: data, options: Options(headers: header));
+      var response = await _dioClient.post(Constants.createAnnouncement, data: data, options: Options(headers: header));
       return true;
     } catch (error) {
       throw error;
@@ -53,13 +53,16 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<ActorModel> login(ActorModel model)async {
+  Future<ActorModel> login(ActorModel model) async {
     try {
       final getit = GetIt.instance<NotificationService>();
       final fcmToken = await getit.getDeviceToken();
       model.fcmToken = fcmToken;
       final data = model.toJson();
-      var response = await _dioClient.post(Constants.login, data: data,);
+      var response = await _dioClient.post(
+        Constants.login,
+        data: data,
+      );
       var map = _dioClient.getJsonBody(response);
       var actor = ActorModel.fromJson(map["user"]);
       return actor;
@@ -69,8 +72,8 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<BatchModel>> getBatches() async{
-     try {
+  Future<List<BatchModel>> getBatches() async {
+    try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       var response = await _dioClient.get(Constants.batch, options: Options(headers: header));
@@ -81,7 +84,8 @@ class ApiGatewayImpl implements ApiGateway {
       throw error;
     }
   }
-  Future<bool> createPoll(PollModel model)async{
+
+  Future<bool> createPoll(PollModel model) async {
     try {
       final data = model.toJson();
       String token = await pref.getAccessToken();
@@ -94,11 +98,11 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<AnnouncementModel>> getAnnouncemantList() async{
+  Future<List<AnnouncementModel>> getAnnouncemantList() async {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.get(Constants.createAnnouncement,options: Options(headers: header));
+      final response = await _dioClient.get(Constants.createAnnouncement, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = AnnouncementListResponse.fromJson(json);
       return model.announcements;
@@ -108,11 +112,11 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<PollModel>> getPollList()async{
+  Future<List<PollModel>> getPollList() async {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.get(Constants.poll,options: Options(headers: header));
+      final response = await _dioClient.get(Constants.poll, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = PollResponseModel.fromJson(json);
       return model.polls;
@@ -122,11 +126,11 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<ActorModel>> getStudentList()async{
+  Future<List<ActorModel>> getStudentList() async {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.get(Constants.getAllStudentList,options: Options(headers: header));
+      final response = await _dioClient.get(Constants.getAllStudentList, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = StudentResponseModel.fromJson(json);
       return model.students;
@@ -136,11 +140,11 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<NotificationModel>> getStudentNotificationsList() async{
+  Future<List<NotificationModel>> getStudentNotificationsList() async {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.get(Constants.studentNotificationList,options: Options(headers: header));
+      final response = await _dioClient.get(Constants.studentNotificationList, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = NotificationResponseModel.fromJson(json);
       return model.notifications;
@@ -150,8 +154,8 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<bool> addVideo(VideoModel model)async {
-     try {
+  Future<bool> addVideo(VideoModel model) async {
+    try {
       final data = model.toJson();
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
@@ -163,16 +167,34 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<VideoModel>> getVideosList()async {
+  Future<List<VideoModel>> getVideosList() async {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.get(Constants.video,options: Options(headers: header));
+      final response = await _dioClient.get(Constants.video, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = VideosRsponseModel.fromJson(json);
       return model.videos;
     } catch (error) {
       throw error;
     }
+  }
+
+  @override
+  Future<String> uploadFile(File file) async {
+    String fileName = file.path.split('/').last;
+
+    FormData data = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        file.path,
+        filename: fileName,
+      ),
+    });
+
+    String token = await pref.getAccessToken();
+    final header = {"Authorization": "Bearer " + token};
+    await _dioClient.post(Constants.video, data: data, options: Options(headers: header));
+
+    return "URL";
   }
 }

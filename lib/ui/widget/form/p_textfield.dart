@@ -12,6 +12,7 @@ class PTextField extends StatelessWidget {
       this.maxLines = 1,
       this.hintText = '',
       this.height = 70,
+      this.onSubmit,
       this.padding = const EdgeInsets.all(0)})
       : super(key: key);
   final TextEditingController controller;
@@ -19,6 +20,7 @@ class PTextField extends StatelessWidget {
   final Type type;
   final int maxLines;
   final double height;
+  final Function(String) onSubmit;
   final EdgeInsetsGeometry padding;
   Widget build(BuildContext context) {
     return Column(
@@ -33,6 +35,14 @@ class PTextField extends StatelessWidget {
           height: height,
           child: TextFormField(
             autocorrect: false,
+            onSaved: (val){
+              print(val);
+            },
+            onFieldSubmitted: (val){
+              if(onSubmit != null){
+                onSubmit(val);
+              }
+            },
             obscureText: (type == Type.password || type == Type.confirmPassword)
                 ? true
                 : false,
