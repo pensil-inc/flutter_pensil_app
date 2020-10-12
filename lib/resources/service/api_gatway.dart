@@ -17,4 +17,5 @@ abstract class ApiGateway {
   Future<List<PollModel>> getPollList();
   Future<List<ActorModel>> getStudentList();
   Future<List<NotificationModel>> getStudentNotificationsList();
+  Future<List<VideoModel>> getVideosList();
 }

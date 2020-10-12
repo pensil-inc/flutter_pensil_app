@@ -2,6 +2,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
+import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/session/session.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
@@ -38,5 +39,8 @@ class BatchRepository {
 
   Future<List<NotificationModel>> getStudentNotificationsList(){
     return gatway.getStudentNotificationsList();
+  }
+  Future<List<VideoModel>> getVideosList(){
+    return gatway.getVideosList();
   }
 }

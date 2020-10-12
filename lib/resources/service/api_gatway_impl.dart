@@ -161,4 +161,18 @@ class ApiGatewayImpl implements ApiGateway {
       throw error;
     }
   }
+
+  @override
+  Future<List<VideoModel>> getVideosList()async {
+    try {
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.video,options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = VideosRsponseModel.fromJson(json);
+      return model.videos;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

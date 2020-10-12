@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_assignment_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_study_material_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/detail/batch_detail_page.dart';
@@ -9,14 +10,22 @@ import 'package:flutter_pensil_app/ui/page/batch/pages/video/batch_videos_page.d
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/fab/animated_fab.dart';
 import 'package:flutter_pensil_app/ui/widget/fab/fab_button.dart';
+import 'package:provider/provider.dart';
 
 class BatchMasterDetailPage extends StatefulWidget {
   BatchMasterDetailPage({Key key, this.model}) : super(key: key);
   final BatchModel model;
   static MaterialPageRoute getRoute(BatchModel model) {
     return MaterialPageRoute(
-        builder: (_) => BatchMasterDetailPage(
-              model: model,
+        builder: (_) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (_) => VideoState(),
+                )
+              ],
+              builder: (_, child) => BatchMasterDetailPage(
+                model: model,
+              ),
             ));
   }
 
@@ -42,6 +51,9 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
     model = widget.model;
     setupAnimations();
     _tabController = TabController(length: 4, vsync: this)..addListener(tabListener);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<VideoState>(context, listen: false).getVideosList();
+    });
     super.initState();
   }
 
@@ -163,6 +175,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
         body: Stack(
           children: <Widget>[
             TabBarView(
+              controller: _tabController,
               children: [BatchDetailPage(model: model), BatchAssignmentPage(), BatchVideosPage(), BatchStudyMaterialPage()],
             ),
             ValueListenableBuilder(
