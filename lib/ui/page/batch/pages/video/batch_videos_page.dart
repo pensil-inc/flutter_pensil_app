@@ -35,13 +35,13 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
     return Container(
       decoration: AppTheme.decoration(context),
       margin: EdgeInsets.only(bottom: 12),
-      height: 120,
+      height: 100,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           AspectRatio(
             aspectRatio: 1,
-            child: _picture(model.url),
+            child: _picture(model.thumbnailUrl),
           ),
           Expanded(
             child: Stack(
@@ -52,19 +52,19 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(model.title),
-                      Text(model.description, style: Theme.of(context).textTheme.subtitle2),
+                      Text(model.title,style: Theme.of(context).textTheme.subtitle2,maxLines: 3,),
+                      // Text(model.description,style: Theme.of(context).textTheme.bodyText2,maxLines: 2, ),
                       Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                         PChip(
                           backgroundColor: PColors.orange,
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                          style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).colorScheme.onPrimary, fontSize: 12, fontWeight: FontWeight.bold,),
                           borderColor: Colors.transparent,
                           label: model.subject ?? "N/A",
                         ),
-                        Text(Utility.toDMformate(model.createdAt), style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 14,))
+                        Text(Utility.toDMformate(model.createdAt), style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 12,color:Theme.of(context).disabledColor))
                       ])
                     ],
                   ),
@@ -75,7 +75,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
         ],
       ).ripple((){
         // Utility.displaySnackbar(context,);
-        Navigator.push(context, WebViewPage.getRoute(model.url));
+        Navigator.push(context, WebViewPage.getRoute(model.videoUrl));
       }),
     );
   }
@@ -134,6 +134,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
             );
           }
           return ListView.builder(
+              physics: BouncingScrollPhysics(),
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               itemCount: state.list.length,
               itemBuilder: (_, index) {

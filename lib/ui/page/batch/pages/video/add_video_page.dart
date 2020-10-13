@@ -14,12 +14,13 @@ import 'package:provider/provider.dart';
 
 class AddVideoPage extends StatefulWidget {
   final String subject;
-  const AddVideoPage({Key key, this.subject}) : super(key: key);
-  static MaterialPageRoute getRoute(String subject) {
+  final VideoState state;
+  const AddVideoPage({Key key, this.subject, this.state}) : super(key: key);
+  static MaterialPageRoute getRoute({String subject, String batchId, VideoState state}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<VideoState>(
-        create: (context) => VideoState(),
-        child: AddVideoPage(subject: subject),
+        create: (context) => VideoState(subject: subject, batchId: batchId),
+        child: AddVideoPage(subject: subject,state:state),
       ),
     );
   }
@@ -33,7 +34,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
   TextEditingController _title;
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
-  ValueNotifier<List<BatchModel>> batchList = ValueNotifier<List<BatchModel>>([]);
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> urlList = ["https://www.youtube.com/watch?v=uv54ec8Pg1k"];
   @override
@@ -47,7 +48,6 @@ class _AddVideoPageState extends State<AddVideoPage> {
   @override
   void dispose() {
     _title.dispose();
-    batchList.dispose();
     _description.dispose();
     super.dispose();
   }
@@ -67,23 +67,16 @@ class _AddVideoPageState extends State<AddVideoPage> {
         ));
   }
 
-  void displayBatchList() async {
-    // final list = Provider.of<HomeState>(context, listen: false).batchList;
-    // if (!(list != null && list.isNotEmpty)) {
-    //   return;
-    // }
-    // print(list.length);
-    // await showSearch(
-    //     context: context,
-    //     delegate: BatchSearch(
-    //         list, Provider.of<HomeState>(context, listen: false), batchList));
-  }
   void addLink() async {
     await Thumbnail.addLink(
       context: context,
       onLinkAdded: (mediaInfo) {
         final state = Provider.of<VideoState>(context, listen: false);
-        state.setUrl(mediaInfo.thumbnailUrl, mediaInfo.title);
+        state.setUrl(
+          thumbnailUrl: mediaInfo.thumbnailUrl,
+          title: mediaInfo.title,
+          videoUrl: mediaInfo.url,
+        );
       },
     );
   }
@@ -103,8 +96,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
     isLoading.value = false;
     if (isOk != null) {
       Alert.sucess(context, message: "Video added sucessfully!!", title: "Message");
-      // final homeState = Provider.of<HomeState>(context, listen: false);
-      // homeState.getAnnouncemantList();
+      widget.state.getVideosList();
     } else {
       Alert.sucess(context, message: "Some error occured. Please try again in some time!!", title: "Message", height: 170);
       // Navigator.pop(context);
@@ -114,17 +106,17 @@ class _AddVideoPageState extends State<AddVideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: Color(0xffeeeeee),
-      appBar: CustomAppBar("Create Announcement"),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
+        key: scaffoldKey,
+        backgroundColor: Color(0xffeeeeee),
+        appBar: CustomAppBar("Add Video"),
+        body: Container(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
                     color: Color(0xfffafafa),
                     padding: EdgeInsets.only(left: 16, right: 16),
                     child: Column(
@@ -144,61 +136,55 @@ class _AddVideoPageState extends State<AddVideoPage> {
                             maxLines: null,
                             height: null,
                             padding: EdgeInsets.symmetric(vertical: 16)),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            _titleText(context, "Add Subject"),
-                            _secondaryButton(context, label: "Pick Subject", onPressed: displayBatchList),
+                            _titleText(context, "Subject"),
                           ],
                         ),
-                        if (batchList != null)
-                          ValueListenableBuilder<List<BatchModel>>(
-                              valueListenable: batchList,
-                              builder: (context, listenableList, chils) {
-                                return Wrap(
-                                    children: listenableList
-                                        .where((element) => element.isSelected)
-                                        .map((e) => Padding(
-                                              padding: EdgeInsets.only(right: 4, top: 4),
-                                              child: PChip(label: e.name),
-                                            ))
-                                        .toList());
-                              }),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(right: 4, top: 10),
+                              child: PChip(label: widget.subject, backgroundColor: PColors.yellow, borderColor: Colors.transparent),
+                            ),
+                          ],
+                        ),
                         SizedBox(height: 20),
                       ],
-                    )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _titleText(context, "Add Link"),
-                    _secondaryButton(context, label: "Add", onPressed: addLink),
-                  ],
-                ).p16,
-                Consumer<VideoState>(
-                  builder: (context, state, child) {
-                    if (state.yUrl != null)
-                      return SizedBox(
-                          height: 284,
-                          child: ThumbnailPreview(
-                            title: state.yTitle,
-                            url: state.yUrl,
-                          ));
-                    return SizedBox();
-                  },
-                ),
-                SizedBox(height: Provider.of<VideoState>(context).yUrl == null ? 100 : 10),
-                PFlatButton(
-                  label: "Create",
-                  isLoading: isLoading,
-                  onPressed: saveVideo,
-                ).p16,
-                SizedBox(height: 16),
-              ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _titleText(context, "Add Link"),
+                      _secondaryButton(context, label: "Add", onPressed: addLink),
+                    ],
+                  ).p16,
+                  Consumer<VideoState>(
+                    builder: (context, state, child) {
+                      if (state.thumbnailUrl != null)
+                        return SizedBox(
+                            height: 284,
+                            child: ThumbnailPreview(
+                              title: state.yTitle,
+                              url: state.thumbnailUrl,
+                            ));
+                      return SizedBox();
+                    },
+                  ),
+                  SizedBox(height: Provider.of<VideoState>(context).videoUrl == null ? 100 : 10),
+                  PFlatButton(
+                    label: "Create",
+                    isLoading: isLoading,
+                    onPressed: saveVideo,
+                  ).p16,
+                  SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
