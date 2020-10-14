@@ -16,12 +16,13 @@ import 'package:provider/provider.dart';
 
 class UploadMaterialPage extends StatefulWidget {
   final String subject;
-  const UploadMaterialPage({Key key, this.subject}) : super(key: key);
-  static MaterialPageRoute getRoute(String subject) {
+  final BatchMaterialState state;
+  const UploadMaterialPage({Key key, this.subject, this.state}) : super(key: key);
+  static MaterialPageRoute getRoute(String subject, String batchId,{BatchMaterialState state}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<BatchMaterialState>(
-        create: (context) => BatchMaterialState(),
-        child: UploadMaterialPage(subject: subject),
+        create: (context) => BatchMaterialState(subject: subject, batchId: batchId),
+        child: UploadMaterialPage(subject: subject,state:state),
       ),
     );
   }
@@ -33,6 +34,7 @@ class UploadMaterialPage extends StatefulWidget {
 class _UploadMaterialPageState extends State<UploadMaterialPage> {
   TextEditingController _description;
   TextEditingController _title;
+  TextEditingController _link;
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
   ValueNotifier<List<BatchModel>> batchList = ValueNotifier<List<BatchModel>>([]);
@@ -42,6 +44,7 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
   void initState() {
     _description = TextEditingController();
     _title = TextEditingController();
+    _link = TextEditingController();
     // batchList.value = Provider.of<HomeState>(context).batchList;
     super.initState();
   }
@@ -80,16 +83,6 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
     //     delegate: BatchSearch(
     //         list, Provider.of<HomeState>(context, listen: false), batchList));
   }
-  void addLink() async {
-    await Thumbnail.addLink(
-      context: context,
-      onLinkAdded: (mediaInfo) {
-        final state = Provider.of<BatchMaterialState>(context, listen: false);
-        state.setArticleUrl(mediaInfo.thumbnailUrl, mediaInfo.title);
-      },
-    );
-  }
-
   void pickFile() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -110,15 +103,16 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
     if (!isTrue) {
       return;
     }
-
+    if (_link.text != null && _link.text.isNotEmpty) {
+      state.setArticleUrl(_link.text);
+    }
     isLoading.value = true;
 
-    final isOk = await state.addMaterial(_title.text, _description.text);
+    final isOk = await state.uploadMaterial(_title.text, _description.text);
     isLoading.value = false;
-    if (isOk != null) {
+    if (isOk) {
       Alert.sucess(context, message: "Video added sucessfully!!", title: "Message");
-      // final homeState = Provider.of<HomeState>(context, listen: false);
-      // homeState.getAnnouncemantList();
+      await widget.state.getBatchMaterialList();
     } else {
       Alert.sucess(context, message: "Some error occured. Please try again in some time!!", title: "Message", height: 170);
       // Navigator.pop(context);
@@ -133,126 +127,121 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
       appBar: CustomAppBar("Upload Material"),
       body: Container(
         child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                    color: Color(0xfffafafa),
-                    padding: EdgeInsets.only(left: 16, right: 16),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 16),
-                        PTextField(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  color: Color(0xfffafafa),
+                  padding: EdgeInsets.only(left: 16, right: 16),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height: 16),
+                      Form(
+                        key: _formKey,
+                        child: PTextField(
                           type: Type.text,
                           controller: _title,
                           label: "Title",
                           hintText: "Enter title here",
                         ),
-                        PTextField(
-                            type: Type.text,
-                            controller: _description,
-                            label: "Description",
-                            hintText: "Enter here",
-                            maxLines: null,
-                            height: null,
-                            padding: EdgeInsets.symmetric(vertical: 16)),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            _titleText(context, "Subject"),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(right: 4, top: 10),
-                              child: PChip(label: widget.subject, backgroundColor: PColors.yellow, borderColor: Colors.transparent),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                      ],
-                    )),
-                _titleText(context, "Add Link").vP16,
-                PTextField(
-                  type: Type.text,
-                  controller: _title,
-                  // label: "Title",
-                  hintText: "Paste link here",
-                  onSubmit: (val) {
-                    print(val);
-                  },
-                ).hP16,
-
-                // SizedBox(height: 10),
-                Center(child: _titleText(context, "OR")),
-                SizedBox(height: 10),
-                Center(child: _titleText(context, "Upload File")),
-                SizedBox(height: 10),
-                Container(
-                  width: AppTheme.fullWidth(context) - 32,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  decoration: AppTheme.outline(context),
-                  child: Column(
-                    children: <Widget>[
-                      Text("Browse file", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                      Image.asset(Images.uploadVideo, height: 25).vP16,
-                      Text("File should be PDF,DOCX,Sheet,Image",
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 12, color: PColors.gray)),
+                      ),
+                      PTextField(
+                          type: Type.text,
+                          controller: _description,
+                          label: "Description",
+                          hintText: "Enter here",
+                          maxLines: null,
+                          height: null,
+                          padding: EdgeInsets.symmetric(vertical: 16)),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          _titleText(context, "Subject"),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(right: 4, top: 10),
+                            child: PChip(label: widget.subject, backgroundColor: PColors.yellow, borderColor: Colors.transparent),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
                     ],
-                  ),
-                ).ripple(pickFile),
-                Consumer<BatchMaterialState>(
-                  builder: (context, state, child) {
-                    if (state.file != null) {
-                      return SizedBox(
-                        height: 65,
-                        width: AppTheme.fullWidth(context),
-                        child: Column(
-                          children: <Widget>[
-                            Row(children: <Widget>[
-                              SizedBox(
-                                  width: 50,
-                                  child: Image.asset(
-                                    Images.getfiletypeIcon(state.file.path.split(".").last),
-                                    height: 30,
-                                  )),
-                              Text(state.file.path.split("/").last),
-                              Spacer(),
-                              IconButton(
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(Icons.cancel),
-                                  onPressed: () {
-                                    state.removeFile();
-                                  })
-                            ]),
-                            Container(
-                              height:5,
-                              margin: EdgeInsets.symmetric(horizontal: 16),
-                              width: AppTheme.fullWidth(context),
-                              decoration: BoxDecoration(
-                                color: Color(0xff0CC476),
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                            )
-                          ],
-                        ),
-                      ).vP8;
-                    }
-                    return SizedBox();
-                  },
+                  )),
+              _titleText(context, "Add Link").vP16,
+              PTextField(
+                type: Type.text,
+                controller: _link,
+                // label: "Title",
+                hintText: "Paste link here",
+                onSubmit: (val) {},
+              ).hP16,
+
+              // SizedBox(height: 10),
+              Center(child: _titleText(context, "OR")),
+              SizedBox(height: 10),
+              Center(child: _titleText(context, "Upload File")),
+              SizedBox(height: 10),
+              Container(
+                width: AppTheme.fullWidth(context) - 32,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                decoration: AppTheme.outline(context),
+                child: Column(
+                  children: <Widget>[
+                    Text("Browse file", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                    Image.asset(Images.uploadVideo, height: 25).vP16,
+                    Text("File should be PDF,DOCX,Sheet,Image",
+                        style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 12, color: PColors.gray)),
+                  ],
                 ),
-                PFlatButton(
-                  label: "Create",
-                  isLoading: isLoading,
-                  onPressed: saveVideo,
-                ).p16,
-                SizedBox(height: 16),
-              ],
-            ),
+              ).ripple(pickFile),
+              Consumer<BatchMaterialState>(
+                builder: (context, state, child) {
+                  if (state.file != null) {
+                    return SizedBox(
+                      height: 65,
+                      width: AppTheme.fullWidth(context),
+                      child: Column(
+                        children: <Widget>[
+                          Row(children: <Widget>[
+                            SizedBox(
+                                width: 50,
+                                child: Image.asset(
+                                  Images.getfiletypeIcon(state.file.path.split(".").last),
+                                  height: 30,
+                                )),
+                            Text(state.file.path.split("/").last),
+                            Spacer(),
+                            IconButton(
+                                padding: EdgeInsets.zero,
+                                icon: Icon(Icons.cancel),
+                                onPressed: () {
+                                  state.removeFile();
+                                })
+                          ]),
+                          Container(
+                            height: 5,
+                            margin: EdgeInsets.symmetric(horizontal: 16),
+                            width: AppTheme.fullWidth(context),
+                            decoration: BoxDecoration(color: Color(0xff0CC476), borderRadius: BorderRadius.circular(20)),
+                          )
+                        ],
+                      ),
+                    ).vP8;
+                  }
+                  return SizedBox();
+                },
+              ),
+              PFlatButton(
+                label: "Create",
+                isLoading: isLoading,
+                onPressed: saveVideo,
+              ).p16,
+              SizedBox(height: 16),
+            ],
           ),
         ),
       ),

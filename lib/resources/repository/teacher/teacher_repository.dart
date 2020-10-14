@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
@@ -17,7 +18,10 @@ class TeacherRepository {
     return gatway.addVideo(model); 
   }
 
-  Future<String> uploadFile(File file){
-    return gatway.uploadFile(file);
+  Future<bool> uploadFile(File file,String id){
+    return gatway.uploadFile(file,id);
+  }
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model){
+    return gatway.uploadMaterial(model);
   }
 }

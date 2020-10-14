@@ -1,12 +1,16 @@
-import 'dart:developer';
 import 'dart:io';
-import 'package:flutter_pensil_app/model/video_model.dart';
+import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
 import 'package:flutter_pensil_app/resources/repository/teacher/teacher_repository.dart';
 import 'package:flutter_pensil_app/states/base_state.dart';
 import 'package:get_it/get_it.dart';
 
 class BatchMaterialState extends BaseState {
+  BatchMaterialState({String subject, String batchId}) {
+    this.batchId = batchId;
+    this.subject = subject;
+  }
+  String batchId;
   String articleUrl;
   String fileUrl;
   String title;
@@ -14,39 +18,55 @@ class BatchMaterialState extends BaseState {
   File file;
 
   /// Container all video list
-  List<VideoModel> list;
-  void setArticleUrl(String url, String title) {
+  List<BatchMaterialModel> list;
+  void setArticleUrl(
+    String url,
+  ) {
     fileUrl = url;
-    title = title;
     notifyListeners();
   }
 
-  set setSubject(String value) {
-    subject = value;
-    notifyListeners();
-  }
-  set setFile(File data){
+  set setFile(File data) {
     file = data;
     notifyListeners();
   }
-  void removeFile(){
+
+  void removeFile() {
     file = null;
     notifyListeners();
   }
 
-  Future<bool> addMaterial(String title, String description) async {
-    try {
+  Future<bool> uploadMaterial(String title, String description) async {
+    final data = await execute(() async {
       assert(title != null);
-
-      var model = VideoModel(title: title, description: description, subject: "Physics", url: fileUrl);
+      assert(subject != null);
+      var model = BatchMaterialModel(
+        title: title,
+        description: description,
+        subject: subject,
+        batchId: batchId,
+      );
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-      await repo.addVideo(model);
+      return await repo.uploadMaterial(model);
+    }, label: "uploadMaterial");
+    if (data != null) {
+      await upload(data.id);
+      isBusy = false;
       return true;
-    } catch (error, strackTrace) {
-      log("createBatch", error: error, stackTrace: strackTrace);
-      return null;
+    } else {
+      isBusy = false;
+      return false;
     }
+  }
+
+  Future<bool> upload(String id) async {
+    return await execute(() async {
+      isBusy = true;
+      final getit = GetIt.instance;
+      final repo = getit.get<TeacherRepository>();
+      return await repo.uploadFile(file, id);
+    }, label: "Upload File");
   }
 
   Future getBatchMaterialList() async {
@@ -54,23 +74,32 @@ class BatchMaterialState extends BaseState {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
-      list = await repo.getVideosList();
+      list = await repo.getBatchMaterialList();
       if (list != null) {
         list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       }
+      // list = [
+      //   BatchMaterialModel(
+      //       batchId: "ewdwe",
+      //       title: "Applied mathmatics",
+      //       createdAt: DateTime.now(),
+      //       description: "sdfsdfsdfsdvsd ds sd sd c",
+      //       file: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      //       fileType: "pdf",
+      //       subject: "English",
+      //       id: "sdf"),
+      //   BatchMaterialModel(
+      //       batchId: "ewdwe",
+      //       title: "Physics part 1",
+      //       createdAt: DateTime.now(),
+      //       description: "sdfsdfsdfsdvsd ds sd sd c",
+      //       file: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      //       fileType: "pdf",
+      //       subject: "English",
+      //       id: "sdf"),
+      // ];
       notifyListeners();
       isBusy = false;
     }, label: "getVideosList");
-  }
-
-  Future upload(File file) async {
-    await execute(() async {
-      isBusy = true;
-      final getit = GetIt.instance;
-      final repo = getit.get<TeacherRepository>();
-      fileUrl = await repo.uploadFile(file);
-      notifyListeners();
-      isBusy = true;
-    });
   }
 }

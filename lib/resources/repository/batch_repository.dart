@@ -1,3 +1,4 @@
+import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
@@ -42,5 +43,8 @@ class BatchRepository {
   }
   Future<List<VideoModel>> getVideosList(){
     return gatway.getVideosList();
+  }
+  Future<List<BatchMaterialModel>> getBatchMaterialList(){
+    return gatway.getBatchMaterialList();
   }
 }

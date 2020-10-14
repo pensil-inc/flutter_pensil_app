@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_assignment_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_study_material_page.dart';
@@ -18,16 +19,14 @@ class BatchMasterDetailPage extends StatefulWidget {
   final BatchModel model;
   static MaterialPageRoute getRoute(BatchModel model) {
     return MaterialPageRoute(
-        builder: (_) => MultiProvider(
-              providers: [
-                ChangeNotifierProvider(
-                  create: (_) => VideoState(),
-                )
-              ],
-              builder: (_, child) => BatchMasterDetailPage(
-                model: model,
-              ),
-            ));
+      builder: (_) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => VideoState()),
+          ChangeNotifierProvider(create: (_) => BatchMaterialState()),
+        ],
+        builder: (_, child) => BatchMasterDetailPage(model: model),
+      ),
+    );
   }
 
   @override
@@ -54,6 +53,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
     _tabController = TabController(length: 4, vsync: this)..addListener(tabListener);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<VideoState>(context, listen: false).getVideosList();
+      Provider.of<BatchMaterialState>(context, listen: false).getBatchMaterialList();
     });
     super.initState();
   }
@@ -120,10 +120,17 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
           icon: Images.edit,
           text: 'Add  Video',
           translateButton: _translateButton,
-          animationValue: 1,
+          animationValue: 3,
           onPressed: () {
             animate();
-            Navigator.push(context, AddVideoPage.getRoute(model.subject));
+            Navigator.push(
+              context,
+              AddVideoPage.getRoute(
+                subject: model.subject,
+                batchId: model.id,
+                state: Provider.of<VideoState>(context, listen: false),
+              ),
+            );
           },
         ),
         FabButton(
@@ -133,7 +140,13 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
           translateButton: _translateButton,
           onPressed: () {
             animate();
-            Navigator.push(context, UploadMaterialPage.getRoute(model.subject));
+            Navigator.push(
+                context,
+                UploadMaterialPage.getRoute(
+                  model.subject,
+                  model.id,
+                  state: Provider.of<BatchMaterialState>(context, listen: false)
+                ));
           },
         ),
         FabButton(

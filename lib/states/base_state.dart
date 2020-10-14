@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class BaseState extends ChangeNotifier {
-  bool _isBusy;
+  bool _isBusy = false;
 
   bool get isBusy => _isBusy;
 

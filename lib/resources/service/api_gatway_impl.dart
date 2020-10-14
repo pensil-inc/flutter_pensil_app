@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
+import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
@@ -181,20 +182,53 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<String> uploadFile(File file) async {
-    String fileName = file.path.split('/').last;
+  Future<bool> uploadFile(File file, String id) async {
+    try {
+      String fileName = file.path.split('/').last;
 
-    FormData data = FormData.fromMap({
-      "file": await MultipartFile.fromFile(
-        file.path,
-        filename: fileName,
-      ),
-    });
+      FormData data = FormData.fromMap({
+        "file": await MultipartFile.fromFile(
+          file.path,
+          filename: fileName,
+        ),
+      });
 
-    String token = await pref.getAccessToken();
-    final header = {"Authorization": "Bearer " + token};
-    await _dioClient.post(Constants.video, data: data, options: Options(headers: header));
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      await _dioClient.post(Constants.material + "/$id/upload", data: data, options: Options(headers: header));
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-    return "URL";
+  @override
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model) async {
+    try {
+      final data = model.toJson();
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.post(Constants.material, data: data, options: Options(headers: header));
+      final map = _dioClient.getJsonBody(response);
+      print(map);
+      final ma = BatchMaterialModel.fromJson(map["material"]);
+      return ma;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<BatchMaterialModel>> getBatchMaterialList() async{
+     try {
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.material, options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = BatchMaterialRespopnseModel.fromJson(json);
+      return model.materials;
+    } catch (error) {
+      throw error;
+    }
   }
 }
