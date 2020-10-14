@@ -44,5 +44,6 @@ void setUpDependency(Config config) {
   serviceLocator.registerSingleton(TeacherRepository(
     GetIt.instance<ApiGateway>(),
     GetIt.instance<SessionService>(),
+    GetIt.instance<SharedPrefrenceHelper>(),
   ));
 }

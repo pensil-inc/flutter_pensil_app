@@ -8,6 +8,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
+import 'package:flutter_pensil_app/model/subject.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/dio_client.dart';
@@ -134,7 +135,23 @@ class ApiGatewayImpl implements ApiGateway {
       final response = await _dioClient.get(Constants.getAllStudentList, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = StudentResponseModel.fromJson(json);
+      // pref.saveStudent(model);
       return model.students;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<String>> getSubjectList() async {
+    try {
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.subjects, options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = SubjectReponseModel.fromJson(json);
+      // pref.saveSubjects(model);
+      return model.subjects;
     } catch (error) {
       throw error;
     }
@@ -219,8 +236,8 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<List<BatchMaterialModel>> getBatchMaterialList() async{
-     try {
+  Future<List<BatchMaterialModel>> getBatchMaterialList() async {
+    try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       final response = await _dioClient.get(Constants.material, options: Options(headers: header));

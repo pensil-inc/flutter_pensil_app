@@ -19,6 +19,7 @@ abstract class ApiGateway {
   Future<List<AnnouncementModel>> getAnnouncemantList();
   Future<List<PollModel>> getPollList();
   Future<List<ActorModel>> getStudentList();
+  Future<List<String>> getSubjectList();
   Future<List<NotificationModel>> getStudentNotificationsList();
   Future<List<VideoModel>> getVideosList();
   Future<bool> uploadFile(File file,String id);

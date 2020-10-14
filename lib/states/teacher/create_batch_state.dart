@@ -1,24 +1,20 @@
 import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 import 'package:flutter_pensil_app/model/subject.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
+import 'package:flutter_pensil_app/resources/repository/teacher/teacher_repository.dart';
+import 'package:flutter_pensil_app/states/base_state.dart';
 import 'package:get_it/get_it.dart';
 
-class CreateBatchStates extends ChangeNotifier {
+class CreateBatchStates extends BaseState {
   final getit = GetIt.instance;
   String batchName;
   String description;
   // List<String> availableSubjects;
   String selectedSubjects;
-  List<Subject> availableSubjects = [
-    Subject(name: "Philosophy", index: 0),
-    Subject(name: "General Studies", index: 1),
-    Subject(name: "Geography", index: 2),
-  ];
+  List<Subject> availableSubjects;
 
   List<String> contactList;
 
@@ -52,7 +48,7 @@ class CreateBatchStates extends ChangeNotifier {
       element.isSelected = false;
     });
     model.isSelected = true;
-     selectedSubjects = name;
+    selectedSubjects = name;
     notifyListeners();
   }
 
@@ -81,27 +77,23 @@ class CreateBatchStates extends ChangeNotifier {
     if (selectedStudentsList == null) {
       selectedStudentsList = [];
     }
-    var model = studentsList
-        .firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
+    var model = studentsList.firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
     model.isSelected = true;
     // selectedStudentsList.add(model);
     notifyListeners();
   }
 
   void removeStudentFromList(value) {
-    var model = studentsList
-        .firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
+    var model = studentsList.firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
     model.isSelected = false;
     notifyListeners();
   }
 
   void addNewSubject(String value) {
     if (availableSubjects == null) {
-      availableSubjects = List<Subject>()
-        ..add(Subject(index: 0, name: value, isSelected: true));
+      availableSubjects = List<Subject>()..add(Subject(index: 0, name: value, isSelected: true));
     } else {
-      availableSubjects.add(Subject(
-          index: availableSubjects.length, name: value, isSelected: false));
+      availableSubjects.add(Subject(index: availableSubjects.length, name: value, isSelected: false));
     }
     notifyListeners();
   }
@@ -131,17 +123,10 @@ class CreateBatchStates extends ChangeNotifier {
   /// Create batch by calling api
   Future<BatchModel> createBatch() async {
     try {
-      final mobile = studentsList
-          .where((element) => element.isSelected)
-          .map((e) => e.mobile);
-      List<String> contacts = new List.from(contactList ?? List<String>())
-        ..addAll(mobile ?? List<String>());
-      final model = BatchModel(
-          name: batchName,
-          description: description,
-          classes: timeSlots,
-          subject: selectedSubjects,
-          students: contacts);
+      final mobile = studentsList.where((element) => element.isSelected).map((e) => e.mobile);
+      List<String> contacts = new List.from(contactList ?? List<String>())..addAll(mobile ?? List<String>());
+      final model =
+          BatchModel(name: batchName, description: description, classes: timeSlots, subject: selectedSubjects, students: contacts);
       // print(model.toJson());
       final repo = getit.get<BatchRepository>();
       await repo.createBatch(model);
@@ -154,17 +139,33 @@ class CreateBatchStates extends ChangeNotifier {
 
   Future getStudentList() async {
     try {
-      final repo = getit.get<BatchRepository>();
+      final repo = getit.get<TeacherRepository>();
       studentsList = await repo.getStudentList();
       studentsList.toSet().toList();
 
       final ids = studentsList.map((e) => e.mobile).toSet();
       studentsList.retainWhere((x) => ids.remove(x.mobile));
-
+      await getSubjectList();
       notifyListeners();
     } catch (error, strackTrace) {
       log("getStudentList", error: error, stackTrace: strackTrace);
       return null;
     }
+  }
+
+  Future getSubjectList() async {
+    await execute(() async {
+      final repo = getit.get<TeacherRepository>();
+      final list = await repo.getSubjectList();
+      if (list != null) {
+        /// Remove duplicate subjects
+        list.toSet().toList();
+        final ids = list.map((e) => e).toSet();
+        list.retainWhere((x) => ids.remove(x));
+
+        availableSubjects =
+            Iterable.generate(list.length, (index) => Subject(index: index, name: list[index], isSelected: index == 0)).toList();
+      }
+    }, label: "Get Sybjects");
   }
 }

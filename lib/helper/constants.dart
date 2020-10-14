@@ -8,6 +8,7 @@ class Constants{
   static const String poll = 'poll';
   static const String video = 'video';
   static const String material = 'material';
+  static const String subjects = 'subjects';
   static const String getAllStudentList = "get-all-student-list";
   static const String studentNotificationList = "student/my-notifications";
 

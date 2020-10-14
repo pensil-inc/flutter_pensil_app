@@ -34,9 +34,7 @@ class BatchRepository {
     return gatway.getPollList();
   }
 
-  Future<List<ActorModel>> getStudentList(){
-    return gatway.getStudentList();
-  }
+  
 
   Future<List<NotificationModel>> getStudentNotificationsList(){
     return gatway.getStudentNotificationsList();
