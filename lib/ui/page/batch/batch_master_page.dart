@@ -3,6 +3,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
+import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_assignment_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_study_material_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/detail/batch_detail_page.dart';
@@ -21,8 +22,8 @@ class BatchMasterDetailPage extends StatefulWidget {
     return MaterialPageRoute(
       builder: (_) => MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => VideoState()),
-          ChangeNotifierProvider(create: (_) => BatchMaterialState()),
+          ChangeNotifierProvider(create: (_) => VideoState(batchId: model.id)),
+          ChangeNotifierProvider(create: (_) => BatchMaterialState(batchId: model.id)),
         ],
         builder: (_, child) => BatchMasterDetailPage(model: model),
       ),
@@ -156,7 +157,11 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
           animationValue: 1,
           onPressed: () {
             animate();
-            // Navigator.push(context, CreateAnnouncement.getRoute());
+            final model = widget.model;
+            model.isSelected = true;
+            Navigator.push(context, CreateAnnouncement.getRoute(
+              selectedBatch: model
+            ));
           },
         ),
       ],

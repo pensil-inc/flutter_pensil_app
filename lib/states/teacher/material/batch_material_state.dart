@@ -74,30 +74,10 @@ class BatchMaterialState extends BaseState {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
-      list = await repo.getBatchMaterialList();
+      list = await repo.getBatchMaterialList(batchId);
       if (list != null) {
         list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       }
-      // list = [
-      //   BatchMaterialModel(
-      //       batchId: "ewdwe",
-      //       title: "Applied mathmatics",
-      //       createdAt: DateTime.now(),
-      //       description: "sdfsdfsdfsdvsd ds sd sd c",
-      //       file: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      //       fileType: "pdf",
-      //       subject: "English",
-      //       id: "sdf"),
-      //   BatchMaterialModel(
-      //       batchId: "ewdwe",
-      //       title: "Physics part 1",
-      //       createdAt: DateTime.now(),
-      //       description: "sdfsdfsdfsdvsd ds sd sd c",
-      //       file: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      //       fileType: "pdf",
-      //       subject: "English",
-      //       id: "sdf"),
-      // ];
       notifyListeners();
       isBusy = false;
     }, label: "getVideosList");

@@ -13,13 +13,13 @@ import 'package:flutter_pensil_app/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class CreateAnnouncement extends StatefulWidget {
-  CreateAnnouncement({Key key}) : super(key: key);
-
-  static MaterialPageRoute getRoute() {
+  CreateAnnouncement({Key key, this.selectedBatch}) : super(key: key);
+  final BatchModel selectedBatch;
+  static MaterialPageRoute getRoute({BatchModel selectedBatch}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<AnnouncementState>(
         create: (context) => AnnouncementState(),
-        child: CreateAnnouncement(),
+        child: CreateAnnouncement(selectedBatch:selectedBatch),
       ),
     );
   }
@@ -40,7 +40,8 @@ class _CreateBatchState extends State<CreateAnnouncement> {
   void initState() {
     _description = TextEditingController();
     _title = TextEditingController();
-    // batchList.value = Provider.of<HomeState>(context).batchList;
+    if(widget.selectedBatch != null)
+    batchList.value = [widget.selectedBatch];
     super.initState();
   }
 

@@ -53,7 +53,7 @@ class VideoState extends BaseState {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
-      list = await repo.getVideosList();
+      list = await repo.getVideosList(batchId);
       if (list != null) {
         list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       }

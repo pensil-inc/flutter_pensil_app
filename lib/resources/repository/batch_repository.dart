@@ -39,10 +39,10 @@ class BatchRepository {
   Future<List<NotificationModel>> getStudentNotificationsList(){
     return gatway.getStudentNotificationsList();
   }
-  Future<List<VideoModel>> getVideosList(){
-    return gatway.getVideosList();
+  Future<List<VideoModel>> getVideosList(String batchId){
+    return gatway.getVideosList(batchId);
   }
-  Future<List<BatchMaterialModel>> getBatchMaterialList(){
-    return gatway.getBatchMaterialList();
+  Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId){
+    return gatway.getBatchMaterialList(batchId);
   }
 }
