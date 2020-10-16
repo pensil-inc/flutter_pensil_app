@@ -52,19 +52,29 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(model.title,style: Theme.of(context).textTheme.subtitle2,maxLines: 3,),
+                      Text(
+                        model.title,
+                        style: Theme.of(context).textTheme.subtitle2,
+                        maxLines: 3,
+                      ),
                       // Text(model.description,style: Theme.of(context).textTheme.bodyText2,maxLines: 2, ),
                       Spacer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
                         PChip(
                           backgroundColor: PColors.orange,
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).colorScheme.onPrimary, fontSize: 12, fontWeight: FontWeight.bold,),
+                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                           borderColor: Colors.transparent,
                           label: model.subject ?? "N/A",
                         ),
-                        Text(Utility.toDMformate(model.createdAt), style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 12,color:Theme.of(context).disabledColor))
+                        Text(Utility.toDMformate(model.createdAt),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(fontWeight: FontWeight.bold, fontSize: 12, color: Theme.of(context).disabledColor))
                       ])
                     ],
                   ),
@@ -73,7 +83,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
             ),
           ),
         ],
-      ).ripple((){
+      ).ripple(() {
         // Utility.displaySnackbar(context,);
         Navigator.push(context, WebViewPage.getRoute(model.videoUrl));
       }),
@@ -129,8 +139,24 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
             return Ploader();
           }
           if (state.list.isEmpty) {
-            return Center(
-              child: Text("No videos available"),
+            return Container(
+              height: 100,
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              width: AppTheme.fullWidth(context),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text("Nothing  to see here",
+                      style: Theme.of(context).textTheme.headline6.copyWith(
+                            color: PColors.gray,
+                          )),
+                  SizedBox(height: 10),
+                  Text("No video is uploaded yet for this batch!!",
+                      style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+                ],
+              ),
             );
           }
           return ListView.builder(

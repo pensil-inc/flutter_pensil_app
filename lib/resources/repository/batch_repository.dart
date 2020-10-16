@@ -45,4 +45,8 @@ class BatchRepository {
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId){
     return gatway.getBatchMaterialList(batchId);
   }
+
+  Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId){
+    return gatway.getBatchAnnouncemantList(batchId);
+  }
 }

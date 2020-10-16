@@ -25,4 +25,5 @@ abstract class ApiGateway {
   Future<bool> uploadFile(File file,String id);
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model);
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
+  Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId);
 }

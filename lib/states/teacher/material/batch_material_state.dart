@@ -80,6 +80,6 @@ class BatchMaterialState extends BaseState {
       }
       notifyListeners();
       isBusy = false;
-    }, label: "getVideosList");
+    }, label: "getBatchMaterialList");
   }
 }

@@ -47,7 +47,7 @@ class ApiGatewayImpl implements ApiGateway {
       final data = model.toJson();
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.post(Constants.createAnnouncement, data: data, options: Options(headers: header));
+      var response = await _dioClient.post(Constants.annoucenment, data: data, options: Options(headers: header));
       return true;
     } catch (error) {
       throw error;
@@ -104,7 +104,7 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.get(Constants.createAnnouncement, options: Options(headers: header));
+      final response = await _dioClient.get(Constants.annoucenment, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = AnnouncementListResponse.fromJson(json);
       return model.announcements;
@@ -244,6 +244,21 @@ class ApiGatewayImpl implements ApiGateway {
       var json = _dioClient.getJsonBody(response);
       final model = BatchMaterialRespopnseModel.fromJson(json);
       return model.materials;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId)async{
+    try {
+      assert(batchId != null);
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.getBatchAnnouncementList(batchId), options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = AnnouncementListResponse.fromJson(json);
+      return model.announcements;
     } catch (error) {
       throw error;
     }

@@ -4,6 +4,7 @@ class Images{
   static const String back = 'assets/images/icons/back.png';
   static const String cross = 'assets/images/icons/cross.png';
   static const String announcements = 'assets/images/icons/announcement.png';
+  static const String megaphone = 'assets/images/icons/megaphone.png';
   static const String peopleWhite = 'assets/images/icons/people_white.png';
   static const String peopleBlack = 'assets/images/icons/people_black.png';
   static const String calender = 'assets/images/icons/calender.png';

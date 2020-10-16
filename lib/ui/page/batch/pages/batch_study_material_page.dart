@@ -72,8 +72,7 @@ class BatchStudyMaterialPage extends StatelessWidget {
           ),
         ],
       ).ripple(() {
-        if(model.file != null)
-        Utility.launchOnWeb(model.file);
+        if (model.file != null) Utility.launchOnWeb(model.file);
         // Navigator.push(context, WebViewPage.getRoute(model.file));
       }),
     );
@@ -126,7 +125,24 @@ class BatchStudyMaterialPage extends StatelessWidget {
           }
           if (!(state.list != null && state.list.isNotEmpty)) {
             return Center(
-              child: Text("No videos available"),
+              child: Container(
+                height: 100,
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                width: AppTheme.fullWidth(context),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Nothing  to see here",
+                        style: Theme.of(context).textTheme.headline6.copyWith(
+                              color: PColors.gray,
+                            )),
+                    SizedBox(height: 10),
+                    Text("No study material uploaded yet for this batch!!", style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+                  ],
+                ),
+              ),
             );
           }
           return ListView.builder(

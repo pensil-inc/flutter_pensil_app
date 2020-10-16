@@ -3,9 +3,12 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
+import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
+import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_avatar.dart';
 import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
+import 'package:provider/provider.dart';
 
 class BatchDetailPage extends StatelessWidget {
   const BatchDetailPage({Key key, this.model}) : super(key: key);
@@ -98,7 +101,24 @@ class BatchDetailPage extends StatelessWidget {
                   Text("${model.studentModel.length} Student", style: theme.textTheme.headline6),
                 ],
               ).hP16,
-              _students(theme)
+              _students(theme),
+              SizedBox(height: 10),
+              Consumer<AnnouncementState>(
+                builder: (context,state, child) {
+                   if (state.batchAnnouncementList != null && state.batchAnnouncementList.isNotEmpty)
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          if (index == 0) return _title(context,"${state.batchAnnouncementList.length} Announcement");
+                          return AnnouncementWidget(state.batchAnnouncementList[index - 1]);
+                        },
+                        childCount: state.batchAnnouncementList.length + 1,
+                      ),
+                    );
+
+                    return SizedBox();
+                },
+              )
             ],
           ),
         )

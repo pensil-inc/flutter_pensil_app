@@ -36,6 +36,10 @@ class Utility {
     return DateFormat('hh:mm a').format(date);
   }
 
+  static String toTimeOfDate(DateTime date) {
+    return DateFormat('hh:mm a dd MMM').format(date);
+  }
+
   static String timeFrom24(String date) {
     final hr = date.split(":")[0];
     final mm = date.split(":")[1];
