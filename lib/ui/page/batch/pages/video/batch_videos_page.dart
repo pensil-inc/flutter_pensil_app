@@ -70,11 +70,13 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
                           borderColor: Colors.transparent,
                           label: model.subject ?? "N/A",
                         ),
-                        Text(Utility.toDMformate(model.createdAt),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2
-                                .copyWith(fontWeight: FontWeight.bold, fontSize: 12, color: Theme.of(context).disabledColor))
+                        Text(
+                          Utility.toDMformate(model.createdAt),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(fontWeight: FontWeight.bold, fontSize: 12, color: Theme.of(context).disabledColor),
+                        )
                       ])
                     ],
                   ),
@@ -85,7 +87,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
         ],
       ).ripple(() {
         // Utility.displaySnackbar(context,);
-        Navigator.push(context, WebViewPage.getRoute(model.videoUrl));
+        Navigator.push(context, WebViewPage.getRoute(model.videoUrl, title:model.title));
       }),
     );
   }

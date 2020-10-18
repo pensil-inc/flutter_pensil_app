@@ -100,7 +100,7 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
     final isOk = await state.uploadMaterial(_title.text, _description.text);
     isLoading.value = false;
     if (isOk) {
-      Alert.sucess(context, message: "Video added sucessfully!!", title: "Message");
+      Alert.sucess(context, message: "Material added sucessfully!!", title: "Message");
       await widget.state.getBatchMaterialList();
     } else {
       Alert.sucess(context, message: "Some error occured. Please try again in some time!!", title: "Message", height: 170);

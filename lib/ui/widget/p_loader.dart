@@ -21,6 +21,9 @@ class Ploader extends StatelessWidget {
 
 
 class PCLoader extends StatelessWidget {
+  final double stroke;
+
+  const PCLoader({Key key, this.stroke = 1}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +32,7 @@ class PCLoader extends StatelessWidget {
       child: SizedBox(
         height: 30,
         width: 30,
-        child: Ploader(stroke: 1),
+        child: Ploader(stroke: stroke),
       ),
     );
   }

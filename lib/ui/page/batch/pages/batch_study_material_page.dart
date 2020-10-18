@@ -72,14 +72,13 @@ class BatchStudyMaterialPage extends StatelessWidget {
           ),
         ],
       ).ripple(() {
-        if (model.file != null) {
-          if (model.file.contains("pdf")) {
+        if (model.file != null || model.articleUrl != null) {
+          if (model?.file?.contains("pdf") ?? false) {
             Utility.launchOnWeb(model.file);
           } else {
-            Utility.launchURL(context, model.file);
+            Utility.launchURL(context, model.articleUrl ?? model.file);
           }
         }
-        // Navigator.push(context, WebViewPage.getRoute(model.file));
       }),
     );
   }

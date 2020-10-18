@@ -30,6 +30,7 @@ class BatchMaterialRespopnseModel {
 class BatchMaterialModel {
     BatchMaterialModel({
         this.id,
+        this.articleUrl,
         this.title,
         this.subject,
         this.description,
@@ -43,6 +44,7 @@ class BatchMaterialModel {
     });
 
     final String id;
+    final String articleUrl;
     final String title;
     final String subject;
     final String description;
@@ -60,6 +62,7 @@ class BatchMaterialModel {
 
     factory BatchMaterialModel.fromJson(Map<String, dynamic> json) => BatchMaterialModel(
         id: json["id"] == null ? null : json["id"],
+        articleUrl: json["fileUrl"] == null ? null : json["fileUrl"],
         title: json["title"] == null ? null : json["title"],
         subject: json["subject"] == null ? null : json["subject"],
         description: json["description"] == null ? null : json["description"],
@@ -74,6 +77,7 @@ class BatchMaterialModel {
 
     Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
+        "fileUrl": articleUrl == null ? null : articleUrl,
         "title": title == null ? null : title,
         "subject": subject == null ? null : subject,
         "description": description == null ? null : description,

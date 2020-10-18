@@ -19,11 +19,8 @@ class BatchMaterialState extends BaseState {
 
   /// Container all video list
   List<BatchMaterialModel> list;
-  void setArticleUrl(
-    String url,
-  ) {
+  void setArticleUrl(String url) {
     fileUrl = url;
-    notifyListeners();
   }
 
   set setFile(File data) {
@@ -40,21 +37,20 @@ class BatchMaterialState extends BaseState {
     final data = await execute(() async {
       assert(title != null);
       assert(subject != null);
-      var model = BatchMaterialModel(
-        title: title,
-        description: description,
-        subject: subject,
-        batchId: batchId,
-      );
+      var model = BatchMaterialModel(title: title, description: description, subject: subject, batchId: batchId, articleUrl: fileUrl);
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
       return await repo.uploadMaterial(model);
     }, label: "uploadMaterial");
-    if (data != null) {
+    if (data != null && file != null) {
       await upload(data.id);
       isBusy = false;
       return true;
-    } else {
+    }else if(fileUrl != null){
+      isBusy = true;
+      return false;
+    }
+     else {
       isBusy = false;
       return false;
     }
@@ -62,6 +58,7 @@ class BatchMaterialState extends BaseState {
 
   Future<bool> upload(String id) async {
     return await execute(() async {
+
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();

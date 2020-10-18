@@ -8,6 +8,7 @@ import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_avatar.dart';
 import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
+import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
 import 'package:provider/provider.dart';
 
 class BatchDetailPage extends StatelessWidget {
@@ -36,19 +37,20 @@ class BatchDetailPage extends StatelessWidget {
 
   Widget _students(ThemeData theme) {
     return Wrap(
-      children: model.studentModel.map((model) => SizedBox(
-                height: 35,
-                child: Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: UsernameWidget(
-                    name: model.name,
-                    textStyle: theme.textTheme.bodyText1.copyWith(fontSize: 12, color: theme.colorScheme.onPrimary),
-                    backGroundColor: PColors.randomColor(model.name),
-                  ),
-                ),
-              )).toList()
-
-    ).p16;
+            children: model.studentModel
+                .map((model) => SizedBox(
+                      height: 35,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 5),
+                        child: UsernameWidget(
+                          name: model.name,
+                          textStyle: theme.textTheme.bodyText1.copyWith(fontSize: 12, color: theme.colorScheme.onPrimary),
+                          backGroundColor: PColors.randomColor(model.name),
+                        ),
+                      ),
+                    ))
+                .toList())
+        .p16;
   }
 
   @override
@@ -76,7 +78,7 @@ class BatchDetailPage extends StatelessWidget {
                   SizedBox(height: 19),
                   Row(
                     children: <Widget>[
-                      Image.asset(Images.calender, width: 25),
+                      Image.asset(Images.calender, width: 20),
                       SizedBox(width: 10),
                       _title(context, "${model.classes.length} Classes", fontSize: 18),
                     ],
@@ -92,7 +94,7 @@ class BatchDetailPage extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset(Images.peopleBlack, width: 25),
+                  Image.asset(Images.peopleBlack, width: 20),
                   SizedBox(width: 10),
                   _title(context, "${model.studentModel.length} Student", fontSize: 18),
                 ],
@@ -104,6 +106,9 @@ class BatchDetailPage extends StatelessWidget {
         SliverToBoxAdapter(child: Divider(height: 1, thickness: 1).pB(8)),
         Consumer<AnnouncementState>(
           builder: (context, state, child) {
+            if (state.isBusy) {
+              return SliverToBoxAdapter(child: PCLoader(stroke:2));
+            }
             if (state.batchAnnouncementList != null && state.batchAnnouncementList.isNotEmpty)
               return SliverList(
                 delegate: SliverChildBuilderDelegate(

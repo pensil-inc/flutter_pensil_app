@@ -5,13 +5,11 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
   final String link;
+  final String title;
 
-  const WebViewPage({Key key, this.link}) : super(key: key);
-  static MaterialPageRoute getRoute(String link) {
-    return MaterialPageRoute(
-        builder: (_) => WebViewPage(
-              link: link,
-            ));
+  const WebViewPage({Key key, this.link, this.title}) : super(key: key);
+  static MaterialPageRoute getRoute(String link, {String title}) {
+    return MaterialPageRoute(builder: (_) => WebViewPage(link: link, title: title));
   }
 
   @override
@@ -25,9 +23,8 @@ class _WebViewExampleState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          // title: const Text('Flutter WebView example'),
-
-          ),
+        title: Text(widget.title ?? ""),
+      ),
       body: Builder(
         builder: (BuildContext context) {
           return Stack(
