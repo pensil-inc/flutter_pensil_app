@@ -29,7 +29,7 @@ class PColors {
   static const Color pink = Color(0XFFea4aaa);
   static const Color white = Color(0XFFffffff);
 
-  static Color randomColor() {
+  static Color randomColor(String text) {
     final colors = <Color>[
       Color(0xffFF7878),
       Color(0xffFFA959),
@@ -43,6 +43,9 @@ class PColors {
       Color(0xffF14CD7),
       Color(0xffFF5757),
     ];
+    if(text != null){
+      return colors[text.length %11];
+    }
     Random ran = Random.secure();
     return colors[ran.nextInt(10)];
   }

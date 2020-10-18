@@ -72,21 +72,10 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
         ));
   }
 
-  void displayBatchList() async {
-    // final list = Provider.of<HomeState>(context, listen: false).batchList;
-    // if (!(list != null && list.isNotEmpty)) {
-    //   return;
-    // }
-    // print(list.length);
-    // await showSearch(
-    //     context: context,
-    //     delegate: BatchSearch(
-    //         list, Provider.of<HomeState>(context, listen: false), batchList));
-  }
   void pickFile() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc'],
+      allowedExtensions: ['jpg', 'pdf', 'doc','xlsx','xls'],
     );
     if (result != null) {
       PlatformFile file = result.files.first;

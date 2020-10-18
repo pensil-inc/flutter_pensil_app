@@ -20,15 +20,10 @@ class BatchDetailPage extends StatelessWidget {
             ));
   }
 
-  Widget _title(context, String text) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: 16,
-      ),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 28, fontWeight: FontWeight.bold),
-      ),
+  Widget _title(context, String text, {double fontSize = 28}) {
+    return Text(
+      text,
+      style: Theme.of(context).textTheme.headline6.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
     );
   }
 
@@ -41,19 +36,18 @@ class BatchDetailPage extends StatelessWidget {
 
   Widget _students(ThemeData theme) {
     return Wrap(
-      children: model.studentModel
-          .map((e) => SizedBox(
+      children: model.studentModel.map((model) => SizedBox(
                 height: 35,
                 child: Padding(
                   padding: EdgeInsets.only(right: 5),
                   child: UsernameWidget(
-                    name: e.name,
+                    name: model.name,
                     textStyle: theme.textTheme.bodyText1.copyWith(fontSize: 12, color: theme.colorScheme.onPrimary),
-                    backGroundColor: PColors.randomColor(),
+                    backGroundColor: PColors.randomColor(model.name),
                   ),
                 ),
-              ))
-          .toList(),
+              )).toList()
+
     ).p16;
   }
 
@@ -68,15 +62,14 @@ class BatchDetailPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _title(context, model.name),
-                  SizedBox(height: 12),
+                  _title(context, model.name).vP8,
                   Wrap(
                     children: <Widget>[
                       PChip(
                         style: theme.textTheme.bodyText1.copyWith(color: theme.colorScheme.onPrimary),
                         borderColor: Colors.transparent,
                         label: model.subject,
-                        backgroundColor: PColors.randomColor(),
+                        backgroundColor: PColors.randomColor(model.subject),
                       ),
                     ],
                   ),
@@ -85,43 +78,47 @@ class BatchDetailPage extends StatelessWidget {
                     children: <Widget>[
                       Image.asset(Images.calender, width: 25),
                       SizedBox(width: 10),
-                      Text("${model.classes.length} Classes", style: theme.textTheme.headline6),
+                      _title(context, "${model.classes.length} Classes", fontSize: 18),
                     ],
                   )
                 ],
               ).hP16,
+              SizedBox(height: 11),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: model.classes.map((e) => _timing(context, e).vP4).toList(),
-              ).p16,
+              ).hP16,
+              SizedBox(height: 16),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Image.asset(Images.peopleBlack, width: 25),
                   SizedBox(width: 10),
-                  Text("${model.studentModel.length} Student", style: theme.textTheme.headline6),
+                  _title(context, "${model.studentModel.length} Student", fontSize: 18),
                 ],
               ).hP16,
               _students(theme),
-              SizedBox(height: 10),
-              Consumer<AnnouncementState>(
-                builder: (context,state, child) {
-                   if (state.batchAnnouncementList != null && state.batchAnnouncementList.isNotEmpty)
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == 0) return _title(context,"${state.batchAnnouncementList.length} Announcement");
-                          return AnnouncementWidget(state.batchAnnouncementList[index - 1]);
-                        },
-                        childCount: state.batchAnnouncementList.length + 1,
-                      ),
-                    );
-
-                    return SizedBox();
-                },
-              )
             ],
           ),
-        )
+        ),
+        SliverToBoxAdapter(child: Divider(height: 1, thickness: 1).pB(8)),
+        Consumer<AnnouncementState>(
+          builder: (context, state, child) {
+            if (state.batchAnnouncementList != null && state.batchAnnouncementList.isNotEmpty)
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    if (index == 0) return _title(context, "Recent Announcement", fontSize: 18).p16;
+                    return AnnouncementWidget(state.batchAnnouncementList[index - 1]);
+                  },
+                  childCount: state.batchAnnouncementList.length + 1,
+                ),
+              );
+
+            return SliverToBoxAdapter();
+          },
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: 70))
       ],
     );
   }

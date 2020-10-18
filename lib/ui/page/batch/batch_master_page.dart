@@ -149,7 +149,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
                 UploadMaterialPage.getRoute(
                   model.subject,
                   model.id,
-                  state: Provider.of<BatchMaterialState>(context, listen: false)
+                  state: Provider.of<BatchMaterialState>(context, listen: false),
                 ));
           },
         ),
@@ -157,20 +157,25 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
           icon: Images.announcements,
           text: 'Add Announcement',
           translateButton: _translateButton,
+          
           animationValue: 1,
           onPressed: () {
             animate();
             final model = widget.model;
             model.isSelected = true;
             Navigator.push(context, CreateAnnouncement.getRoute(
-              selectedBatch: model
+              selectedBatch: model,
+              onAnnouncementCreated:onAnnouncementCreated,
             ));
           },
         ),
       ],
     ];
   }
-
+ 
+  void onAnnouncementCreated()async{
+    Provider.of<AnnouncementState>(context, listen: false).getBatchAnnouncementList();
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

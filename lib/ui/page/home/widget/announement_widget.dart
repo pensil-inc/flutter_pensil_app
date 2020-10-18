@@ -40,8 +40,9 @@ class AnnouncementWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(model.description),
+                  SizedBox(height: 8),
                   Align(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.bottomRight,
                     child: Text(
                       Utility.toTimeOfDate(model.createdAt),
                       style: Theme.of(context).textTheme.subtitle1.copyWith(fontSize: 12, fontWeight: FontWeight.w500),

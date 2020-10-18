@@ -61,7 +61,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
                       Spacer(),
                       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
                         PChip(
-                          backgroundColor: PColors.orange,
+                          backgroundColor: PColors.randomColor(model.subject),
                           style: Theme.of(context).textTheme.bodyText2.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
                                 fontSize: 12,

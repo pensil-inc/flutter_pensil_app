@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as custom;
 
 class Utility {
   static void displaySnackbar(BuildContext context, {String msg = "Feature is under development", GlobalKey<ScaffoldState> key}) {
@@ -72,5 +73,31 @@ class Utility {
       msg = 'now';
     }
     return msg;
+  }
+  static void launchURL(BuildContext context, String url) async {
+    if(url == null){
+      return;
+    }
+    try {
+      await custom.launch(
+        url,
+        option: new custom.CustomTabsOption(
+          toolbarColor: Colors.white,
+          enableDefaultShare: true,
+          enableUrlBarHiding: true,
+          showPageTitle: true,
+          animation: new custom.CustomTabsAnimation.slideIn(),
+          extraCustomTabs: <String>[
+            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
+            'org.mozilla.firefox',
+            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
+            'com.microsoft.emmx',
+          ],
+        ),
+      );
+    } catch (e) {
+      // An exception is thrown if browser app is not installed on Android device.
+      debugPrint(e.toString());
+    }
   }
 }

@@ -20,7 +20,7 @@ class AddVideoPage extends StatefulWidget {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<VideoState>(
         create: (context) => VideoState(subject: subject, batchId: batchId),
-        child: AddVideoPage(subject: subject,state:state),
+        child: AddVideoPage(subject: subject, state: state),
       ),
     );
   }
@@ -147,7 +147,12 @@ class _AddVideoPageState extends State<AddVideoPage> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(right: 4, top: 10),
-                              child: PChip(label: widget.subject, backgroundColor: PColors.yellow, borderColor: Colors.transparent),
+                              child: PChip(
+                                label: widget.subject,
+                                backgroundColor: PColors.randomColor(widget.subject),
+                                borderColor: Colors.transparent,
+                                style: TextStyle(color:Colors.white),
+                              ),
                             ),
                           ],
                         ),

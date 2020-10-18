@@ -72,7 +72,13 @@ class BatchStudyMaterialPage extends StatelessWidget {
           ),
         ],
       ).ripple(() {
-        if (model.file != null) Utility.launchOnWeb(model.file);
+        if (model.file != null) {
+          if (model.file.contains("pdf")) {
+            Utility.launchOnWeb(model.file);
+          } else {
+            Utility.launchURL(context, model.file);
+          }
+        }
         // Navigator.push(context, WebViewPage.getRoute(model.file));
       }),
     );
@@ -139,7 +145,8 @@ class BatchStudyMaterialPage extends StatelessWidget {
                               color: PColors.gray,
                             )),
                     SizedBox(height: 10),
-                    Text("No study material uploaded yet for this batch!!", style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+                    Text("No study material uploaded yet for this batch!!",
+                        style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
                   ],
                 ),
               ),

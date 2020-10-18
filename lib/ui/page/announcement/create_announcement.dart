@@ -13,13 +13,14 @@ import 'package:flutter_pensil_app/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class CreateAnnouncement extends StatefulWidget {
-  CreateAnnouncement({Key key, this.selectedBatch}) : super(key: key);
+  CreateAnnouncement({Key key, this.selectedBatch, this.onAnnouncementCreated}) : super(key: key);
   final BatchModel selectedBatch;
-  static MaterialPageRoute getRoute({BatchModel selectedBatch}) {
+  final Function onAnnouncementCreated;
+  static MaterialPageRoute getRoute({BatchModel selectedBatch, Function onAnnouncementCreated}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<AnnouncementState>(
         create: (context) => AnnouncementState(),
-        child: CreateAnnouncement(selectedBatch:selectedBatch),
+        child: CreateAnnouncement(selectedBatch: selectedBatch, onAnnouncementCreated: onAnnouncementCreated),
       ),
     );
   }
@@ -33,15 +34,13 @@ class _CreateBatchState extends State<CreateAnnouncement> {
   TextEditingController _title;
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
-  ValueNotifier<List<BatchModel>> batchList =
-      ValueNotifier<List<BatchModel>>([]);
+  ValueNotifier<List<BatchModel>> batchList = ValueNotifier<List<BatchModel>>([]);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     _description = TextEditingController();
     _title = TextEditingController();
-    if(widget.selectedBatch != null)
-    batchList.value = [widget.selectedBatch];
+    if (widget.selectedBatch != null) batchList.value = [widget.selectedBatch];
     super.initState();
   }
 
@@ -54,23 +53,17 @@ class _CreateBatchState extends State<CreateAnnouncement> {
   }
 
   Widget _titleText(context, String name) {
-    return Text(name,
-        style: Theme.of(context)
-            .textTheme
-            .bodyText1
-            .copyWith(fontWeight: FontWeight.bold, fontSize: 16));
+    return Text(name, style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
-  Widget _secondaryButton(BuildContext context,
-      {String label, Function onPressed}) {
+  Widget _secondaryButton(BuildContext context, {String label, Function onPressed}) {
     final theme = Theme.of(context);
     return OutlineButton.icon(
         onPressed: onPressed,
         icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
         label: Text(
           label,
-          style: theme.textTheme.button
-              .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
+          style: theme.textTheme.button.copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -80,10 +73,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
       return;
     }
     print(list.length);
-    await showSearch(
-        context: context,
-        delegate: BatchSearch(
-            list, Provider.of<HomeState>(context, listen: false), batchList));
+    await showSearch(context: context, delegate: BatchSearch(list, Provider.of<HomeState>(context, listen: false), batchList));
   }
 
   void createAnnouncement() async {
@@ -97,19 +87,17 @@ class _CreateBatchState extends State<CreateAnnouncement> {
 
     isLoading.value = true;
 
-    final addNewAnnouncment = await state.createAnnouncement(
-        title: _title.text, description: _description.text, batches: batchList.value);
+    final addNewAnnouncment = await state.createAnnouncement(title: _title.text, description: _description.text, batches: batchList.value);
     isLoading.value = false;
     if (addNewAnnouncment != null) {
-      Alert.sucess(context,
-          message: "Announcement created sucessfully!!", title: "Message");
+      Alert.sucess(context, message: "Announcement created sucessfully!!", title: "Message");
+      if (widget.onAnnouncementCreated != null) {
+        widget.onAnnouncementCreated();
+      }
       final homeState = Provider.of<HomeState>(context, listen: false);
       homeState.getAnnouncemantList();
     } else {
-      Alert.sucess(context,
-          message: "Some error occured. Please try again in some time!!",
-          title: "Message",
-          height: 170);
+      Alert.sucess(context, message: "Some error occured. Please try again in some time!!", title: "Message", height: 170);
       Navigator.pop(context);
     }
   }
@@ -120,7 +108,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
       key: scaffoldKey,
       appBar: CustomAppBar("Create Announcement"),
       body: Container(
-        padding: EdgeInsets.only(left:16,right:16),
+        padding: EdgeInsets.only(left: 16, right: 16),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -143,12 +131,11 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                     height: null,
                     padding: EdgeInsets.symmetric(vertical: 16)),
                 SizedBox(height: 10),
-                 Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     _titleText(context, "Add Batch"),
-                    _secondaryButton(context,
-                        label: "Pick Batch", onPressed: displayBatchList),
+                    _secondaryButton(context, label: "Pick Batch", onPressed: displayBatchList),
                   ],
                 ),
                 if (batchList != null)
@@ -158,23 +145,15 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                         return Wrap(
                             children: listenableList
                                 .where((element) => element.isSelected)
-                                .map((e) => Padding(
-                                  padding:EdgeInsets.only(right:4,top:4), 
-                                  child:PChip(label: e.name)
-                                ))
+                                .map((e) => Padding(padding: EdgeInsets.only(right: 4, top: 4), child: PChip(label: e.name)))
                                 .toList());
                       }),
-                // SizedBox(height: 10),
-               
-                // SizedBox(height: 10),
-
                 SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text("For all batches",
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, fontSize: 16)),
                     Switch(
                       value: Provider.of<AnnouncementState>(
                         context,

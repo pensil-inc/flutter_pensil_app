@@ -41,6 +41,7 @@ dependencies:
   contacts_service: ^0.4.6
   webview_flutter: ^0.3.22+1
   firebase_messaging: ^7.0.3
+  flutter_custom_tabs: ^0.6.0
   shared_preferences: ^0.5.12
   permission_handler: ^5.0.1+1
   cached_network_image: ^2.2.0+1

@@ -29,11 +29,11 @@ class VideoState extends BaseState {
 
   Future<bool> addVideo(String title, String description) async {
     try {
-      assert(title != null);
+      assert(subject != null);
       var model = VideoModel(
         title: title,
         description: description,
-        subject: "Physics",
+        subject: subject,
         videoUrl: videoUrl,
         batchId:batchId,
         thumbnailUrl:thumbnailUrl
