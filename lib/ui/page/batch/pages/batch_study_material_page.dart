@@ -4,6 +4,7 @@ import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
+import 'package:flutter_pensil_app/ui/page/common/pdf_view.dart';
 import 'package:flutter_pensil_app/ui/page/common/web_view.page.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
@@ -73,10 +74,13 @@ class BatchStudyMaterialPage extends StatelessWidget {
         ],
       ).ripple(() {
         if (model.file != null || model.articleUrl != null) {
-          if (model?.file?.contains("pdf") ?? false) {
-            Utility.launchOnWeb(model.file);
-          } else {
+          if (model.articleUrl != null) {
             Utility.launchURL(context, model.articleUrl ?? model.file);
+          }
+          if (model.file.contains("pdf")) {
+            Navigator.push(context, PdfViewPage.getRoute(model.file, title: model.title));
+          } else {
+            Utility.launchOnWeb(model.file);
           }
         }
       }),

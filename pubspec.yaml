@@ -39,6 +39,7 @@ dependencies:
   add_thumbnail: ^0.0.2
   image_picker: ^0.6.7+11
   contacts_service: ^0.4.6
+  advance_pdf_viewer: ^1.2.0
   webview_flutter: ^0.3.22+1
   firebase_messaging: ^7.0.3
   flutter_custom_tabs: ^0.6.0
