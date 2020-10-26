@@ -34,6 +34,8 @@ dependencies:
   get_it: ^5.0.1
   equatable: ^1.2.0
   provider: ^4.3.2+2
+  yoyo_player: ^0.1.0
+  better_player: ^0.0.29+1
   filter_list: ^0.0.5
   file_picker: ^2.0.7
   add_thumbnail: ^0.0.2

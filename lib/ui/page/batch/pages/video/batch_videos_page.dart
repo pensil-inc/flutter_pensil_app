@@ -5,6 +5,8 @@ import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/video/video_player_pag2e.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/video/video_player_page.dart';
 import 'package:flutter_pensil_app/ui/page/common/web_view.page.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
@@ -87,7 +89,8 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
         ],
       ).ripple(() {
         // Utility.displaySnackbar(context,);
-        Navigator.push(context, WebViewPage.getRoute(model.videoUrl, title:model.title));
+        Navigator.push(context,VideoPlayerPage2.getRoute(model.videoUrl, title:model.title));
+        // Navigator.push(context, WebViewPage.getRoute(model.videoUrl, title:model.title));
       }),
     );
   }
