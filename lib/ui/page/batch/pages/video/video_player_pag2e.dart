@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
@@ -25,7 +26,10 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
   BetterPlayerController _betterPlayerController;
   StreamController<bool> _fileVideoStreamController = StreamController.broadcast();
   bool _fileVideoShown = false;
-
+  void initState() { 
+    super.initState();
+    log("Now playing: ${widget.path}");
+  }
   Future<BetterPlayerController> _setupDefaultVideoData() async {
     var dataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.NETWORK, "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",

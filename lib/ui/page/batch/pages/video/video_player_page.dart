@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
@@ -23,7 +25,11 @@ class VideoPlayerPage extends StatefulWidget {
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
   bool fullscreen = false;
-
+  @override
+  void initState() { 
+    super.initState();
+    log("Now playing: ${widget.path}");
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

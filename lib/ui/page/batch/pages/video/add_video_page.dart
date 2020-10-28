@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:add_thumbnail/add_thumbnail.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
@@ -81,6 +85,18 @@ class _AddVideoPageState extends State<AddVideoPage> {
     );
   }
 
+  void pickFile() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['mp4', 'avi', "flv","mkv","mov"],
+    );
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      final state = Provider.of<VideoState>(context, listen: false);
+      state.setFile = File(file.path);
+    }
+  }
+
   void saveVideo() async {
     final state = Provider.of<VideoState>(context, listen: false);
     // validate batch name and batch description
@@ -151,7 +167,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
                                 label: widget.subject,
                                 backgroundColor: PColors.randomColor(widget.subject),
                                 borderColor: Colors.transparent,
-                                style: TextStyle(color:Colors.white),
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
                           ],
@@ -167,6 +183,58 @@ class _AddVideoPageState extends State<AddVideoPage> {
                       _secondaryButton(context, label: "Add", onPressed: addLink),
                     ],
                   ).p16,
+                  Container(
+                    width: AppTheme.fullWidth(context) ,
+                    margin: EdgeInsets.symmetric(horizontal:16),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    decoration: AppTheme.outline(context),
+                    child: Column(
+                      children: <Widget>[
+                        Text("Browse file", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                        Image.asset(Images.uploadVideo, height: 25).vP16,
+                        Text("File should be mp4,mov,avi",
+                            style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 12, color: PColors.gray)),
+                      ],
+                    ),
+                  ).ripple(pickFile),
+                  Consumer<VideoState>(
+                    builder: (context, state, child) {
+                      if (state.file != null) {
+                        return SizedBox(
+                          height: 65,
+                          width: AppTheme.fullWidth(context),
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(height: 10),
+                              Row(children: <Widget>[
+                                SizedBox(
+                                    width: 50,
+                                    child: Image.asset(
+                                      Images.getfiletypeIcon(state.file.path.split(".").last),
+                                      height: 30,
+                                    )),
+                                Text(state.file.path.split("/").last, maxLines: 2,).extended,
+                                IconButton(
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(Icons.cancel),
+                                    onPressed: () {
+                                      state.removeFile();
+                                    })
+                              ]),
+                              Container(
+                                height: 5,
+                                margin: EdgeInsets.symmetric(horizontal: 16),
+                                width: AppTheme.fullWidth(context),
+                                decoration: BoxDecoration(color: Color(0xff0CC476), borderRadius: BorderRadius.circular(20)),
+                              )
+                            ],
+                          ),
+                        ).vP8;
+                      }
+                      return SizedBox();
+                    },
+                  ),
+                  SizedBox(height: 20),
                   Consumer<VideoState>(
                     builder: (context, state, child) {
                       if (state.thumbnailUrl != null)

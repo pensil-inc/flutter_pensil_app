@@ -31,12 +31,12 @@ class TeacherRepository {
   Future<bool> createPoll(PollModel model)async{
     return gatway.createPoll(model);
   }
-  Future<bool> addVideo(VideoModel model){
+  Future<VideoModel> addVideo(VideoModel model){
     return gatway.addVideo(model); 
   }
 
-  Future<bool> uploadFile(File file,String id){
-    return gatway.uploadFile(file,id);
+  Future<bool> uploadFile(File file,String id,{bool isVideo = false}){
+    return gatway.uploadFile(file,id,isVideo:isVideo);
   }
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model){
     return gatway.uploadMaterial(model);

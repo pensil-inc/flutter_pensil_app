@@ -12,7 +12,7 @@ abstract class ApiGateway {
   Future<dynamic> getUser();
   Future<bool> createBatch(BatchModel model);
   Future<bool> createAnnouncement(AnnouncementModel model);
-  Future<bool> addVideo(VideoModel model);
+  Future<VideoModel> addVideo(VideoModel model);
   Future<ActorModel> login(ActorModel model);
   Future<List<BatchModel>> getBatches();
   Future<bool> createPoll(PollModel model);
@@ -22,7 +22,7 @@ abstract class ApiGateway {
   Future<List<String>> getSubjectList();
   Future<List<NotificationModel>> getStudentNotificationsList();
   Future<List<VideoModel>> getVideosList(String batchId);
-  Future<bool> uploadFile(File file,String id);
+  Future<bool> uploadFile(File file,String id,{bool isVideo = false});
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model);
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
   Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId);

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
@@ -17,6 +18,17 @@ class VideoState extends BaseState {
   String thumbnailUrl;
   String yTitle;
   String subject;
+  File file;
+
+  set setFile(File data) {
+    file = data;
+    notifyListeners();
+  }
+
+  void removeFile() {
+    file = null;
+    notifyListeners();
+  }
 
   /// Container all video list
   List<VideoModel> list;
@@ -29,23 +41,41 @@ class VideoState extends BaseState {
 
   Future<bool> addVideo(String title, String description) async {
     try {
+      if (file == null && videoUrl == null) {
+        return false;
+      }
       assert(subject != null);
       var model = VideoModel(
-        title: title,
-        description: description,
-        subject: subject,
-        videoUrl: videoUrl,
-        batchId:batchId,
-        thumbnailUrl:thumbnailUrl
-      );
+          title: title, description: description, subject: subject, videoUrl: videoUrl, batchId: batchId, thumbnailUrl: thumbnailUrl);
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-      await repo.addVideo(model);
+
+      final data = await execute(() async {
+        return await repo.addVideo(model);
+      }, label: "addVideo");
+      if (data != null && file != null) {
+        bool ok = await upload(data.id);
+        isBusy = false;
+        if (ok != null && ok) {
+          return true;
+        } else {
+          return false;
+        }
+      }
       return true;
     } catch (error, strackTrace) {
-      log("createBatch", error: error, stackTrace: strackTrace);
+      log("addVideo", error: error, stackTrace: strackTrace);
       return null;
     }
+  }
+
+  Future<bool> upload(String id) async {
+    return await execute(() async {
+      isBusy = true;
+      final getit = GetIt.instance;
+      final repo = getit.get<TeacherRepository>();
+      return await repo.uploadFile(file, id, isVideo: true);
+    }, label: "Upload Video");
   }
 
   Future getVideosList() async {
