@@ -30,6 +30,7 @@ class VideoModel {
     this.duration,
     this.thumbnailUrl,
     this.videoUrl,
+    this.video,
     this.isPrivate,
     this.quality,
     this.createdAt,
@@ -44,6 +45,7 @@ class VideoModel {
   final String duration;
   final String thumbnailUrl;
   final String videoUrl;
+  final String video;
   final bool isPrivate;
   final String quality;
   final DateTime createdAt;
@@ -62,6 +64,7 @@ class VideoModel {
         duration: json["duration"] == null ? null : json["duration"],
         thumbnailUrl: json["thumbnailUrl"] == null ? null : json["thumbnailUrl"],
         videoUrl: json["videoUrl"] == null ? null : json["videoUrl"],
+        video: json["video"] == null ? null : json["video"],
         isPrivate: json["isPrivate"] == null ? null : json["isPrivate"],
         quality: json["quality"] == null ? null : json["quality"],
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
@@ -77,6 +80,7 @@ class VideoModel {
         "duration": duration == null ? null : duration,
         "thumbnailUrl": thumbnailUrl == null ? null : thumbnailUrl,
         "videoUrl": videoUrl == null ? null : videoUrl,
+        "video": video == null ? null :video,
         "isPrivate": isPrivate == null ? null : isPrivate,
         "quality": quality == null ? null : quality,
         "createdAt": createdAt == null ? null : createdAt.toIso8601String(),

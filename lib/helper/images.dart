@@ -16,6 +16,14 @@ class Images{
   static const String epub = 'assets/images/icons/epub.png';
   static const String doc = 'assets/images/icons/doc.png';
   static const String audio = 'assets/images/icons/audio.png';
+  static const String quiz = 'assets/images/icons/quiz.png';
+  static const String question = 'assets/images/icons/question.png';
+  static const String timer = 'assets/images/icons/timer.png';
+  static const String dropdown = 'assets/images/icons/drop_down.png';
+  static const String scoreBack = 'assets/images/icons/score_back.png';
+  static const String correct = 'assets/images/icons/correct.png';
+  static const String wrong = 'assets/images/icons/wrong.png';
+  static const String skipped = 'assets/images/icons/skipped.png';
 
   static getfiletypeIcon(String type){
     switch (type) {

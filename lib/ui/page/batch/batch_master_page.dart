@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/states/quiz/quiz_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
@@ -26,6 +27,7 @@ class BatchMasterDetailPage extends StatefulWidget {
           ChangeNotifierProvider(create: (_) => VideoState(batchId: model.id)),
           ChangeNotifierProvider(create: (_) => BatchMaterialState(batchId: model.id)),
           ChangeNotifierProvider(create: (_) => AnnouncementState(batchId: model.id)),
+          ChangeNotifierProvider(create: (_) => QuizState(batchId: model.id)),
         ],
         builder: (_, child) => BatchMasterDetailPage(model: model),
       ),
@@ -58,6 +60,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
       Provider.of<VideoState>(context, listen: false).getVideosList();
       Provider.of<BatchMaterialState>(context, listen: false).getBatchMaterialList();
       Provider.of<AnnouncementState>(context, listen: false).getBatchAnnouncementList();
+      Provider.of<QuizState>(context, listen: false).getQuizList();
     });
     super.initState();
   }

@@ -4,11 +4,13 @@ class Constants{
   static const String developmentBaseUrl = "https://pensil-staging.herokuapp.com/";
   static const String batch = "batch";
   static const String annoucenment = 'announcement';
+  static const String assignment = 'assignment';
   static const String login = 'login';
   static const String poll = 'poll';
   static const String video = 'video';
   static const String material = 'material';
   static const String subjects = 'subjects';
+  static const String student = 'student';
   static const String getAllStudentList = "get-all-student-list";
   static const String studentNotificationList = "student/my-notifications";
 
@@ -21,5 +23,12 @@ class Constants{
 
   static String getBatchAnnouncementList(String batchId){
     return "$batch/$batchId/$annoucenment";
+  }
+
+  static String getBatchAssignmentList(String batchId){
+    return "$batch/$batchId/$assignment";
+  }
+  static String getBatchAssignmentDetail(String batchId,String assignmentId){
+    return "$student/$batch/$batchId/$assignment/$assignmentId";
   }
 }

@@ -89,7 +89,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
         ],
       ).ripple(() {
         // Utility.displaySnackbar(context,);
-        Navigator.push(context,VideoPlayerPage2.getRoute(model.videoUrl, title:model.title));
+        Navigator.push(context,VideoPlayerPage2.getRoute(model.video, title:model.title));
         // Navigator.push(context, WebViewPage.getRoute(model.videoUrl, title:model.title));
       }),
     );

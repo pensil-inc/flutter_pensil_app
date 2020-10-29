@@ -6,6 +6,7 @@ import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
+import 'package:flutter_pensil_app/model/quiz_model.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
 
 abstract class ApiGateway {
@@ -26,4 +27,6 @@ abstract class ApiGateway {
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model);
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
   Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId);
+  Future<List<AssignmentModel>> getAssignmentList(String batchId);
+  Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assgnmentId);
 }

@@ -3,6 +3,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
+import 'package:flutter_pensil_app/model/quiz_model.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
 import 'package:flutter_pensil_app/resources/service/session/session.dart';
@@ -48,5 +49,13 @@ class BatchRepository {
 
   Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId){
     return gatway.getBatchAnnouncemantList(batchId);
+  }
+
+  Future<List<AssignmentModel>> getAssignmentList(String batchId){
+    return gatway.getAssignmentList(batchId);
+  }
+
+  Future<QuizDetailModel> getAssignmentDetailList(String batchId,String assgnmentId){
+    return gatway.getAssignmentDetailList(batchId,assgnmentId);
   }
 }

@@ -110,7 +110,7 @@ class _AddVideoPageState extends State<AddVideoPage> {
 
     final isOk = await state.addVideo(_title.text, _description.text);
     isLoading.value = false;
-    if (isOk != null) {
+    if (isOk != null && isOk) {
       Alert.sucess(context, message: "Video added sucessfully!!", title: "Message");
       widget.state.getVideosList();
     } else {

@@ -8,6 +8,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
+import 'package:flutter_pensil_app/model/quiz_model.dart';
 import 'package:flutter_pensil_app/model/subject.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/resources/service/api_gatway.dart';
@@ -262,6 +263,36 @@ class ApiGatewayImpl implements ApiGateway {
       var json = _dioClient.getJsonBody(response);
       final model = AnnouncementListResponse.fromJson(json);
       return model.announcements;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<AssignmentModel>> getAssignmentList(String batchId)async {
+    try {
+      assert(batchId != null);
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.get(Constants.getBatchAssignmentList(batchId), options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = QuizRepsonseModel.fromJson(json);
+      return model.assignments;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assgnmentId) async{
+    try {
+      assert(batchId != null);
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc1ZlcmlmaWVkIjp0cnVlLCJsYXN0TG9naW5EYXRlIjoiMjAyMC0xMC0yOVQwNjozNDoyMC42MTNaIiwibmFtZSI6Ik5ldyBVc2VyIiwibW9iaWxlIjoiODIxODU3ODQ5OSIsInJvbGUiOiJzdHVkZW50IiwiY3JlYXRlZEF0IjoiMjAyMC0xMC0xMFQxNDozOToxMi42ODFaIiwidXBkYXRlZEF0IjoiMjAyMC0xMC0yOVQwNjozNDoyMC42MjBaIiwiZmNtVG9rZW4iOiJkNUZ5ZktVNVNXeVQzT1ZJT0hPVks3OkFQQTkxYkhOSTZnd1FuclVWZEVoYWY2am9RRkpHZm84V2Zid1EtdzJNNWM3MjB5NkxxZk1ya3lPTUNrbHBtRkVNU25JNnp5aFZWQ0xRS3pGbU53TTl4c2std0F6SG4yRlMwd1JGTEZBU3k1TUhkWm9pLUxEdDJwMy1KRFBOMEtWc19WakQxYW5CQjY3IiwiaWQiOiI1ZjgxYzc5MGJhZjY2NDAwMTdkOGNjY2IiLCJpYXQiOjE2MDM5NTMyNjB9.UTcM3OUTai8RT0mnAf5vnIBbIIfrcrzVipE3hH1oRp4"};
+      final response = await _dioClient.get(Constants.getBatchAssignmentDetail(batchId,assgnmentId), options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = QuizDetailModel.fromJson(json["assignment"][0]);
+      return model;
     } catch (error) {
       throw error;
     }

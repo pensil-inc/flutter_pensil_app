@@ -46,23 +46,25 @@ class VideoState extends BaseState {
       }
       assert(subject != null);
       var model = VideoModel(
-          title: title, description: description, subject: subject, videoUrl: videoUrl, batchId: batchId, thumbnailUrl: thumbnailUrl);
+          title: title, description: description, subject: subject, videoUrl: videoUrl ?? "https://truetechpro.snovasys.io/dashboard-management/dashboard/42cf1a89-801e-407f-9eb0-aad1a186637e", batchId: batchId, thumbnailUrl: thumbnailUrl);
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
 
       final data = await execute(() async {
         return await repo.addVideo(model);
       }, label: "addVideo");
-      if (data != null && file != null) {
-        bool ok = await upload(data.id);
-        isBusy = false;
-        if (ok != null && ok) {
-          return true;
-        } else {
-          return false;
+      if (data != null) {
+        if (file != null) {
+          bool ok = await upload(data.id);
+          isBusy = false;
+          if (ok != null && ok) {
+            return true;
+          } else {
+            return false;
+          }
         }
       }
-      return true;
+      return false;
     } catch (error, strackTrace) {
       log("addVideo", error: error, stackTrace: strackTrace);
       return null;
