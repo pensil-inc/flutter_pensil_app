@@ -3,6 +3,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/quiz/quiz_state.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/quiz/quiz_list_page.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
+import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
 import 'package:provider/provider.dart';
 
 class BatchAssignmentPage extends StatelessWidget {
@@ -38,6 +39,9 @@ class BatchAssignmentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<QuizState>(
       builder: (context, state, child) {
+        if(state.isBusy){
+          return Ploader();
+        }
         if(state.assignmentsList == null){
           return noQuiz(context);
         }

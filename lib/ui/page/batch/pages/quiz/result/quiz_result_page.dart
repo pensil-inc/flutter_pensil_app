@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/quiz_model.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/quiz/result/view_quiz_solution.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';
 
@@ -27,6 +28,8 @@ class QuizRasultPage extends StatelessWidget {
       ),
     );
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +95,9 @@ class QuizRasultPage extends StatelessWidget {
                   "View Solution",
                   style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
                 ),
-              ).ripple(() {}),
+              ).ripple(() {
+                Navigator.push(context, QuizSolutionPage.getRoute(model));
+              }),
               SizedBox(height: 16),
               PFlatButton(
                 label: "Go to home",

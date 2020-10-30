@@ -43,6 +43,12 @@ class AppTheme {
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Theme.of(context).primaryColor, width: 1),
       );
+
+  static BoxDecoration outlineSucess(context) => BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: PColors.green, width: 1),
+      );
+
   static BoxDecoration outlineError(context) => BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Theme.of(context).errorColor, width: 2),

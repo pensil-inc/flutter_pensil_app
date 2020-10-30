@@ -5,7 +5,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/quiz_model.dart';
 import 'package:flutter_pensil_app/states/quiz/quiz_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
-import 'package:flutter_pensil_app/ui/page/batch/pages/quiz/quiz_result_page.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/quiz/result/quiz_result_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/quiz/start/widget/question_count_section.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/quiz/start/widget/timer.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
