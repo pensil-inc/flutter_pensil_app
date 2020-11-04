@@ -1,7 +1,7 @@
-class Constants{
-  static const String productionBaseUrl = "https://pensil-staging.herokuapp.com/api/";
+class Constants {
+  static const String productionBaseUrl = "http://34.222.54.250:3000/api/";
 
-  static const String developmentBaseUrl = "https://pensil-staging.herokuapp.com/";
+  static const String developmentBaseUrl = "https://pensil-staging.herokuapp.com/api";
   static const String batch = "batch";
   static const String annoucenment = 'announcement';
   static const String assignment = 'assignment';
@@ -14,21 +14,23 @@ class Constants{
   static const String getAllStudentList = "get-all-student-list";
   static const String studentNotificationList = "student/my-notifications";
 
-  static String getBatchMaterialList(String batchId){
+  static String getBatchMaterialList(String batchId) {
     return "$batch/$batchId/$material";
   }
-  static String getBatchVideoList(String batchId){
+
+  static String getBatchVideoList(String batchId) {
     return "$batch/$batchId/$video";
   }
 
-  static String getBatchAnnouncementList(String batchId){
+  static String getBatchAnnouncementList(String batchId) {
     return "$batch/$batchId/$annoucenment";
   }
 
-  static String getBatchAssignmentList(String batchId){
+  static String getBatchAssignmentList(String batchId) {
     return "$batch/$batchId/$assignment";
   }
-  static String getBatchAssignmentDetail(String batchId,String assignmentId){
+
+  static String getBatchAssignmentDetail(String batchId, String assignmentId) {
     return "$student/$batch/$batchId/$assignment/$assignmentId";
   }
 }

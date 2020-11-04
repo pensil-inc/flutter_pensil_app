@@ -100,14 +100,13 @@ class Alert {
     );
   }
 
-  static void dialog(
-    BuildContext context, {
-    String title,
-    Widget child,
-    Function onPressed,
-    Color titleBackGround = PColors.orange,
-    String buttonText = "Ok",
-  }) async {
+  static void dialog(BuildContext context,
+      {String title,
+      Widget child,
+      Function onPressed,
+      Color titleBackGround = PColors.orange,
+      String buttonText = "Ok",
+      bool enableCrossButton = true}) async {
     final theme = Theme.of(context);
     await showDialog(
       barrierDismissible: false,
@@ -140,7 +139,7 @@ class Alert {
                           Text(title, style: Theme.of(context).textTheme.headline5.copyWith(color: theme.colorScheme.onPrimary)),
                           Spacer(),
                           Image.asset(Images.cross, height: 30).p(8).ripple(() {
-                            Navigator.pop(context);
+                            if (enableCrossButton) Navigator.pop(context);
                           })
                         ],
                       )),

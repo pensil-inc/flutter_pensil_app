@@ -19,34 +19,23 @@ class _QuizListPageState extends State<QuizListPage> {
     return Container(
       decoration: AppTheme.decoration(context),
       margin: EdgeInsets.only(bottom: 12),
-      height: 100,
+      // height: 50,
+      alignment: Alignment.center,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        model.title,
-                        style: Theme.of(context).textTheme.subtitle2,
-                        maxLines: 3,
-                      ),
-                      // Text(model.description,style: Theme.of(context).textTheme.bodyText2,maxLines: 2, ),
-                      Spacer(),
-                    ],
-                  ),
-                ),
-              ],
+          Icon(Icons.list_alt).hP8,
+          Container(
+            width: AppTheme.fullWidth(context) - 85,
+            child: Text(
+              model.title,
+              style: Theme.of(context).textTheme.subtitle2,
+              maxLines: 3,
             ),
           ),
+          SizedBox(width: 12),
         ],
-      ).ripple(() {
+      ).vP16.ripple(() {
         // Utility.displaySnackbar(context,);
         Alert.dialog(
           context,

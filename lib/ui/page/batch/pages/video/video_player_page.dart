@@ -26,10 +26,11 @@ class VideoPlayerPage extends StatefulWidget {
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
   bool fullscreen = false;
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     log("Now playing: ${widget.path}");
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,21 +46,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         children: [
           YoYoPlayer(
             aspectRatio: 16 / 9,
-            url:
-                // widget.path,
-                // "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
-                "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+            url: widget.path,
+            // "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
+            // "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
             // "https://player.vimeo.com/external/440218055.m3u8?s=7ec886b4db9c3a52e0e7f5f917ba7287685ef67f&oauth2_token_id=1360367101",
             // "https://sfux-ext.sfux.info/hls/chapter/105/1588724110/1588724110.m3u8",
             videoStyle: VideoStyle(
-              play: Icon(Icons.play_arrow),
-              pause: Icon(Icons.pause),
-              fullscreen: Icon((Icons.fullscreen)),
-              forward: Icon(Icons.skip_next),
-              playedColor: PColors.primary,
-              qualitystyle: TextStyle(color: Colors.white) ,
-              backward: IconButton(onPressed: (){},icon:Icon(Icons.ac_unit),)
-            ),
+                play: Icon(Icons.play_arrow),
+                pause: Icon(Icons.pause),
+                fullscreen: Icon((Icons.fullscreen)),
+                forward: Icon(Icons.skip_next),
+                playedColor: PColors.primary,
+                qualitystyle: TextStyle(color: Colors.white),
+                backward: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.ac_unit),
+                )),
             videoLoadingStyle: VideoLoadingStyle(
               loading: Center(
                 child: Column(

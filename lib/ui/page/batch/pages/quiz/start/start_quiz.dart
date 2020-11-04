@@ -118,7 +118,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
                             Icon(e == model.selectedAnswer ? Icons.check_circle_rounded : Icons.panorama_fish_eye,
                                     color: e == model.selectedAnswer ? PColors.green : PColors.gray)
                                 .p16,
-                            Text("sdc sd jsdn sjdn jskdnf kjs fjskdf sjdfn jsdf sjdf sjdb sjkdb fsjdb sjdb sk").extended,
+                            Text(e).extended,
                           ],
                         ),
                       ).ripple(() {
@@ -209,27 +209,28 @@ class _StartQuizPageState extends State<StartQuizPage> {
     );
   }
 
-  void onTimerComplete(String timerText,{bool force = false}) {
+  void onTimerComplete(String timerText, {bool force = false}) {
     bool isTimerEnd = timerText == "0:00 time left";
     if (isQuizEnd) {
       print("Return from end");
       return;
-    }else if(!force && isTimerEnd){
+    } else if (!force && isTimerEnd) {
       isQuizEnd = true;
     }
     final state = Provider.of<QuizState>(context, listen: false);
     final unAnswered = state.quizModel.questions.where((element) => element.selectedAnswer == null).length;
     print("Quiz time End");
-    
+
     Alert.dialog(
       context,
       title: "Review",
       buttonText: "Submit Quiz",
       titleBackGround: Color(0xffF7506A),
+      enableCrossButton: !isQuizEnd,
       onPressed: () {
         Navigator.pop(context);
         final state = Provider.of<QuizState>(context, listen: false);
-        Navigator.pushReplacement(context, QuizRasultPage.getRoute(model: state.quizModel, batchId: state.batchId,timeTaken:timeTaken));
+        Navigator.pushReplacement(context, QuizRasultPage.getRoute(model: state.quizModel, batchId: state.batchId, timeTaken: timeTaken));
       },
       child: Container(
         child: Column(
@@ -323,15 +324,14 @@ class _StartQuizPageState extends State<StartQuizPage> {
             Consumer<QuizState>(builder: (context, state, child) {
               if (state.quizModel != null && state.quizModel.duration != null)
                 return Timer(
-                  duration: state.quizModel.duration,
-                  onTimerComplete: onTimerComplete,
-                  onTimerChanged: (value) {
-                    remianingTime = value;
-                  },
-                  timeTaken:(val){
-                    timeTaken = val;
-                  }
-                );
+                    duration: state.quizModel.duration,
+                    onTimerComplete: onTimerComplete,
+                    onTimerChanged: (value) {
+                      remianingTime = value;
+                    },
+                    timeTaken: (val) {
+                      timeTaken = val;
+                    });
               return Text("", style: theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold));
             }),
           ],
@@ -339,7 +339,7 @@ class _StartQuizPageState extends State<StartQuizPage> {
         actions: [
           Center(
             child: Text("Submit", style: theme.textTheme.button.copyWith(color: theme.primaryColor)).p16.ripple(() {
-              onTimerComplete(remianingTime,force:true);
+              onTimerComplete(remianingTime, force: true);
             }),
           )
         ],

@@ -6,7 +6,7 @@ import 'package:flutter_pensil_app/ui/app.dart';
 import 'package:flutter_pensil_app/ui/page/splash.dart';
 
 void main() {
-  final config = devConfig();
+  final config = stableConfig();
   setUpDependency(config);
   final configuredApp = AppConfig(
     config: config,

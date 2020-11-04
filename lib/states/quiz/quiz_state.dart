@@ -12,7 +12,7 @@ class QuizState extends BaseState {
   final String batchId;
   List<AssignmentModel> assignmentsList;
 
-  QuizDetailModel quizModel ;//= QuizDetailModel.dummyData;
+  QuizDetailModel quizModel; //= QuizDetailModel.dummyData;
 
   void addAnswer(Question value) {
     var data = quizModel.questions.firstWhere((element) => element.id == value.id);
@@ -31,14 +31,13 @@ class QuizState extends BaseState {
     }, label: "getQuizList");
   }
 
-  Future<QuizDetailModel> getAssignmentDetail(String assignmentId) async {
+  Future getAssignmentDetail(String assignmentId) async {
     await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
       quizModel = await repo.getAssignmentDetailList(batchId, assignmentId);
       isBusy = false;
-      return quizModel;
     }, label: "getAssignmentDetail");
   }
 }

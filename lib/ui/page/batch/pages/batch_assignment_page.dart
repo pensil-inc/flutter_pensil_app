@@ -15,8 +15,9 @@ class BatchAssignmentPage extends StatelessWidget {
               model: model,
             ));
   }
-  Widget noQuiz(BuildContext context){
-    return  Container(
+
+  Widget noQuiz(BuildContext context) {
+    return Container(
       height: 100,
       margin: EdgeInsets.symmetric(horizontal: 16),
       width: AppTheme.fullWidth(context),
@@ -35,14 +36,15 @@ class BatchAssignmentPage extends StatelessWidget {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<QuizState>(
       builder: (context, state, child) {
-        if(state.isBusy){
+        if (state.isBusy) {
           return Ploader();
         }
-        if(state.assignmentsList == null){
+        if (!(state.assignmentsList != null && state.assignmentsList.isNotEmpty)) {
           return noQuiz(context);
         }
         return QuizListPage();

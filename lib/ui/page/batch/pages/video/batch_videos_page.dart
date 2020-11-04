@@ -89,8 +89,12 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
         ],
       ).ripple(() {
         // Utility.displaySnackbar(context,);
-        Navigator.push(context,VideoPlayerPage2.getRoute(model.video, title:model.title));
-        // Navigator.push(context, WebViewPage.getRoute(model.videoUrl, title:model.title));
+        if (model.video != null) {
+          Navigator.push(context, VideoPlayerPage2.getRoute(model.video, title: model.title));
+        } else if (model.videoUrl != null) {
+          Navigator.push(context, WebViewPage.getRoute(model.videoUrl, title: model.title));
+        }
+        // Navigator.push(context, VideoPlayerPage.getRoute(model.video, title: model.title));
       }),
     );
   }
@@ -104,13 +108,25 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
           bottomLeft: Radius.circular(5),
         ),
         child: Container(
+          alignment: Alignment.center,
           color: Color(0xffeaeaea),
-          child: Center(
-            child: Text(
-              "No Photo".toUpperCase(),
-              style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold, fontSize: 14),
-            ),
-          ),
+          child: url == null
+              ? Container(
+                  child: Text(
+                    "No Photo".toUpperCase(),
+                    style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
+                )
+              : Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(30),
+                    color: Color(0xffffffff),
+                  ),
+                  child: Center(child: Icon(Icons.play_arrow)),
+                ),
         ),
       );
     }

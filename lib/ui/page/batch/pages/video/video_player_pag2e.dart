@@ -32,18 +32,17 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
   }
 
   Future<BetterPlayerController> _setupDefaultVideoData() async {
-    var dataSource = BetterPlayerDataSource(
-      BetterPlayerDataSourceType.NETWORK,
-      // widget.path
-      "https://pensil-staging.herokuapp.com/videos/408853c4-945b-4085-ab09-7bb378fea72c.flv"
-      // "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-      // resolutions: {
-      //   "LOW": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4",
-      //   "MEDIUM": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
-      //   "LARGE": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
-      //   "EXTRA_LARGE": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1920_18MG.mp4"
-      // },
-    );
+    var dataSource = BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, widget.path
+        // "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4"
+        // "https://pensil-staging.herokuapp.com/videos/408853c4-945b-4085-ab09-7bb378fea72c.flv"
+        // "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        // resolutions: {
+        //   "LOW": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4",
+        //   "MEDIUM": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+        //   "LARGE": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
+        //   "EXTRA_LARGE": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1920_18MG.mp4"
+        // },
+        );
     _betterPlayerController = BetterPlayerController(
         BetterPlayerConfiguration(
           controlsConfiguration: BetterPlayerControlsConfiguration(

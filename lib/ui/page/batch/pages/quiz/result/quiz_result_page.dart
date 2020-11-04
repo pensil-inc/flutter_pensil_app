@@ -29,13 +29,11 @@ class QuizRasultPage extends StatelessWidget {
     );
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     final total = model.questions.length;
     final correct = model.questions.where((e) => e.answer == e.selectedAnswer).length;
-    final wrong = model.questions.where((e) => e.answer != e.selectedAnswer).length;
+    final wrong = model.questions.where((e) => e.selectedAnswer != null && e.answer != e.selectedAnswer).length;
     final skipped = model.questions.where((e) => e.selectedAnswer == null).length;
 
     final percent = correct * 100 / total;

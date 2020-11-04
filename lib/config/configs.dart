@@ -3,14 +3,14 @@ import 'package:flutter_pensil_app/helper/constants.dart';
 
 devConfig() => Config(
       appName: 'Pensil [DEV]',
-      apiBaseUrl: Constants.productionBaseUrl,
+      apiBaseUrl: Constants.developmentBaseUrl,
       appToken: '',
       apiLogging: true,
       diagnostic: true,
     );
 stableConfig() => Config(
       appName: 'Pensil [Stable]',
-      apiBaseUrl: Constants.developmentBaseUrl,
+      apiBaseUrl: Constants.productionBaseUrl,
       appToken: '',
       apiLogging: true,
       diagnostic: true,
