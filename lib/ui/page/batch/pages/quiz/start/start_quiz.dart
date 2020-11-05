@@ -45,7 +45,8 @@ class _StartQuizPageState extends State<StartQuizPage> {
     super.initState();
     _pageController = PageController();
 
-    Provider.of<QuizState>(context, listen: false).getAssignmentDetail(widget.model.id);
+    Provider.of<QuizState>(context, listen: false)
+        .getAssignmentDetail(widget.model.id);
   }
 
   @override
@@ -69,7 +70,8 @@ class _StartQuizPageState extends State<StartQuizPage> {
                 builder: (BuildContext context, int value, Widget child) {
                   return Text(
                     "question: ${value + 1}/${state.quizModel.questions.length}",
-                    style: theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.bodyText1
+                        .copyWith(fontWeight: FontWeight.bold),
                   );
                 },
               ),
@@ -77,7 +79,8 @@ class _StartQuizPageState extends State<StartQuizPage> {
               SizedBox(
                   height: 45,
                   width: 45,
-                  child: Image.asset(Images.dropdown, height: 20).p16.ripple(() {
+                  child:
+                      Image.asset(Images.dropdown, height: 20).p16.ripple(() {
                     isDisplayQuestion.value = !isDisplayQuestion.value;
                   }))
             ],
@@ -115,15 +118,21 @@ class _StartQuizPageState extends State<StartQuizPage> {
                             //     print(val);
                             //   },
                             // ),
-                            Icon(e == model.selectedAnswer ? Icons.check_circle_rounded : Icons.panorama_fish_eye,
-                                    color: e == model.selectedAnswer ? PColors.green : PColors.gray)
+                            Icon(
+                                    e == model.selectedAnswer
+                                        ? Icons.check_circle_rounded
+                                        : Icons.panorama_fish_eye,
+                                    color: e == model.selectedAnswer
+                                        ? PColors.green
+                                        : PColors.gray)
                                 .p16,
                             Text(e).extended,
                           ],
                         ),
                       ).ripple(() {
                         model.selectedAnswer = e;
-                        Provider.of<QuizState>(context, listen: false).addAnswer(model);
+                        Provider.of<QuizState>(context, listen: false)
+                            .addAnswer(model);
                       }))
                   .toList(),
             ),
@@ -162,11 +171,14 @@ class _StartQuizPageState extends State<StartQuizPage> {
             width: AppTheme.fullWidth(context) * .45,
             child: FlatButton(
               onPressed: () {
-                _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.linear);
+                _pageController.previousPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.linear);
               },
               child: Text(
                 "Previous",
-                style: theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, color: theme.primaryColor),
+                style: theme.textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold, color: theme.primaryColor),
               ),
             ),
           ),
@@ -175,11 +187,14 @@ class _StartQuizPageState extends State<StartQuizPage> {
             width: AppTheme.fullWidth(context) * .45,
             child: FlatButton(
               onPressed: () {
-                _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.linear);
+                _pageController.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.linear);
               },
               child: Text(
                 "Next",
-                style: theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, color: theme.primaryColor),
+                style: theme.textTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold, color: theme.primaryColor),
               ),
             ),
           ),
@@ -203,7 +218,9 @@ class _StartQuizPageState extends State<StartQuizPage> {
                     color: PColors.gray,
                   )),
           SizedBox(height: 10),
-          Text("No Assignment is uploaded yet for this batch!!", style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+          Text("No Assignment is uploaded yet for this batch!!",
+              style: Theme.of(context).textTheme.bodyText1,
+              textAlign: TextAlign.center),
         ],
       ),
     );
@@ -218,8 +235,14 @@ class _StartQuizPageState extends State<StartQuizPage> {
       isQuizEnd = true;
     }
     final state = Provider.of<QuizState>(context, listen: false);
-    final unAnswered = state.quizModel.questions.where((element) => element.selectedAnswer == null).length;
+    final unAnswered = state.quizModel.questions
+        .where((element) => element.selectedAnswer == null)
+        .length;
     print("Quiz time End");
+
+    final list = state.quizModel.questions
+        .where((value) => value.selectedAnswer == null)
+        .toList();
 
     Alert.dialog(
       context,
@@ -230,7 +253,12 @@ class _StartQuizPageState extends State<StartQuizPage> {
       onPressed: () {
         Navigator.pop(context);
         final state = Provider.of<QuizState>(context, listen: false);
-        Navigator.pushReplacement(context, QuizRasultPage.getRoute(model: state.quizModel, batchId: state.batchId, timeTaken: timeTaken));
+        Navigator.pushReplacement(
+            context,
+            QuizRasultPage.getRoute(
+                model: state.quizModel,
+                batchId: state.batchId,
+                timeTaken: timeTaken));
       },
       child: Container(
         child: Column(
@@ -251,20 +279,25 @@ class _StartQuizPageState extends State<StartQuizPage> {
             SizedBox(height: 12),
             Text(
               "$unAnswered  Unanswered questions",
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 12),
             Wrap(
-              children: Iterable.generate(state.quizModel.questions.skipWhile((value) => value.selectedAnswer != null).length, (index) {
+              children: Iterable.generate(unAnswered, (index) {
                 return _circularNo(
-                    context, index, state.quizModel.questions.skipWhile((value) => value.selectedAnswer != null).toList()[index]);
+                    context,
+                    state.quizModel.questions.indexOf(list[index]),
+                    list[index]);
               }).toList(),
             ),
             SizedBox(height: 42),
             Container(
-              decoration: isTimerEnd ? AppTheme.outline(context) : AppTheme.outlinePrimary(context),
+              decoration: isTimerEnd
+                  ? AppTheme.outline(context)
+                  : AppTheme.outlinePrimary(context),
               margin: EdgeInsets.symmetric(horizontal: 16),
               width: double.infinity,
               child: FlatButton(
@@ -276,10 +309,11 @@ class _StartQuizPageState extends State<StartQuizPage> {
                 // disabledColor: PColors.gray,
                 child: Text(
                   "Go back to quiz",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(fontWeight: FontWeight.bold, color: isTimerEnd ? PColors.gray : Theme.of(context).primaryColor),
+                  style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isTimerEnd
+                          ? PColors.gray
+                          : Theme.of(context).primaryColor),
                 ),
               ),
             ),
@@ -332,13 +366,19 @@ class _StartQuizPageState extends State<StartQuizPage> {
                     timeTaken: (val) {
                       timeTaken = val;
                     });
-              return Text("", style: theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold));
+              return Text("",
+                  style: theme.textTheme.bodyText1
+                      .copyWith(fontWeight: FontWeight.bold));
             }),
           ],
         ),
         actions: [
           Center(
-            child: Text("Submit", style: theme.textTheme.button.copyWith(color: theme.primaryColor)).p16.ripple(() {
+            child: Text("Submit",
+                    style: theme.textTheme.button
+                        .copyWith(color: theme.primaryColor))
+                .p16
+                .ripple(() {
               onTimerComplete(remianingTime, force: true);
             }),
           )
