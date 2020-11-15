@@ -146,7 +146,7 @@ class _SignUpState extends State<SignUp> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: PFlatButton(
                   label: "Create",
-                  color:PColors.secondary,
+                  color: PColors.secondary,
                   isLoading: isLoading,
                   onPressed: () {
                     _submit(context);
@@ -182,7 +182,7 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                         width: 150,
                         child: Divider(
-                          color:theme.colorScheme.onPrimary,
+                          color: theme.colorScheme.onPrimary,
                           thickness: 1,
                         ),
                       ),
@@ -192,11 +192,14 @@ class _SignUpState extends State<SignUp> {
                           Text("Already have an account ?",
                               style: theme.textTheme.bodyText2
                                   .copyWith(color: Colors.white60)),
-                          Text("SIGN IP",
-                              style: theme.textTheme.bodyText2
-                                  .copyWith(fontWeight: FontWeight.bold, color:theme.colorScheme.onPrimary)).p16.ripple((){
-                                    Navigator.pop(context);
-                                  }),
+                          Text("SIGN IN",
+                                  style: theme.textTheme.bodyText2.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: theme.colorScheme.onPrimary))
+                              .p16
+                              .ripple(() {
+                            Navigator.pop(context);
+                          }),
                         ],
                       ),
                       SizedBox(width: 40)
