@@ -21,10 +21,13 @@ class BatchDetailPage extends StatelessWidget {
             ));
   }
 
-  Widget _title(context, String text, {double fontSize = 28}) {
+  Widget _title(context, String text, {double fontSize = 22}) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.headline6.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
+      style: Theme.of(context)
+          .textTheme
+          .headline6
+          .copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
     );
   }
 
@@ -44,7 +47,8 @@ class BatchDetailPage extends StatelessWidget {
                         padding: EdgeInsets.only(right: 5),
                         child: UsernameWidget(
                           name: model.name,
-                          textStyle: theme.textTheme.bodyText1.copyWith(fontSize: 12, color: theme.colorScheme.onPrimary),
+                          textStyle: theme.textTheme.bodyText1.copyWith(
+                              fontSize: 12, color: theme.colorScheme.onPrimary),
                           backGroundColor: PColors.randomColor(model.name),
                         ),
                       ),
@@ -68,7 +72,8 @@ class BatchDetailPage extends StatelessWidget {
                   Wrap(
                     children: <Widget>[
                       PChip(
-                        style: theme.textTheme.bodyText1.copyWith(color: theme.colorScheme.onPrimary),
+                        style: theme.textTheme.bodyText1
+                            .copyWith(color: theme.colorScheme.onPrimary),
                         borderColor: Colors.transparent,
                         label: model.subject,
                         backgroundColor: PColors.randomColor(model.subject),
@@ -80,7 +85,8 @@ class BatchDetailPage extends StatelessWidget {
                     children: <Widget>[
                       Image.asset(Images.calender, width: 20),
                       SizedBox(width: 10),
-                      _title(context, "${model.classes.length} Classes", fontSize: 18),
+                      _title(context, "${model.classes.length} Classes",
+                          fontSize: 18),
                     ],
                   )
                 ],
@@ -88,7 +94,8 @@ class BatchDetailPage extends StatelessWidget {
               SizedBox(height: 11),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: model.classes.map((e) => _timing(context, e).vP4).toList(),
+                children:
+                    model.classes.map((e) => _timing(context, e).vP4).toList(),
               ).hP16,
               SizedBox(height: 16),
               Row(
@@ -96,7 +103,8 @@ class BatchDetailPage extends StatelessWidget {
                 children: <Widget>[
                   Image.asset(Images.peopleBlack, width: 20),
                   SizedBox(width: 10),
-                  _title(context, "${model.studentModel.length} Student", fontSize: 18),
+                  _title(context, "${model.studentModel.length} Student",
+                      fontSize: 18),
                 ],
               ).hP16,
               _students(theme),
@@ -107,14 +115,19 @@ class BatchDetailPage extends StatelessWidget {
         Consumer<AnnouncementState>(
           builder: (context, state, child) {
             if (state.isBusy) {
-              return SliverToBoxAdapter(child: PCLoader(stroke:2));
+              return SliverToBoxAdapter(child: PCLoader(stroke: 2));
             }
-            if (state.batchAnnouncementList != null && state.batchAnnouncementList.isNotEmpty)
+            if (state.batchAnnouncementList != null &&
+                state.batchAnnouncementList.isNotEmpty)
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == 0) return _title(context, "Recent Announcement", fontSize: 18).p16;
-                    return AnnouncementWidget(state.batchAnnouncementList[index - 1]);
+                    if (index == 0)
+                      return _title(context, "Recent Announcement",
+                              fontSize: 18)
+                          .p16;
+                    return AnnouncementWidget(
+                        state.batchAnnouncementList[index - 1]);
                   },
                   childCount: state.batchAnnouncementList.length + 1,
                 ),

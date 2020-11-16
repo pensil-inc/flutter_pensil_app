@@ -184,8 +184,9 @@ class _CreateBatchState extends State<CreateBatch> {
       return;
     }
     //validate Students
-    if(!(state.contactList != null && state.contactList.isNotEmpty))
-    if (state.studentsList.every((element) => !element.isSelected)) {
+    if (!(state.contactList != null && state.contactList.isNotEmpty)) if (state
+        .studentsList
+        .every((element) => !element.isSelected)) {
       Utility.displaySnackbar(context,
           msg: "Please Add students to batch", key: scaffoldKey);
       return;
@@ -300,7 +301,7 @@ class _CreateBatchState extends State<CreateBatch> {
                                 .toList());
                       }),
                 _secondaryButton(context,
-                    label: "PIck Student", onPressed: displayStudentsList),
+                    label: "Pick Student", onPressed: displayStudentsList),
                 SizedBox(height: 10),
                 PFlatButton(
                   label: "Create",

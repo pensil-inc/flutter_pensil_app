@@ -24,7 +24,9 @@ class TeacherHomePage extends StatefulWidget {
   _TeacherHomePageState createState() => _TeacherHomePageState();
 }
 
-class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderStateMixin {
+class _TeacherHomePageState extends State<TeacherHomePage>
+    with TickerProviderStateMixin {
+  double _angle = 0;
   AnimationController _controller;
   bool isOpened = false;
   AnimationController _animationController;
@@ -51,8 +53,10 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
 
   animate() {
     if (!isOpened) {
+      _angle = .785;
       _animationController.forward();
     } else {
+      _angle = 0;
       _animationController.reverse();
     }
     isOpened = !isOpened;
@@ -60,13 +64,16 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
   }
 
   setupAnimations() {
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
+    _controller = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 2000));
     _controller.repeat();
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 200))
-      ..addListener(() {
-        setState(() {});
-      });
-    _animateIcon = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+          ..addListener(() {
+            setState(() {});
+          });
+    _animateIcon =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _translateButton = Tween<double>(
       begin: 100,
       end: 0,
@@ -85,9 +92,12 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: animate,
       tooltip: 'Toggle',
-      child: AnimatedIcon(
-        icon: AnimatedIcons.menu_close,
-        progress: _animateIcon,
+      child: Transform.rotate(
+        angle: _angle,
+        child: Icon(
+          Icons.add,
+          size: 30,
+        ),
       ),
     );
   }
@@ -123,26 +133,32 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
         top: 16,
         left: 16,
       ),
-      child: Text(text, style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 28, fontWeight: FontWeight.bold)),
+      child: Text(text,
+          style: Theme.of(context)
+              .textTheme
+              .headline6
+              .copyWith(fontSize: 28, fontWeight: FontWeight.bold)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Title(color: PColors.black, child: Text("Teacher Home page")), actions: <Widget>[
-        Center(
-          child: SizedBox(
-            height: 40,
-            child: OutlineButton(
-                onPressed: () {
-                  Provider.of<HomeState>(context, listen: false).logout();
-                  Navigator.pushReplacement(context, LoginPage.getRoute());
-                },
-                child: Text("Sign out")),
-          ),
-        ).hP16,
-      ]),
+      appBar: AppBar(
+          title: Title(color: PColors.black, child: Text("Teacher Home page")),
+          actions: <Widget>[
+            Center(
+              child: SizedBox(
+                height: 40,
+                child: OutlineButton(
+                    onPressed: () {
+                      Provider.of<HomeState>(context, listen: false).logout();
+                      Navigator.pushReplacement(context, LoginPage.getRoute());
+                    },
+                    child: Text("Sign out")),
+              ),
+            ).hP16,
+          ]),
       floatingActionButton: _floatingActionButton(),
       body: Stack(
         children: <Widget>[
@@ -175,7 +191,8 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          if (index == 0) return _title("${state.batchList.length} Batches");
+                          if (index == 0)
+                            return _title("${state.batchList.length} Batches");
                           return BatchWidget(state.batchList[index - 1]);
                         },
                         childCount: state.batchList.length + 1,
@@ -193,12 +210,16 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
                                 _title("Today's Poll"),
                                 OutlineButton(
                                   onPressed: () {
-                                    Navigator.push(context, CreatePoll.getRoute());
+                                    Navigator.push(
+                                        context, CreatePoll.getRoute());
                                   },
                                   textColor: Theme.of(context).primaryColor,
-                                  highlightedBorderColor: Theme.of(context).primaryColor,
-                                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                  highlightedBorderColor:
+                                      Theme.of(context).primaryColor,
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4)),
                                   child: Text("Create Poll"),
                                 ).hP16
                               ],
@@ -208,12 +229,16 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
                         childCount: state.polls.length + 1,
                       ),
                     ),
-                  if (state.announcementList != null && state.announcementList.isNotEmpty)
+                  if (state.announcementList != null &&
+                      state.announcementList.isNotEmpty)
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          if (index == 0) return _title("${state.announcementList.length} Announcement");
-                          return AnnouncementWidget(state.announcementList[index - 1]);
+                          if (index == 0)
+                            return _title(
+                                "${state.announcementList.length} Announcement");
+                          return AnnouncementWidget(
+                              state.announcementList[index - 1]);
                         },
                         childCount: state.announcementList.length + 1,
                       ),
@@ -222,7 +247,8 @@ class _TeacherHomePageState extends State<TeacherHomePage> with TickerProviderSt
               );
             },
           ),
-          AnimatedFabButton(showFabButton: showFabButton, children: _floatingButtons()),
+          AnimatedFabButton(
+              showFabButton: showFabButton, children: _floatingButtons()),
         ],
       ),
     );

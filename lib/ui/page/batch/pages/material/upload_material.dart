@@ -17,12 +17,15 @@ import 'package:provider/provider.dart';
 class UploadMaterialPage extends StatefulWidget {
   final String subject;
   final BatchMaterialState state;
-  const UploadMaterialPage({Key key, this.subject, this.state}) : super(key: key);
-  static MaterialPageRoute getRoute(String subject, String batchId,{BatchMaterialState state}) {
+  const UploadMaterialPage({Key key, this.subject, this.state})
+      : super(key: key);
+  static MaterialPageRoute getRoute(String subject, String batchId,
+      {BatchMaterialState state}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<BatchMaterialState>(
-        create: (context) => BatchMaterialState(subject: subject, batchId: batchId),
-        child: UploadMaterialPage(subject: subject,state:state),
+        create: (context) =>
+            BatchMaterialState(subject: subject, batchId: batchId),
+        child: UploadMaterialPage(subject: subject, state: state),
       ),
     );
   }
@@ -37,7 +40,8 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
   TextEditingController _link;
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
-  ValueNotifier<List<BatchModel>> batchList = ValueNotifier<List<BatchModel>>([]);
+  ValueNotifier<List<BatchModel>> batchList =
+      ValueNotifier<List<BatchModel>>([]);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> urlList = ["https://www.youtube.com/watch?v=uv54ec8Pg1k"];
   @override
@@ -58,24 +62,30 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
   }
 
   Widget _titleText(context, String name) {
-    return Text(name, style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, fontSize: 16));
+    return Text(name,
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1
+            .copyWith(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
-  Widget _secondaryButton(BuildContext context, {String label, Function onPressed}) {
+  Widget _secondaryButton(BuildContext context,
+      {String label, Function onPressed}) {
     final theme = Theme.of(context);
     return OutlineButton.icon(
         onPressed: onPressed,
         icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
         label: Text(
           label,
-          style: theme.textTheme.button.copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
+          style: theme.textTheme.button
+              .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
         ));
   }
 
   void pickFile() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc','xlsx','xls'],
+      allowedExtensions: ['jpg', 'pdf', 'doc', 'xlsx', 'xls'],
     );
     if (result != null) {
       PlatformFile file = result.files.first;
@@ -100,10 +110,14 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
     final isOk = await state.uploadMaterial(_title.text, _description.text);
     isLoading.value = false;
     if (isOk) {
-      Alert.sucess(context, message: "Material added sucessfully!!", title: "Message");
+      Alert.sucess(context,
+          message: "Material added sucessfully!!", title: "Message");
       await widget.state.getBatchMaterialList();
     } else {
-      Alert.sucess(context, message: "Some error occured. Please try again in some time!!", title: "Message", height: 170);
+      Alert.sucess(context,
+          message: "Some error occured. Please try again in some time!!",
+          title: "Message",
+          height: 170);
       // Navigator.pop(context);
     }
   }
@@ -153,7 +167,10 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.only(right: 4, top: 10),
-                            child: PChip(label: widget.subject, backgroundColor: PColors.yellow, borderColor: Colors.transparent),
+                            child: PChip(
+                                label: widget.subject,
+                                backgroundColor: PColors.yellow,
+                                borderColor: Colors.transparent),
                           ),
                         ],
                       ),
@@ -180,10 +197,17 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                 decoration: AppTheme.outline(context),
                 child: Column(
                   children: <Widget>[
-                    Text("Browse file", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                    Text("Browse file",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontWeight: FontWeight.bold)),
                     Image.asset(Images.uploadVideo, height: 25).vP16,
-                    Text("File should be PDF,DOCX,Sheet,Image",
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 12, color: PColors.gray)),
+                    Text("File should be PDF, DOCX, Sheet, Image",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontSize: 12, color: PColors.gray)),
                   ],
                 ),
               ).ripple(pickFile),
@@ -199,7 +223,8 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                             SizedBox(
                                 width: 50,
                                 child: Image.asset(
-                                  Images.getfiletypeIcon(state.file.path.split(".").last),
+                                  Images.getfiletypeIcon(
+                                      state.file.path.split(".").last),
                                   height: 30,
                                 )),
                             Text(state.file.path.split("/").last),
@@ -215,7 +240,9 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                             height: 5,
                             margin: EdgeInsets.symmetric(horizontal: 16),
                             width: AppTheme.fullWidth(context),
-                            decoration: BoxDecoration(color: Color(0xff0CC476), borderRadius: BorderRadius.circular(20)),
+                            decoration: BoxDecoration(
+                                color: Color(0xff0CC476),
+                                borderRadius: BorderRadius.circular(20)),
                           )
                         ],
                       ),

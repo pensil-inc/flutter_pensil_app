@@ -22,29 +22,50 @@ class _QuizListPageState extends State<QuizListPage> {
       // height: 50,
       alignment: Alignment.center,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(Icons.list_alt).hP8,
+          Icon(Icons.list_alt).hP8.pT(4),
           Container(
             width: AppTheme.fullWidth(context) - 85,
-            child: Text(
-              model.title,
-              style: Theme.of(context).textTheme.subtitle2,
-              maxLines: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  model.title,
+                  style: Theme.of(context).textTheme.subtitle2,
+                  maxLines: 3,
+                ).vP4,
+                Text(
+                  "Questions: ${model.questions}",
+                  style: Theme.of(context).textTheme.subtitle2,
+                  maxLines: 3,
+                ).vP4,
+                Text(
+                  "Subject: Englishhss",
+                  style: Theme.of(context).textTheme.subtitle2,
+                  maxLines: 3,
+                ).vP4,
+                Text(
+                  "Time Alloted: ${model.duration} min",
+                  style: Theme.of(context).textTheme.subtitle2,
+                  maxLines: 3,
+                ).vP4
+              ],
             ),
           ),
           SizedBox(width: 12),
         ],
-      ).vP16.ripple(() {
+      ).vP8.ripple(() {
         // Utility.displaySnackbar(context,);
         Alert.dialog(
           context,
-          title: "Test",
+          title: model.title,
           buttonText: "Start Quiz",
           onPressed: () {
             Navigator.pop(context);
             final state = Provider.of<QuizState>(context, listen: false);
-            Navigator.push(context, StartQuizPage.getRoute(model: model, batchId: state.batchId));
+            Navigator.push(context,
+                StartQuizPage.getRoute(model: model, batchId: state.batchId));
           },
           child: Container(
             child: Column(

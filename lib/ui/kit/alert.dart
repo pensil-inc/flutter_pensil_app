@@ -4,7 +4,8 @@ import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';
 
 class Alert {
-  static void sucess(BuildContext context, {String message, String title, double height = 150}) async {
+  static void sucess(BuildContext context,
+      {String message, String title, double height = 150}) async {
     final theme = Theme.of(context);
     await showDialog(
       context: context,
@@ -25,7 +26,11 @@ class Alert {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(title, style: Theme.of(context).textTheme.headline6.copyWith(fontWeight: FontWeight.bold, fontSize: 20)),
+              Text(title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(fontWeight: FontWeight.bold, fontSize: 20)),
               SizedBox(height: 16),
               Text(
                 message,
@@ -40,7 +45,9 @@ class Alert {
                   Navigator.pop(context);
                 },
                 color: Theme.of(context).primaryColor,
-                child: Text("OK", style: theme.textTheme.button.copyWith(color: theme.colorScheme.onPrimary)),
+                child: Text("OK",
+                    style: theme.textTheme.button
+                        .copyWith(color: theme.colorScheme.onPrimary)),
               )
             ],
           ),
@@ -49,7 +56,8 @@ class Alert {
     );
   }
 
-  static void yesOrNo(BuildContext context, {String message, String title, Function onYes, Function onCancel}) async {
+  static void yesOrNo(BuildContext context,
+      {String message, String title, Function onYes, Function onCancel}) async {
     await showDialog(
       context: context,
       child: Dialog(
@@ -67,9 +75,20 @@ class Alert {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(title, style: Theme.of(context).typography.dense.headline5.copyWith(color: Colors.black)),
+              Text(title,
+                  style: Theme.of(context)
+                      .typography
+                      .dense
+                      .headline5
+                      .copyWith(color: Colors.black)),
               SizedBox(height: 16),
-              Text(message, style: Theme.of(context).typography.dense.bodyText2.copyWith(color: Colors.black), textAlign: TextAlign.center),
+              Text(message,
+                  style: Theme.of(context)
+                      .typography
+                      .dense
+                      .bodyText2
+                      .copyWith(color: Colors.black),
+                  textAlign: TextAlign.center),
               Spacer(),
               ButtonBar(
                 alignment: MainAxisAlignment.center,
@@ -88,8 +107,10 @@ class Alert {
                     child: Text("Sign In", textAlign: TextAlign.center),
                     elevation: 5,
                     color: Theme.of(context).primaryColor,
-                    padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
-                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
                   ),
                 ],
               )
@@ -131,13 +152,29 @@ class Alert {
                       padding: EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           color: titleBackGround,
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10))),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(title, style: Theme.of(context).textTheme.headline5.copyWith(color: theme.colorScheme.onPrimary)),
-                          Spacer(),
+                          Container(
+                              width: MediaQuery.of(context).size.width - 160,
+                              child: Text(
+                                title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline5
+                                    .copyWith(
+                                        color: theme.colorScheme.onPrimary),
+                                // maxLines: 1,
+                                // overflow: TextOverflow.ellipsis,
+                              )).extended.vP8,
+                          // Spacer(),
                           Image.asset(Images.cross, height: 30).p(8).ripple(() {
                             if (enableCrossButton) Navigator.pop(context);
                           })

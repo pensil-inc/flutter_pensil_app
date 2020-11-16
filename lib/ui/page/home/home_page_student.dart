@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/home/student_list_preview.dart';
+import 'package:flutter_pensil_app/ui/page/home/widget/batch_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
 import 'package:flutter_pensil_app/ui/page/notification/notifications_page.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
@@ -23,7 +26,8 @@ class StudentHomePage extends StatefulWidget {
   _StudentHomePageState createState() => _StudentHomePageState();
 }
 
-class _StudentHomePageState extends State<StudentHomePage> with TickerProviderStateMixin {
+class _StudentHomePageState extends State<StudentHomePage>
+    with TickerProviderStateMixin {
   AnimationController _controller;
   bool isOpened = false;
   AnimationController _animationController;
@@ -31,6 +35,7 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
   Curve _curve = Curves.easeOut;
   Animation<double> _translateButton;
   bool showFabButton = false;
+  double _angle = 0;
 
   @override
   void initState() {
@@ -51,21 +56,27 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
   animate() {
     if (!isOpened) {
       _animationController.forward();
+      _angle = 0;
     } else {
+      _angle = _animationController.value * 45 / 360 * pi * 2;
       _animationController.reverse();
     }
+
     isOpened = !isOpened;
     showFabButton = !showFabButton;
   }
 
   setupAnimations() {
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
+    _controller = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 2000));
     _controller.repeat();
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 200))
-      ..addListener(() {
-        setState(() {});
-      });
-    _animateIcon = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+          ..addListener(() {
+            setState(() {});
+          });
+    _animateIcon =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _translateButton = Tween<double>(
       begin: 100,
       end: 0,
@@ -84,10 +95,17 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: animate,
       tooltip: 'Toggle',
-      child: AnimatedIcon(
-        icon: AnimatedIcons.menu_close,
-        progress: _animateIcon,
+      child: Transform.rotate(
+        angle: _angle,
+        child: Icon(
+          Icons.add,
+          size: 30,
+        ),
       ),
+      //  AnimatedIcon(
+      //   icon: AnimatedIcons.menu_home,
+      //   progress: _animateIcon,
+      // ),
     );
   }
 
@@ -118,7 +136,8 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
     );
   }
 
-  Widget _smallFabButton(String icon, {Function onPressed, double animationValue, String text = ''}) {
+  Widget _smallFabButton(String icon,
+      {Function onPressed, double animationValue, String text = ''}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       child: Transform(
@@ -131,20 +150,28 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
           elevation: 4,
           color: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20), topRight: Radius.circular(40)),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
+                topRight: Radius.circular(40)),
           ),
           child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
               decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20), topRight: Radius.circular(40)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    topRight: Radius.circular(40)),
                 color: Theme.of(context).primaryColor,
               ),
               child: Row(
                 children: <Widget>[
                   Image.asset(icon, height: 20),
                   SizedBox(width: 8),
-                  Text(text, style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary)),
+                  Text(text,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onPrimary)),
                 ],
               )).ripple(
             onPressed,
@@ -157,40 +184,6 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
         ),
       ),
     );
-  }
-
-  Widget _batch(BatchModel model) {
-    final theme = Theme.of(context);
-    return Container(
-        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        decoration: AppTheme.decoration(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(model.name, style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            PChip(
-              label: model.subject,
-              backgroundColor: Color(0xffF67619),
-              borderColor: Colors.transparent,
-              style: theme.textTheme.bodyText1.copyWith(fontSize: 14, color: theme.colorScheme.onSecondary),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: <Widget>[
-                Row(
-                    // children: model.classes.map((e) => Text(e.toshortDay()).hP4).toList()
-                    children: Iterable.generate(model.classes.length, (index) {
-                  final e = model.classes[index];
-                  return Text(e.toshortDay() + (model.classes.length == index + 1 ? "" : ",")).hP4;
-                }).toList()),
-                Spacer(),
-                StudentListPreview(list: model.studentModel),
-              ],
-            )
-          ],
-        ));
   }
 
   Widget _announcement(AnnouncementModel model) {
@@ -209,8 +202,12 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
           // ),
           Align(
             alignment: Alignment.centerRight,
-            child: Text(Utility.getPassedTime(model.createdAt.toIso8601String()),
-                style: Theme.of(context).textTheme.subtitle1.copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
+            child: Text(
+                Utility.getPassedTime(model.createdAt.toIso8601String()),
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1
+                    .copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
           )
         ],
       ),
@@ -223,7 +220,11 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
         top: 16,
         left: 16,
       ),
-      child: Text(text, style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 28, fontWeight: FontWeight.bold)),
+      child: Text(text,
+          style: Theme.of(context)
+              .textTheme
+              .headline6
+              .copyWith(fontSize: 20, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -231,18 +232,24 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: _floatingActionButton(),
-      appBar: AppBar(title: Title(color: PColors.black, child: Text("Student Home page")), actions: <Widget>[
-        Center(
-          child: SizedBox(
-            height: 40,
-            child: OutlineButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context, LoginPage.getRoute());
-                },
-                child: Text("Sign out")),
+      appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.dehaze),
+            onPressed: () {},
           ),
-        ).hP16,
-      ]),
+          title: Title(color: PColors.black, child: Text("Student Home page")),
+          actions: <Widget>[
+            Center(
+              child: SizedBox(
+                height: 40,
+                child: OutlineButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context, LoginPage.getRoute());
+                    },
+                    child: Text("Sign out")),
+              ),
+            ).hP16,
+          ]),
       body: Stack(
         children: <Widget>[
           Consumer<HomeState>(
@@ -266,11 +273,18 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text("You have no batch",
-                                      style: Theme.of(context).textTheme.headline6.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6
+                                          .copyWith(
                                             color: PColors.gray,
                                           )),
                                   SizedBox(height: 10),
-                                  Text("Ask your teacher to add you in a batch!!", style: Theme.of(context).textTheme.bodyText1),
+                                  Text(
+                                      "Ask your teacher to add you in a batch!!",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
                                 ],
                               ))
                         ],
@@ -281,7 +295,10 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           if (index == 0) return _title("My Batches");
-                          return _batch(state.batchList[index - 1]);
+                          return BatchWidget(
+                            state.batchList[index - 1],
+                            isTeacher: false,
+                          );
                         },
                         childCount: state.batchList.length + 1,
                       ),
@@ -297,12 +314,14 @@ class _StudentHomePageState extends State<StudentHomePage> with TickerProviderSt
                         childCount: state.polls.length + 1,
                       ),
                     ),
-                  if (state.announcementList != null && state.announcementList.isNotEmpty)
+                  if (state.announcementList != null &&
+                      state.announcementList.isNotEmpty)
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           if (index == 0) return _title("Announcement");
-                          return _announcement(state.announcementList[index - 1]);
+                          return _announcement(
+                              state.announcementList[index - 1]);
                         },
                         childCount: state.batchList.length + 1,
                       ),

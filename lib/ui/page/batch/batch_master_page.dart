@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
@@ -18,18 +20,23 @@ import 'package:flutter_pensil_app/ui/widget/fab/fab_button.dart';
 import 'package:provider/provider.dart';
 
 class BatchMasterDetailPage extends StatefulWidget {
-  BatchMasterDetailPage({Key key, this.model}) : super(key: key);
+  BatchMasterDetailPage({Key key, this.model, this.isTeacher})
+      : super(key: key);
   final BatchModel model;
-  static MaterialPageRoute getRoute(BatchModel model) {
+  final bool isTeacher;
+  static MaterialPageRoute getRoute(BatchModel model, {bool isTeacher}) {
     return MaterialPageRoute(
       builder: (_) => MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => VideoState(batchId: model.id)),
-          ChangeNotifierProvider(create: (_) => BatchMaterialState(batchId: model.id)),
-          ChangeNotifierProvider(create: (_) => AnnouncementState(batchId: model.id)),
+          ChangeNotifierProvider(
+              create: (_) => BatchMaterialState(batchId: model.id)),
+          ChangeNotifierProvider(
+              create: (_) => AnnouncementState(batchId: model.id)),
           ChangeNotifierProvider(create: (_) => QuizState(batchId: model.id)),
         ],
-        builder: (_, child) => BatchMasterDetailPage(model: model),
+        builder: (_, child) =>
+            BatchMasterDetailPage(model: model, isTeacher: isTeacher),
       ),
     );
   }
@@ -38,7 +45,9 @@ class BatchMasterDetailPage extends StatefulWidget {
   _BatchMasterDetailPageState createState() => _BatchMasterDetailPageState();
 }
 
-class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with TickerProviderStateMixin {
+class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
+    with TickerProviderStateMixin {
+  double _angle = 0;
   BatchModel model;
   AnimationController _controller;
   TabController _tabController;
@@ -55,11 +64,14 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
     super.initState();
     model = widget.model;
     setupAnimations();
-    _tabController = TabController(length: 4, vsync: this)..addListener(tabListener);
+    _tabController = TabController(length: 4, vsync: this)
+      ..addListener(tabListener);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<VideoState>(context, listen: false).getVideosList();
-      Provider.of<BatchMaterialState>(context, listen: false).getBatchMaterialList();
-      Provider.of<AnnouncementState>(context, listen: false).getBatchAnnouncementList();
+      Provider.of<BatchMaterialState>(context, listen: false)
+          .getBatchMaterialList();
+      Provider.of<AnnouncementState>(context, listen: false)
+          .getBatchAnnouncementList();
       Provider.of<QuizState>(context, listen: false).getQuizList();
     });
     super.initState();
@@ -78,13 +90,19 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
   }
 
   setupAnimations() {
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
+    if (!widget.isTeacher) {
+      return;
+    }
+    _controller = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 2000));
     _controller.repeat();
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 200))
-      ..addListener(() {
-        setState(() {});
-      });
-    _animateIcon = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+          ..addListener(() {
+            setState(() {});
+          });
+    _animateIcon =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _translateButton = Tween<double>(
       begin: 100,
       end: 0,
@@ -100,9 +118,12 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
 
   animate() {
     if (!isOpened) {
+      _angle = .785;
       _animationController.forward();
     } else {
+      _angle = 0;
       _animationController.reverse();
+      _angle = 0;
     }
     isOpened = !isOpened;
     showFabButton.value = !showFabButton.value;
@@ -113,9 +134,12 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: animate,
       tooltip: 'Toggle',
-      child: AnimatedIcon(
-        icon: AnimatedIcons.menu_close,
-        progress: _animateIcon,
+      child: Transform.rotate(
+        angle: _angle,
+        child: Icon(
+          Icons.add,
+          size: 30,
+        ),
       ),
     );
   }
@@ -152,7 +176,8 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
                 UploadMaterialPage.getRoute(
                   model.subject,
                   model.id,
-                  state: Provider.of<BatchMaterialState>(context, listen: false),
+                  state:
+                      Provider.of<BatchMaterialState>(context, listen: false),
                 ));
           },
         ),
@@ -160,31 +185,35 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
           icon: Images.announcements,
           text: 'Add Announcement',
           translateButton: _translateButton,
-          
           animationValue: 1,
           onPressed: () {
             animate();
             final model = widget.model;
             model.isSelected = true;
-            Navigator.push(context, CreateAnnouncement.getRoute(
-              selectedBatch: model,
-              onAnnouncementCreated:onAnnouncementCreated,
-            ));
+            Navigator.push(
+                context,
+                CreateAnnouncement.getRoute(
+                  selectedBatch: model,
+                  onAnnouncementCreated: onAnnouncementCreated,
+                ));
           },
         ),
       ],
     ];
   }
- 
-  void onAnnouncementCreated()async{
-    Provider.of<AnnouncementState>(context, listen: false).getBatchAnnouncementList();
+
+  void onAnnouncementCreated() async {
+    Provider.of<AnnouncementState>(context, listen: false)
+        .getBatchAnnouncementList();
   }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        floatingActionButton: _floatingActionButton(),
+        floatingActionButton:
+            !widget.isTeacher ? null : _floatingActionButton(),
         appBar: AppBar(
           bottom: TabBar(
             controller: _tabController,
@@ -192,8 +221,8 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
             labelColor: Theme.of(context).textTheme.bodyText1.color,
             tabs: [
               Tab(text: "Detail"),
-              Tab(text: "Assignment"),
               Tab(text: "Videos"),
+              Tab(text: "Quiz"),
               Tab(text: "Study Material"),
             ],
           ),
@@ -206,14 +235,22 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage> with Tick
           children: <Widget>[
             TabBarView(
               controller: _tabController,
-              children: [BatchDetailPage(model: model), BatchAssignmentPage(), BatchVideosPage(), BatchStudyMaterialPage()],
+              children: [
+                BatchDetailPage(model: model),
+                BatchVideosPage(),
+                BatchAssignmentPage(),
+                BatchStudyMaterialPage()
+              ],
             ),
-            ValueListenableBuilder(
-              valueListenable: currentPageNo,
-              builder: (BuildContext context, dynamic index, Widget child) {
-                return AnimatedFabButton(showFabButton: showFabButton, children: _floatingButtons(index));
-              },
-            ),
+            if (widget.isTeacher)
+              ValueListenableBuilder(
+                valueListenable: currentPageNo,
+                builder: (BuildContext context, dynamic index, Widget child) {
+                  return AnimatedFabButton(
+                      showFabButton: showFabButton,
+                      children: _floatingButtons(index));
+                },
+              ),
           ],
         ),
       ),

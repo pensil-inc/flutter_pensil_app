@@ -8,9 +8,11 @@ import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
 class BatchWidget extends StatelessWidget {
   const BatchWidget(
     this.model, {
+    this.isTeacher = true,
     Key key,
   }) : super(key: key);
   final BatchModel model;
+  final bool isTeacher;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -20,13 +22,18 @@ class BatchWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(model.name, style: Theme.of(context).textTheme.headline6.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(model.name,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6
+                  .copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
           PChip(
             label: model.subject,
             backgroundColor: Color(0xffF67619),
             borderColor: Colors.transparent,
-            style: theme.textTheme.bodyText1.copyWith(fontSize: 14, color: theme.colorScheme.onSecondary),
+            style: theme.textTheme.bodyText1
+                .copyWith(fontSize: 14, color: theme.colorScheme.onSecondary),
           ),
           SizedBox(height: 10),
           Row(
@@ -34,7 +41,9 @@ class BatchWidget extends StatelessWidget {
               Row(
                 children: Iterable.generate(model.classes.length, (index) {
                   final e = model.classes[index];
-                  return Text(e.toshortDay() + (model.classes.length == index + 1 ? "" : ",")).hP4;
+                  return Text(e.toshortDay() +
+                          (model.classes.length == index + 1 ? "" : ","))
+                      .hP4;
                 }).toList(),
               ),
               Spacer(),
@@ -43,7 +52,8 @@ class BatchWidget extends StatelessWidget {
           )
         ],
       ).p16.ripple(() {
-        Navigator.push(context, BatchMasterDetailPage.getRoute(model));
+        Navigator.push(context,
+            BatchMasterDetailPage.getRoute(model, isTeacher: isTeacher));
       }),
     );
   }
