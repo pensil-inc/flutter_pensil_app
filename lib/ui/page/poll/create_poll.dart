@@ -81,10 +81,11 @@ class _CreateBatchState extends State<CreatePoll> {
     final newPoll = await state.createPoll(_question.text);
     isLoading.value = false;
     if (newPoll != null) {
-      Alert.sucess(context,
-          message: "Poll created sucessfully!!", title: "Message");
+      // Alert.sucess(context,
+      //     message: "Poll created sucessfully!!", title: "Message");
       final homeState = Provider.of<HomeState>(context, listen: false);
       homeState.getPollList();
+      Navigator.pop(context);
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",

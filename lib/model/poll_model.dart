@@ -1,59 +1,188 @@
 import 'dart:convert';
+
 class PollResponseModel {
-    PollResponseModel({
-        this.polls,
-    });
+  PollResponseModel({
+    this.polls,
+  });
 
-    final List<PollModel> polls;
+  final List<PollModel> polls;
 
-    factory PollResponseModel.fromRawJson(String str) => PollResponseModel.fromJson(json.decode(str));
+  factory PollResponseModel.fromRawJson(String str) =>
+      PollResponseModel.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory PollResponseModel.fromJson(Map<String, dynamic> json) => PollResponseModel(
-        polls: json["polls"] == null ? null : List<PollModel>.from(json["polls"].map((x) => PollModel.fromJson(x))),
-    );
+  factory PollResponseModel.fromJson(Map<String, dynamic> json) =>
+      PollResponseModel(
+        polls: json["polls"] == null
+            ? null
+            : List<PollModel>.from(
+                json["polls"].map((x) => PollModel.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
-        "polls": polls == null ? null : List<dynamic>.from(polls.map((x) => x.toJson())),
-    };
+  Map<String, dynamic> toJson() => {
+        "polls": polls == null
+            ? null
+            : List<dynamic>.from(polls.map((x) => x.toJson())),
+      };
 }
+
 class PollModel {
-    PollModel({
-        this.question,
-        this.options,
-        this.endTime,
-        this.isForAll,
-        this.batches,
-        this.createdAt
-    });
+  PollModel({
+    this.id,
+    this.question,
+    this.options,
+    this.endTime,
+    this.batches,
+    this.isForAll,
+    this.answers,
+    this.totalVotes,
+    this.votes,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    final String question;
-    final List<String> options;
-    final String endTime;
-    final bool isForAll;
-    final List<String> batches;
-    final DateTime createdAt;
+  final String id;
+  final String question;
+  final List<String> options;
+  final DateTime endTime;
+  final List<dynamic> batches;
+  final bool isForAll;
+  final List<Answer> answers;
+  final int totalVotes;
+  final Map<String, int> votes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-    factory PollModel.fromRawJson(String str) => PollModel.fromJson(json.decode(str));
+  PollModel copyWith({
+    String id,
+    String question,
+    List<String> options,
+    DateTime endTime,
+    List<dynamic> batches,
+    bool isForAll,
+    List<dynamic> answers,
+    int totalVotes,
+    Map<String, int> votes,
+    DateTime createdAt,
+    DateTime updatedAt,
+  }) =>
+      PollModel(
+        id: id ?? this.id,
+        question: question ?? this.question,
+        options: options ?? this.options,
+        endTime: endTime ?? this.endTime,
+        batches: batches ?? this.batches,
+        isForAll: isForAll ?? this.isForAll,
+        answers: answers ?? this.answers,
+        totalVotes: totalVotes ?? this.totalVotes,
+        votes: votes ?? this.votes,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 
-    String toRawJson() => json.encode(toJson());
+  factory PollModel.fromRawJson(String str) =>
+      PollModel.fromJson(json.decode(str));
 
-    factory PollModel.fromJson(Map<String, dynamic> json) => PollModel(
+  String toRawJson() => json.encode(toJson());
+
+  factory PollModel.fromJson(Map<String, dynamic> json) => PollModel(
+        id: json["id"] == null ? null : json["id"],
         question: json["question"] == null ? null : json["question"],
-        options: json["options"] == null ? null : List<String>.from(json["options"].map((x) => x)),
-        endTime: json["endTime"] == null ? null : json["endTime"],
+        totalVotes: json["totalVotes"] == null ? null : json["totalVotes"],
+        options: json["options"] == null
+            ? null
+            : List<String>.from(json["options"].map((x) => x)),
+        endTime:
+            json["endTime"] == null ? null : DateTime.parse(json["endTime"]),
+        batches: json["batches"] == null
+            ? null
+            : List<dynamic>.from(json["batches"].map((x) => x)),
         isForAll: json["isForAll"] == null ? null : json["isForAll"],
-        batches: json["batches"] == null ? null : List<String>.from(json["batches"].map((x) => x)),
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    );
+        answers: json["answers"] == null
+            ? null
+            : List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x))),
+        votes: json["votes"] == null
+            ? null
+            : Map.from(json["votes"])
+                .map((k, v) => MapEntry<String, int>(k, v)),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
+        "id": id == null ? null : id,
         "question": question == null ? null : question,
-        "options": options == null ? null : List<dynamic>.from(options.map((x) => x)),
-        "endTime": endTime == null ? null : endTime,
+        "options":
+            options == null ? null : List<dynamic>.from(options.map((x) => x)),
+        "endTime": endTime == null ? null : endTime.toIso8601String(),
+        "batches":
+            batches == null ? null : List<dynamic>.from(batches.map((x) => x)),
         "isForAll": isForAll == null ? null : isForAll,
-        "batches": batches == null ? null : List<dynamic>.from(batches.map((x) => x)),
+        "answers":
+            answers == null ? null : List<Answer>.from(answers.map((x) => x)),
+        "totalVotes": totalVotes == null ? null : totalVotes,
+        "votes": votes == null
+            ? null
+            : Map.from(votes).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
-    };
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+      };
+
+  double percent(String key) {
+    final total = this.votes[key];
+    if (total == 0) {
+      return 0;
+    }
+    final perc = (total * 100) / this.totalVotes;
+    return perc;
+  }
+
+  bool isMyVote(String studentId, String option) {
+    print(studentId);
+    if (this.answers != null && this.answers.isNotEmpty) {
+      if (this.answers.any((element) =>
+          element.studentId == studentId && element.option == option)) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+class Answer {
+  Answer({
+    this.studentId,
+    this.option,
+  });
+
+  final String studentId;
+  final String option;
+
+  Answer copyWith({
+    String studentId,
+    String option,
+  }) =>
+      Answer(
+        studentId: studentId ?? this.studentId,
+        option: option ?? this.option,
+      );
+
+  factory Answer.fromRawJson(String str) => Answer.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Answer.fromJson(Map<String, dynamic> json) => Answer(
+        studentId: json["studentId"] == null ? null : json["studentId"],
+        option: json["option"] == null ? null : json["option"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "studentId": studentId == null ? null : studentId,
+        "option": option == null ? null : option,
+      };
 }

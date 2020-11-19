@@ -15,7 +15,9 @@ class Constants {
   static const String getAllStudentList = "get-all-student-list";
   static const String studentNotificationList = "student/my-notifications";
 
-  static const String batchStudent = student + "/my-batches";
+  static const String studentBatch = student + "/my-batches";
+  static const String studentAnnouncements = student + "/my-announcements";
+  static const String studentPolls = student + "/my-polls";
 
   static String getBatchMaterialList(String batchId) {
     return "$batch/$batchId/$material";
@@ -35,5 +37,9 @@ class Constants {
 
   static String getBatchAssignmentDetail(String batchId, String assignmentId) {
     return "$student/$batch/$batchId/$assignment/$assignmentId";
+  }
+
+  static String castStudentVotOnPoll(String pollId) {
+    return "student/poll/$pollId/vote";
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/home/student_list_preview.dart';
+import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/batch_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
 import 'package:flutter_pensil_app/ui/page/notification/notifications_page.dart';
@@ -31,7 +32,6 @@ class _StudentHomePageState extends State<StudentHomePage>
   AnimationController _controller;
   bool isOpened = false;
   AnimationController _animationController;
-  Animation<double> _animateIcon;
   Curve _curve = Curves.easeOut;
   Animation<double> _translateButton;
   bool showFabButton = false;
@@ -75,8 +75,6 @@ class _StudentHomePageState extends State<StudentHomePage>
           ..addListener(() {
             setState(() {});
           });
-    _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _translateButton = Tween<double>(
       begin: 100,
       end: 0,
@@ -102,10 +100,6 @@ class _StudentHomePageState extends State<StudentHomePage>
           size: 30,
         ),
       ),
-      //  AnimatedIcon(
-      //   icon: AnimatedIcons.menu_home,
-      //   progress: _animateIcon,
-      // ),
     );
   }
 
@@ -182,34 +176,6 @@ class _StudentHomePageState extends State<StudentHomePage>
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _announcement(AnnouncementModel model) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      decoration: AppTheme.decoration(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(model.description),
-          // Wrap(
-          //   children:model.batches.map((e) => PChip(
-          //     label:e
-          //   )).toList()
-          // ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-                Utility.getPassedTime(model.createdAt.toIso8601String()),
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle1
-                    .copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
-          )
-        ],
       ),
     );
   }
@@ -309,7 +275,9 @@ class _StudentHomePageState extends State<StudentHomePage>
                         (context, index) {
                           if (index == 0) return _title("Today's Poll");
 
-                          return PollWidget(model: state.polls[index - 1]);
+                          return PollWidget(
+                              model: state.polls[index - 1],
+                              hideFinishButton: false);
                         },
                         childCount: state.polls.length + 1,
                       ),
@@ -320,10 +288,10 @@ class _StudentHomePageState extends State<StudentHomePage>
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           if (index == 0) return _title("Announcement");
-                          return _announcement(
+                          return AnnouncementWidget(
                               state.announcementList[index - 1]);
                         },
-                        childCount: state.batchList.length + 1,
+                        childCount: state.announcementList.length + 1,
                       ),
                     ),
                 ],

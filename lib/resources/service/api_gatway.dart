@@ -23,10 +23,12 @@ abstract class ApiGateway {
   Future<List<String>> getSubjectList();
   Future<List<NotificationModel>> getStudentNotificationsList();
   Future<List<VideoModel>> getVideosList(String batchId);
-  Future<bool> uploadFile(File file,String id,{bool isVideo = false});
+  Future<bool> uploadFile(File file, String id, {bool isVideo = false});
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model);
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
   Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId);
   Future<List<AssignmentModel>> getAssignmentList(String batchId);
-  Future<QuizDetailModel> getAssignmentDetailList(String batchId, String assgnmentId);
+  Future<QuizDetailModel> getAssignmentDetailList(
+      String batchId, String assgnmentId);
+  Future<PollModel> castVoteOnPoll(String pollId, String vote);
 }

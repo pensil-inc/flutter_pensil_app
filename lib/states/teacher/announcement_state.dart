@@ -9,7 +9,7 @@ import 'package:get_it/get_it.dart';
 
 class AnnouncementState extends BaseState {
   final String batchId;
-  bool isForAll = false;
+  bool isForAll = true;
   List<AnnouncementModel> batchAnnouncementList;
 
   AnnouncementState({this.batchId});
@@ -18,12 +18,18 @@ class AnnouncementState extends BaseState {
     notifyListeners();
   }
 
-  Future<AnnouncementModel> createAnnouncement({String title, String description, List<BatchModel> batches}) async {
+  Future<AnnouncementModel> createAnnouncement(
+      {String title, String description, List<BatchModel> batches}) async {
     try {
       assert(title != null);
       var model = AnnouncementModel(
           // title:title,
-          batches: batches == null ? null : batches.where((element) => element.isSelected).map((e) => e.id).toList(),
+          batches: batches == null
+              ? null
+              : batches
+                  .where((element) => element.isSelected)
+                  .map((e) => e.id)
+                  .toList(),
           description: description,
           isForAll: batches == null
               ? true
@@ -47,7 +53,8 @@ class AnnouncementState extends BaseState {
       final repo = getit.get<BatchRepository>();
       batchAnnouncementList = await repo.getBatchAnnouncemantList(batchId);
       if (batchAnnouncementList != null) {
-        batchAnnouncementList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        batchAnnouncementList
+            .sort((a, b) => b.createdAt.compareTo(a.createdAt));
       }
       notifyListeners();
       isBusy = false;

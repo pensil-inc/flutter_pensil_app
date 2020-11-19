@@ -80,10 +80,9 @@ class ApiGatewayImpl implements ApiGateway {
   Future<List<BatchModel>> getBatches() async {
     try {
       String token = await pref.getAccessToken();
-
       final header = {"Authorization": "Bearer " + token};
       String endpoint =
-          await pref.isStudent() ? Constants.batchStudent : Constants.batch;
+          await pref.isStudent() ? Constants.studentBatch : Constants.batch;
       var response = await _dioClient.get(
         endpoint,
         options: Options(headers: header),
@@ -114,8 +113,11 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.get(Constants.annoucenment,
-          options: Options(headers: header));
+      String endpoint = await pref.isStudent()
+          ? Constants.studentAnnouncements
+          : Constants.annoucenment;
+      final response =
+          await _dioClient.get(endpoint, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = AnnouncementListResponse.fromJson(json);
       return model.announcements;
@@ -129,8 +131,10 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.get(Constants.poll,
-          options: Options(headers: header));
+      String endpoint =
+          await pref.isStudent() ? Constants.studentPolls : Constants.poll;
+      final response =
+          await _dioClient.get(endpoint, options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = PollResponseModel.fromJson(json);
       return model.polls;
@@ -325,6 +329,24 @@ class ApiGatewayImpl implements ApiGateway {
       var json = _dioClient.getJsonBody(response);
       final model = QuizDetailModel.fromJson(json["assignment"][0]);
       return model;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<PollModel> castVoteOnPoll(String pollId, String vote) async {
+    try {
+      final data = {"answer": vote};
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      final response = await _dioClient.post(
+          Constants.castStudentVotOnPoll(pollId),
+          data: data,
+          options: Options(headers: header));
+      final map = _dioClient.getJsonBody(response);
+      final value = PollModel.fromJson(map["poll"]);
+      return value;
     } catch (error) {
       throw error;
     }
