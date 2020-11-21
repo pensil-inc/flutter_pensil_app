@@ -122,7 +122,8 @@ class _CreateBatchState extends State<CreatePoll> {
                     return Column(
                         children: Iterable.generate(state.pollOptions.length,
                             (index) {
-                      return PollOption(index: index);
+                      return PollOption(
+                          index: index, value: state.pollOptions[index]);
                     }).toList());
                   },
                 ),

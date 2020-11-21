@@ -13,6 +13,8 @@ class PTextField extends StatelessWidget {
       this.hintText = '',
       this.height = 70,
       this.onSubmit,
+      this.suffixIcon,
+      this.onChange,
       this.padding = const EdgeInsets.all(0)})
       : super(key: key);
   final TextEditingController controller;
@@ -20,26 +22,31 @@ class PTextField extends StatelessWidget {
   final Type type;
   final int maxLines;
   final double height;
+  final Widget suffixIcon;
   final Function(String) onSubmit;
   final EdgeInsetsGeometry padding;
+  final Function(String) onChange;
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        if(label != null)
-        ...[
-          Text(label ?? "", style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold, fontSize: 16)),
+        if (label != null) ...[
+          Text(label ?? "",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(fontWeight: FontWeight.bold, fontSize: 16)),
           SizedBox(height: 5),
         ],
         Container(
           height: height,
           child: TextFormField(
             autocorrect: false,
-            onSaved: (val){
+            onSaved: (val) {
               print(val);
             },
-            onFieldSubmitted: (val){
-              if(onSubmit != null){
+            onFieldSubmitted: (val) {
+              if (onSubmit != null) {
                 onSubmit(val);
               }
             },
@@ -47,9 +54,11 @@ class PTextField extends StatelessWidget {
                 ? true
                 : false,
             maxLines: maxLines,
+            onChanged: onChange,
             keyboardType: getKeyboardType(type),
             controller: controller ?? TextEditingController(),
-            decoration: getInputDecotration(context, hintText: hintText),
+            decoration: getInputDecotration(context,
+                hintText: hintText, suffixIcon: suffixIcon),
             textInputAction: (type == Type.password ||
                     type == Type.reset ||
                     type == Type.confirmPassword)
@@ -62,22 +71,23 @@ class PTextField extends StatelessWidget {
     );
   }
 
-  InputDecoration getInputDecotration(context, {String hintText}) {
+  InputDecoration getInputDecotration(context,
+      {String hintText, Widget suffixIcon}) {
     return InputDecoration(
-      // helperText: '',
-      hintText: hintText,
-      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-      border: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: Theme.of(context).dividerColor,
+        // helperText: '',
+        hintText: hintText,
+        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Theme.of(context).dividerColor,
+          ),
         ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: Theme.of(context).dividerColor,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Theme.of(context).dividerColor,
+          ),
         ),
-      ),
-    );
+        suffixIcon: suffixIcon);
   }
 
   TextInputType getKeyboardType(Type choice) {

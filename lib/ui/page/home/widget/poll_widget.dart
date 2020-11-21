@@ -46,7 +46,9 @@ class PollWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(e),
-            Text(model.percent(e).toStringAsFixed(1) + "%"),
+            Text(model.percent(e).toStringAsFixed(1) +
+                "%" +
+                " (${model.voteOnOption(e)})"),
           ],
         ),
       ).ripple(() {
@@ -86,7 +88,7 @@ class PollWidget extends StatelessWidget {
               children: model.options.map((e) {
             return _option(context, e);
           }).toList()),
-          if (hideFinishButton) ...[
+          if (hideFinishButton && !model.endTime.isBefore(DateTime.now())) ...[
             SizedBox(height: 10),
             _secondaryButton(context, label: "Finish", onPressed: () {})
           ]

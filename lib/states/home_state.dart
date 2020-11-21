@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter_pensil_app/helper/enum.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
@@ -12,6 +13,7 @@ class HomeState extends BaseState {
   List<AnnouncementModel> announcementList;
   List<PollModel> polls;
   String userId;
+  bool isTeacher = true;
 
   Future getBatchList() async {
     try {
@@ -19,6 +21,7 @@ class HomeState extends BaseState {
       final pref = getit.get<SharedPrefrenceHelper>();
       var user = await pref.getUserProfile();
       userId = user.id;
+      isTeacher = user.role == Role.TEACHER.asString();
       final repo = getit.get<BatchRepository>();
       batchList = await repo.getBatch();
       notifyListeners();
@@ -52,6 +55,10 @@ class HomeState extends BaseState {
   }
 
   Future castVoteOnPoll(String pollId, String vote) async {
+    if (isTeacher) {
+      print("Teacher can't cast vote");
+      return;
+    }
     var model = await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;

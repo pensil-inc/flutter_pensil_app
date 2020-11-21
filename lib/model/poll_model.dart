@@ -134,7 +134,7 @@ class PollModel {
       };
 
   double percent(String key) {
-    final total = this.votes[key];
+    final total = voteOnOption(key);
     if (total == 0) {
       return 0;
     }
@@ -142,8 +142,11 @@ class PollModel {
     return perc;
   }
 
+  int voteOnOption(String key) {
+    return this.votes[key];
+  }
+
   bool isMyVote(String studentId, String option) {
-    print(studentId);
     if (this.answers != null && this.answers.isNotEmpty) {
       if (this.answers.any((element) =>
           element.studentId == studentId && element.option == option)) {

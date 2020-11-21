@@ -13,6 +13,12 @@ class PollState extends ChangeNotifier {
     pollOptions[index] = value;
   }
 
+  void removePollOption(int index) {
+    var val = pollOptions[index];
+    pollOptions.remove(val);
+    notifyListeners();
+  }
+
   void addPollOptions() {
     pollOptions.add("");
     notifyListeners();
