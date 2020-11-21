@@ -17,16 +17,19 @@ class BatchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: AppTheme.decoration(context),
+      width: AppTheme.fullWidth(context) * .7,
+      margin: EdgeInsets.only(left: 16),
+      decoration: AppTheme.outline(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(model.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context)
                   .textTheme
                   .headline6
-                  .copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+                  .copyWith(fontSize: 15, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
           PChip(
             label: model.subject,
@@ -37,6 +40,7 @@ class BatchWidget extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(
                 children: Iterable.generate(model.classes.length, (index) {
@@ -46,7 +50,6 @@ class BatchWidget extends StatelessWidget {
                       .hP4;
                 }).toList(),
               ),
-              Spacer(),
               StudentListPreview(list: model.studentModel),
             ],
           )

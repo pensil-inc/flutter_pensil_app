@@ -137,7 +137,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
           style: Theme.of(context)
               .textTheme
               .headline6
-              .copyWith(fontSize: 28, fontWeight: FontWeight.bold)),
+              .copyWith(fontSize: 24, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -168,34 +168,67 @@ class _TeacherHomePageState extends State<TeacherHomePage>
               return CustomScrollView(
                 slivers: <Widget>[
                   // if (!(state.batchList != null && state.batchList.isNotEmpty))
-                  //  SliverList(
-                  //   delegate: SliverChildListDelegate([
-                  //     _title("Batches"),
-                  //     SizedBox(height:20),
-                  //     Container(
-                  //       height:100,
-                  //       margin: EdgeInsets.symmetric(horizontal: 16),
-                  //       decoration:AppTheme.outline(context),
-                  //       width: AppTheme.fullWidth(context),
-                  //       alignment: Alignment.center,
-                  //       child:Column(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: <Widget>[
-                  //         Text("You haven't created any batch yet",style:Theme.of(context).textTheme.headline6.copyWith(color:PColors.gray, )),
-                  //         SizedBox(height:10),
-                  //         Text("Tap on below fab button to create new",style:Theme.of(context).textTheme.bodyText1),
-                  //       ],)
-                  //     )
-                  //   ],),),
+                  //   SliverList(
+                  //     delegate: SliverChildListDelegate(
+                  //       [
+                  //         _title("Batches"),
+                  //         SizedBox(height: 20),
+                  //         Container(
+                  //             height: 100,
+                  //             margin: EdgeInsets.symmetric(horizontal: 16),
+                  //             decoration: AppTheme.outline(context),
+                  //             width: AppTheme.fullWidth(context),
+                  //             alignment: Alignment.center,
+                  //             child: Column(
+                  //               mainAxisAlignment: MainAxisAlignment.center,
+                  //               children: <Widget>[
+                  //                 Text("You haven't created any batch yet",
+                  //                     style: Theme.of(context)
+                  //                         .textTheme
+                  //                         .headline6
+                  //                         .copyWith(
+                  //                           color: PColors.gray,
+                  //                         )),
+                  //                 SizedBox(height: 10),
+                  //                 Text("Tap on below fab button to create new",
+                  //                     style: Theme.of(context)
+                  //                         .textTheme
+                  //                         .bodyText1),
+                  //               ],
+                  //             ))
+                  //       ],
+                  //     ),
+                  //   ),
                   if (state.batchList != null && state.batchList.isNotEmpty)
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == 0)
-                            return _title("${state.batchList.length} Batches");
-                          return BatchWidget(state.batchList[index - 1]);
-                        },
-                        childCount: state.batchList.length + 1,
+                    // SliverList(
+                    //   delegate: SliverChildBuilderDelegate(
+                    //     (context, index) {
+                    //       if (index == 0)
+                    //         return _title("${state.batchList.length} Batches");
+                    //       return BatchWidget(state.batchList[index - 1]);
+                    //     },
+                    //     childCount: state.batchList.length + 1,
+                    //   ),
+                    // ),
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _title("${state.batchList.length} Batches"),
+                          SizedBox(height: 5),
+                          Container(
+                            height: 138,
+                            width: AppTheme.fullWidth(context),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: state.batchList.length,
+                              itemBuilder: (context, index) {
+                                return BatchWidget(state.batchList[index]);
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10)
+                        ],
                       ),
                     ),
                   if (state.polls != null)
