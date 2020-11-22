@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
@@ -49,7 +50,8 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
             child: Stack(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,25 +63,35 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
                       ),
                       // Text(model.description,style: Theme.of(context).textTheme.bodyText2,maxLines: 2, ),
                       Spacer(),
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-                        PChip(
-                          backgroundColor: PColors.randomColor(model.subject),
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                          borderColor: Colors.transparent,
-                          label: model.subject ?? "N/A",
-                        ),
-                        Text(
-                          Utility.toDMformate(model.createdAt),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2
-                              .copyWith(fontWeight: FontWeight.bold, fontSize: 12, color: Theme.of(context).disabledColor),
-                        )
-                      ])
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            PChip(
+                              backgroundColor:
+                                  PColors.randomColor(model.subject),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                              borderColor: Colors.transparent,
+                              label: model.subject ?? "N/A",
+                            ),
+                            Text(
+                              Utility.toDMformate(model.createdAt),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      color: Theme.of(context).disabledColor),
+                            )
+                          ])
                     ],
                   ),
                 ),
@@ -90,9 +102,11 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
       ).ripple(() {
         // Utility.displaySnackbar(context,);
         if (model.video != null) {
-          Navigator.push(context, VideoPlayerPage2.getRoute(model.video, title: model.title));
+          Navigator.push(context,
+              VideoPlayerPage2.getRoute(model.video, title: model.title));
         } else if (model.videoUrl != null) {
-          Navigator.push(context, WebViewPage.getRoute(model.videoUrl, title: model.title));
+          Navigator.push(context,
+              WebViewPage.getRoute(model.videoUrl, title: model.title));
         }
         // Navigator.push(context, VideoPlayerPage.getRoute(model.video, title: model.title));
       }),
@@ -112,10 +126,14 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
           color: Color(0xffeaeaea),
           child: url == null
               ? Container(
-                  child: Text(
-                    "No Photo".toUpperCase(),
-                    style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold, fontSize: 14),
-                  ),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(Images.videoPlay),
+                          fit: BoxFit.cover)),
+                  // child: Text(
+                  //   "No Photo".toUpperCase(),
+                  //   style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold, fontSize: 14),
+                  // ),
                 )
               : Container(
                   height: 40,
@@ -133,16 +151,19 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
 
     return // Picture
         ClipRRect(
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
       child: Image.network(
         url != null ? url : "",
         fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent loadingProgress) {
           if (loadingProgress == null) return child;
           return Center(
             child: CircularProgressIndicator(
               value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes
                   : null,
             ),
           );
@@ -175,7 +196,8 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
                           )),
                   SizedBox(height: 10),
                   Text("No video is uploaded yet for this batch!!",
-                      style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+                      style: Theme.of(context).textTheme.bodyText1,
+                      textAlign: TextAlign.center),
                 ],
               ),
             );

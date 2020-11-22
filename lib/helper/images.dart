@@ -1,4 +1,4 @@
-class Images{
+class Images {
   static const String logo = 'assets/images/logo.png';
   static const String logoText = 'assets/images/logo_text.png';
   static const String back = 'assets/images/icons/back.png';
@@ -24,19 +24,30 @@ class Images{
   static const String correct = 'assets/images/icons/correct.png';
   static const String wrong = 'assets/images/icons/wrong.png';
   static const String skipped = 'assets/images/icons/skipped.png';
+  static const String videoPlay = 'assets/images/icons/video_play.jpeg';
 
-  static getfiletypeIcon(String type){
+  static getfiletypeIcon(String type) {
     switch (type) {
-      case "pdf": return pdf;
-      case "png": return image;
-      case "jpg": return image;
-      case "jpeg": return image;
-      case "doc": return doc;
-      case "epub": return epub;
-      case "mp3": return audio;
-      case "mp4": return audio;
-      case "docx": return doc;
-      default:return doc;
+      case "pdf":
+        return pdf;
+      case "png":
+        return image;
+      case "jpg":
+        return image;
+      case "jpeg":
+        return image;
+      case "doc":
+        return doc;
+      case "epub":
+        return epub;
+      case "mp3":
+        return audio;
+      case "mp4":
+        return audio;
+      case "docx":
+        return doc;
+      default:
+        return doc;
     }
   }
 }
