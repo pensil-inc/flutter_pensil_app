@@ -5,9 +5,11 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/quiz/quiz_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
+import 'package:flutter_pensil_app/states/teacher/create_batch_state.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
 import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart';
+import 'package:flutter_pensil_app/ui/page/batch/create_batch/create_batch.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_assignment_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_study_material_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/detail/batch_detail_page.dart';
@@ -230,6 +232,20 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
             color: PColors.black,
             child: Text(model.name),
           ),
+          actions: [
+            // CreateBatch
+            Center(
+              child: SizedBox(
+                height: 40,
+                child: OutlineButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context, CreateBatch.getRoute(model: widget.model));
+                    },
+                    child: Text("Edit")),
+              ),
+            ).hP16,
+          ],
         ),
         body: Stack(
           children: <Widget>[
