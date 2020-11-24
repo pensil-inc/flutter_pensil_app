@@ -35,7 +35,10 @@ class ApiGatewayImpl implements ApiGateway {
       print(data);
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.post(Constants.batch,
+      var endpoint = model.id == null
+          ? Constants.batch
+          : Constants.editBatchDetail(model.id);
+      var response = await _dioClient.post(endpoint,
           data: data, options: Options(headers: header));
       return true;
     } catch (error) {

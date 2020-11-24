@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 
 class BatchTimeSlotModel extends Equatable {
@@ -33,29 +35,30 @@ class BatchTimeSlotModel extends Equatable {
       );
 
   Map<String, dynamic> toJson() => {
-        "dayOfWeek": day == null ? null : toindex(),
+        "dayOfWeek": day == null ? dayOfWeek : toindex(),
         "startTime": startTime == null ? null : startTime.replaceAll(" ", ""),
         "endTime": endTime == null ? null : endTime.replaceAll(" ", ""),
       };
   int toindex() {
     switch (this.day) {
-      case "Monday":
+      case "Mon":
         return 1;
-      case "Tuesday":
+      case "Tues":
         return 2;
-      case "Wednesday":
+      case "Wed":
         return 3;
-      case "Thursday":
+      case "Thu":
         return 4;
-      case "Friday":
+      case "Fri":
         return 5;
-      case "Saturday":
+      case "Sat":
         return 6;
-      case "Sunday":
+      case "Sun":
         return 7;
 
         break;
       default:
+        log("Unknown Day index ${this.day}", name: "BatchTimeSlotModel");
         return 0;
     }
   }
@@ -78,7 +81,10 @@ class BatchTimeSlotModel extends Equatable {
         return "Sun";
 
         break;
+
       default:
+        log("Unknown Day index ${this.dayOfWeek}",
+            name: this.runtimeType.toString());
         return "N/A";
     }
   }

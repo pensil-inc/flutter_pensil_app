@@ -36,7 +36,7 @@ class StudentListPreview extends StatelessWidget {
           if (list.length > 3 && index == 0) {
             return _wrapper(context,
                 index: index,
-                child: Text("+${list.length - 3 }",
+                child: Text("+${list.length - 3}",
                     style: Theme.of(context).textTheme.bodyText1.copyWith(
                         fontSize: 10,
                         color: Theme.of(context).colorScheme.onPrimary)));

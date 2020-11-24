@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 
 class BatchTimeSlotWidget extends StatelessWidget {
   final BatchTimeSlotModel model;
-
-  const BatchTimeSlotWidget({Key key, this.model}) : super(key: key);
+  final int indexValue;
+  const BatchTimeSlotWidget({Key key, this.model, this.indexValue})
+      : super(key: key);
 
   Widget _addClass(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,7 +46,7 @@ class BatchTimeSlotWidget extends StatelessWidget {
                     )),
                 isExpanded: true,
                 underline: SizedBox(),
-                value: model.day,
+                value: model.day ?? model.toshortDay(),
                 items: <String>['Mon', 'Tue', 'Wed', 'Thu', "Fri", "Sat", "Sun"]
                     .map((String value) {
                   return new DropdownMenuItem<String>(
@@ -56,8 +57,9 @@ class BatchTimeSlotWidget extends StatelessWidget {
                 onChanged: (val) {
                   if (val != null) {
                     model.day = val;
+                    model.dayOfWeek = model.toindex();
                     Provider.of<CreateBatchStates>(context, listen: false)
-                        .updateTimeSlots(model);
+                        .updateTimeSlots(model, indexValue);
                   }
                 },
               ),
@@ -72,7 +74,7 @@ class BatchTimeSlotWidget extends StatelessWidget {
             if (time != null) {
               model.startTime = time;
               Provider.of<CreateBatchStates>(context, listen: false)
-                  .updateTimeSlots(model);
+                  .updateTimeSlots(model, indexValue);
             }
           }),
         ),
@@ -84,7 +86,7 @@ class BatchTimeSlotWidget extends StatelessWidget {
             if (time != null) {
               model.endTime = time;
               Provider.of<CreateBatchStates>(context, listen: false)
-                  .updateTimeSlots(model);
+                  .updateTimeSlots(model, indexValue);
             }
           }),
         ),

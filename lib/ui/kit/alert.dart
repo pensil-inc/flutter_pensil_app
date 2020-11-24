@@ -5,7 +5,10 @@ import 'package:flutter_pensil_app/ui/widget/p_button.dart';
 
 class Alert {
   static void sucess(BuildContext context,
-      {String message, String title, double height = 150}) async {
+      {String message,
+      String title,
+      double height = 150,
+      Function onPressed}) async {
     final theme = Theme.of(context);
     await showDialog(
       context: context,
@@ -43,6 +46,9 @@ class Alert {
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context);
+                  if (onPressed != null) {
+                    onPressed();
+                  }
                 },
                 color: Theme.of(context).primaryColor,
                 child: Text("OK",

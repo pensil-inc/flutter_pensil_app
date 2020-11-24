@@ -257,16 +257,25 @@ class _StudentHomePageState extends State<StudentHomePage>
                       ),
                     ),
                   if (state.batchList != null && state.batchList.isNotEmpty)
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == 0) return _title("My Batches");
-                          return BatchWidget(
-                            state.batchList[index - 1],
-                            isTeacher: false,
-                          );
-                        },
-                        childCount: state.batchList.length + 1,
+                   SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _title("${state.batchList.length} Batches"),
+                          SizedBox(height: 5),
+                          Container(
+                            height: 150,
+                            width: AppTheme.fullWidth(context),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: state.batchList.length,
+                              itemBuilder: (context, index) {
+                                return BatchWidget(state.batchList[index], isTeacher: false,);
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10)
+                        ],
                       ),
                     ),
                   if (state.polls != null && state.polls.isNotEmpty)

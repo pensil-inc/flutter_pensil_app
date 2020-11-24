@@ -233,18 +233,18 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
             child: Text(model.name),
           ),
           actions: [
-            // CreateBatch
-            Center(
-              child: SizedBox(
-                height: 40,
-                child: OutlineButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context, CreateBatch.getRoute(model: widget.model));
-                    },
-                    child: Text("Edit")),
-              ),
-            ).hP16,
+            if (widget.isTeacher)
+              Center(
+                child: SizedBox(
+                  height: 40,
+                  child: OutlineButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context, CreateBatch.getRoute(model: widget.model));
+                      },
+                      child: Text("Edit")),
+                ),
+              ).hP16,
           ],
         ),
         body: Stack(

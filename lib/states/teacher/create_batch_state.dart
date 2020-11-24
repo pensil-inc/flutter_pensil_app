@@ -9,17 +9,43 @@ import 'package:flutter_pensil_app/states/base_state.dart';
 import 'package:get_it/get_it.dart';
 
 class CreateBatchStates extends BaseState {
+  CreateBatchStates(BatchModel model) {
+    setBatchToEdit(model);
+  }
   final getit = GetIt.instance;
-  String batchName;
+  String batchName = "";
   String description;
-  // List<String> availableSubjects;
+  bool isEditBatch = false;
   String selectedSubjects;
+
+  BatchModel editBatch = BatchModel();
+
+  setBatchToEdit(BatchModel model) {
+    if (model == null) {
+      return;
+    }
+    isEditBatch = true;
+    editBatch = model;
+    selectedStudentsList = model.studentModel;
+    batchName = model.name;
+    timeSlots = List.from(model.classes);
+    description = model.description;
+    var counter = 0;
+    timeSlots.forEach((clas) {
+      clas.index = counter;
+      counter++;
+    });
+    selectedSubjects = model.subject;
+    selectedStudentsList.forEach((model) {
+      print(model.id);
+    });
+  }
+
   List<Subject> availableSubjects;
 
   List<String> contactList;
 
   /// selected student's mobile list from availavle students
-  // List<ActorModel> selectedStudentsListTemp;
   List<BatchTimeSlotModel> timeSlots = [BatchTimeSlotModel.initial()];
 
   /// Total available previous students list from api
@@ -52,8 +78,8 @@ class CreateBatchStates extends BaseState {
     notifyListeners();
   }
 
-  void updateTimeSlots(BatchTimeSlotModel model) {
-    var data = timeSlots.firstWhere((e) => e.index == e.index);
+  void updateTimeSlots(BatchTimeSlotModel model, int index) {
+    var data = timeSlots[index];
     data = model;
     checkSlotsModel(model);
     notifyListeners();
@@ -77,23 +103,27 @@ class CreateBatchStates extends BaseState {
     if (selectedStudentsList == null) {
       selectedStudentsList = [];
     }
-    var model = studentsList.firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
+    var model = studentsList
+        .firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
     model.isSelected = true;
     // selectedStudentsList.add(model);
     notifyListeners();
   }
 
   void removeStudentFromList(value) {
-    var model = studentsList.firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
+    var model = studentsList
+        .firstWhere((e) => e.name == value.name && e.mobile == value.mobile);
     model.isSelected = false;
     notifyListeners();
   }
 
   void addNewSubject(String value) {
     if (availableSubjects == null) {
-      availableSubjects = List<Subject>()..add(Subject(index: 0, name: value, isSelected: true));
+      availableSubjects = List<Subject>()
+        ..add(Subject(index: 0, name: value, isSelected: true));
     } else {
-      availableSubjects.add(Subject(index: availableSubjects.length, name: value, isSelected: false));
+      availableSubjects.add(Subject(
+          index: availableSubjects.length, name: value, isSelected: false));
     }
     notifyListeners();
   }
@@ -123,13 +153,22 @@ class CreateBatchStates extends BaseState {
   /// Create batch by calling api
   Future<BatchModel> createBatch() async {
     try {
-      final mobile = studentsList.where((element) => element.isSelected).map((e) => e.mobile);
-      List<String> contacts = new List.from(contactList ?? List<String>())..addAll(mobile ?? List<String>());
-      final model =
-          BatchModel(name: batchName, description: description, classes: timeSlots, subject: selectedSubjects, students: contacts);
+      final mobile = studentsList
+          .where((element) => element.isSelected)
+          .map((e) => e.mobile);
+      List<String> contacts = new List.from(contactList ?? List<String>())
+        ..addAll(mobile ?? List<String>());
+      final model = editBatch.copyWith(
+          name: batchName,
+          description: description,
+          classes: timeSlots,
+          subject: selectedSubjects,
+          students: contacts);
       // print(model.toJson());
       final repo = getit.get<BatchRepository>();
       await repo.createBatch(model);
+      // print(model.toJson());
+      // return Future.value(null);
       return model;
     } catch (error, strackTrace) {
       log("createBatch", error: error, stackTrace: strackTrace);
@@ -145,6 +184,14 @@ class CreateBatchStates extends BaseState {
 
       final ids = studentsList.map((e) => e.mobile).toSet();
       studentsList.retainWhere((x) => ids.remove(x.mobile));
+      if (selectedStudentsList != null && selectedStudentsList.isNotEmpty) {
+        studentsList.forEach((student) {
+          var isAvailable =
+              selectedStudentsList.any((element) => student.id == element.id);
+          print(student.id);
+          student.isSelected = isAvailable;
+        });
+      }
       await getSubjectList();
       notifyListeners();
     } catch (error, strackTrace) {
@@ -163,8 +210,22 @@ class CreateBatchStates extends BaseState {
         final ids = list.map((e) => e).toSet();
         list.retainWhere((x) => ids.remove(x));
 
-        availableSubjects =
-            Iterable.generate(list.length, (index) => Subject(index: index, name: list[index], isSelected: index == 0)).toList();
+        availableSubjects = Iterable.generate(
+          list.length,
+          (index) => Subject(
+            index: index,
+            name: list[index],
+            isSelected: selectedSubjects == null
+                ? index == 0
+                : selectedSubjects == list[index]
+                    ? true
+                    : false,
+          ),
+        ).toList();
+
+        if (selectedSubjects == null) {
+          selectedSubjects = availableSubjects.first.name;
+        }
       }
     }, label: "Get Sybjects");
   }

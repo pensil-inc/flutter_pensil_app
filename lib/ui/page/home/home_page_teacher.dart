@@ -217,7 +217,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                           _title("${state.batchList.length} Batches"),
                           SizedBox(height: 5),
                           Container(
-                            height: 138,
+                            height: 150,
                             width: AppTheme.fullWidth(context),
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,

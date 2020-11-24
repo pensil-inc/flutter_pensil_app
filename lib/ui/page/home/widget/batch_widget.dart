@@ -50,9 +50,14 @@ class BatchWidget extends StatelessWidget {
                       .hP4;
                 }).toList(),
               ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
               StudentListPreview(list: model.studentModel),
             ],
-          )
+          ),
         ],
       ).p16.ripple(() {
         Navigator.push(context,

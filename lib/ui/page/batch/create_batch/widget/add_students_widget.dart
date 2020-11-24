@@ -15,7 +15,8 @@ class AddStudentsWidget extends StatelessWidget {
       decoration: InputDecoration(
           border: InputBorder.none, hintText: "Enter contact no.."),
       onSubmitted: (contact) {
-        Provider.of<CreateBatchStates>(context, listen: false).addContact(contact);
+        Provider.of<CreateBatchStates>(context, listen: false)
+            .addContact(contact);
         controller.clear();
       },
     );
@@ -36,9 +37,10 @@ class AddStudentsWidget extends StatelessWidget {
                   ? <Widget>[SizedBox.shrink()]
                   : state.contactList
                       .map((e) => PChip(
-                            label: e,
+                            label: e ?? "12345",
                             onDeleted: () {
-                              Provider.of<CreateBatchStates>(context, listen: false)
+                              Provider.of<CreateBatchStates>(context,
+                                      listen: false)
                                   .removeContact(e);
                             },
                           ).p(3))

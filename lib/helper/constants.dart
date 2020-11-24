@@ -42,4 +42,8 @@ class Constants {
   static String castStudentVotOnPoll(String pollId) {
     return "student/poll/$pollId/vote";
   }
+
+  static String editBatchDetail(String batchId) {
+    return "$batch/$batchId";
+  }
 }

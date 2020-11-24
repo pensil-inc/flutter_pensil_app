@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
+import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/create_batch_state.dart';
@@ -16,12 +17,14 @@ import 'package:flutter_pensil_app/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class CreateBatch extends StatefulWidget {
-  CreateBatch({Key key}) : super(key: key);
+  const CreateBatch({
+    Key key,
+  }) : super(key: key);
 
-  static MaterialPageRoute getRoute() {
+  static MaterialPageRoute getRoute({BatchModel model}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<CreateBatchStates>(
-        create: (context) => CreateBatchStates(),
+        create: (context) => CreateBatchStates(model),
         child: CreateBatch(),
       ),
     );
@@ -43,11 +46,14 @@ class _CreateBatchState extends State<CreateBatch> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
+    var state = Provider.of<CreateBatchStates>(context, listen: false);
     _contactController = TextEditingController();
-    _name = TextEditingController();
-    _description = TextEditingController();
+    _name = TextEditingController(text: state.batchName ?? "");
+    _description = TextEditingController(text: state.description ?? "");
     _subject = TextEditingController();
-    Provider.of<CreateBatchStates>(context, listen: false).getStudentList();
+    state.getStudentList().then((_) {
+      student.value = state.studentsList;
+    });
     super.initState();
   }
 
@@ -166,6 +172,7 @@ class _CreateBatchState extends State<CreateBatch> {
   }
 
   void createBatch() async {
+    FocusManager.instance.primaryFocus.unfocus();
     final state = Provider.of<CreateBatchStates>(context, listen: false);
     // validate batch name and batch description
     final isTrue = _formKey.currentState.validate();
@@ -198,8 +205,15 @@ class _CreateBatchState extends State<CreateBatch> {
     final newBatch = await state.createBatch();
     isLoading.value = false;
     if (newBatch != null) {
-      Alert.sucess(context,
-          message: "Batch is sucessfully created!!", title: "Message");
+      var message = state.isEditBatch
+          ? "Batch updated sucessfully!!"
+          : "Batch is sucessfully created!!";
+      Alert.sucess(context, message: message, title: "Message", onPressed: () {
+        if (state.isEditBatch) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }
+      });
       final homeState = Provider.of<HomeState>(context, listen: false);
       homeState.getBatchList();
     } else {
@@ -258,11 +272,14 @@ class _CreateBatchState extends State<CreateBatch> {
                     return state.timeSlots == null
                         ? SizedBox()
                         : Column(
-                            children: state.timeSlots
-                                .map((e) => BatchTimeSlotWidget(
-                                      model: state.timeSlots[e.index],
-                                    ).vP5)
-                                .toList());
+                            children: state.timeSlots.map((e) {
+                            var index = state.timeSlots.indexOf(e);
+                            var model = state.timeSlots[index];
+                            return BatchTimeSlotWidget(
+                              model: model,
+                              indexValue: index,
+                            ).vP5;
+                          }).toList());
                   },
                 ),
                 _secondaryButton(context, label: "Add Class", onPressed: () {
