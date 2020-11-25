@@ -29,12 +29,16 @@ class _SignUpState extends State<SignUp> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController email;
+  TextEditingController name;
   TextEditingController password;
+  TextEditingController mobile;
 
   @override
   void initState() {
+    name = TextEditingController();
     email = TextEditingController();
     password = TextEditingController();
+    mobile = TextEditingController();
     super.initState();
   }
 
@@ -66,24 +70,26 @@ class _SignUpState extends State<SignUp> {
       }
       final state = Provider.of<AuthState>(context, listen: false);
       state.setEmail = email.text;
+      state.setName = name.text;
       state.setPassword = password.text;
       isLoading.value = true;
-      final isSucess = await state.login();
+      final isSucess = await state.register();
       if (isSucess) {
         Alert.sucess(context,
-            message: "Announcement created sucessfully!!", title: "Message");
+            message: "An OTP is sent to your email address", title: "Message");
       } else {
         Alert.sucess(context,
             message: "Some error occured. Please try again in some time!!",
             title: "Message",
             height: 170);
-        Navigator.pop(context);
       }
+      isLoading.value = false;
     } catch (error) {
+      isLoading.value = false;
       print("SCreen ${error.message}");
       Utility.displaySnackbar(context, msg: error.message, key: scaffoldKey);
     }
-    isLoading.value = false;
+    print("End");
   }
 
   Widget _form(BuildContext context) {
@@ -114,24 +120,24 @@ class _SignUpState extends State<SignUp> {
             SizedBox(height: 30),
             PTextField(
               type: Type.text,
-              controller: email,
+              controller: name,
               label: "Name",
               hintText: "Enter name.",
             ).hP16,
             // SizedBox(height: 10),
             PTextField(
               type: Type.email,
-              controller: password,
+              controller: email,
               label: "Email",
               hintText: "Enter email here",
             ).hP16,
             //  SizedBox(height: 10),
-            PTextField(
-              type: Type.phone,
-              controller: password,
-              label: "mobile",
-              hintText: "Enter mobile here",
-            ).hP16,
+            // PTextField(
+            //   type: Type.phone,
+            //   controller: mobile,
+            //   label: "mobile",
+            //   hintText: "Enter mobile here",
+            // ).hP16,
             //  SizedBox(height: 10),
             PTextField(
               type: Type.password,

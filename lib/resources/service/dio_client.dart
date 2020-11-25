@@ -84,13 +84,13 @@ class DioClient {
 
   Exception _handleError(DioError e) {
     final apiResponse = getJsonBody(e.response);
-    String message ;
-    if(e.response.statusCode != 422){
+    String message;
+    if (e.response.statusCode != 422) {
       message = apiResponse["message"];
-    }else{
+    } else {
       message = json.encode(apiResponse["errors"]);
     }
-    
+
     switch (e.response.statusCode) {
       case 500:
         return ApiInternalServerException();
@@ -101,6 +101,9 @@ class DioClient {
         return UnauthorisedException(message);
       case 404:
         return ResourceNotFoundException(message, response: e.response);
+
+      case 422:
+        return UnprocessableException(message, response: e.response);
       default:
         // throw FetchDataException(
         //     'Error occurred while communicating with server : ${e.response.statusCode}');

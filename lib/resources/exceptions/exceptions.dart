@@ -29,8 +29,7 @@ class ApiDataNotFoundException extends ApiException {
   ApiDataNotFoundException() : super('Data Not Found Error');
 }
 
-abstract class LocalizeMessageException implements Exception {
-}
+abstract class LocalizeMessageException implements Exception {}
 
 class HttpException implements Exception {
   final String _message;
@@ -84,5 +83,11 @@ class InvalidInputException extends HttpException {
 
 class ApiUnauthorizedException extends HttpException {
   ApiUnauthorizedException(String message) : super(message);
-  
+}
+
+class UnprocessableException extends HttpException {
+  String message;
+
+  UnprocessableException(this.message, {Response<dynamic> response})
+      : super(message);
 }

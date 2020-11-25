@@ -82,6 +82,25 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
+  Future<ActorModel> register(ActorModel model) async {
+    try {
+      final getit = GetIt.instance<NotificationService>();
+      final fcmToken = await getit.getDeviceToken();
+      model.fcmToken = fcmToken;
+      final data = model.toJson();
+      var response = await _dioClient.post(
+        Constants.register,
+        data: data,
+      );
+      var map = _dioClient.getJsonBody(response);
+      var actor = ActorModel.fromJson(map["user"]);
+      return actor;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
   Future<List<BatchModel>> getBatches() async {
     try {
       String token = await pref.getAccessToken();

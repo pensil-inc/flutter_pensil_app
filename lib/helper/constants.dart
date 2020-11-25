@@ -7,6 +7,7 @@ class Constants {
   static const String annoucenment = 'announcement';
   static const String assignment = 'assignment';
   static const String login = 'login';
+  static const String register = 'register';
   static const String poll = 'poll';
   static const String video = 'video';
   static const String material = 'material';

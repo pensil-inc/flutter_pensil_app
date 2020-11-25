@@ -27,6 +27,12 @@ class BatchRepository {
     return true;
   }
 
+  Future<bool> register(ActorModel model) async {
+    var actor = await gatway.register(model);
+    await sessionService.saveSession(actor);
+    return true;
+  }
+
   Future<List<BatchModel>> getBatch() {
     return gatway.getBatches();
   }
