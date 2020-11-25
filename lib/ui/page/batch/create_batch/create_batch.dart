@@ -209,8 +209,8 @@ class _CreateBatchState extends State<CreateBatch> {
           ? "Batch updated sucessfully!!"
           : "Batch is sucessfully created!!";
       Alert.sucess(context, message: message, title: "Message", onPressed: () {
+        Navigator.pop(context);
         if (state.isEditBatch) {
-          Navigator.pop(context);
           Navigator.pop(context);
         }
       });

@@ -43,7 +43,7 @@ class BatchTimeSlotModel extends Equatable {
     switch (this.day) {
       case "Mon":
         return 1;
-      case "Tues":
+      case "Tue":
         return 2;
       case "Wed":
         return 3;
@@ -83,7 +83,7 @@ class BatchTimeSlotModel extends Equatable {
         break;
 
       default:
-        log("Unknown Day index ${this.dayOfWeek}",
+        log("Unknown dayOfWeek ${this.dayOfWeek}",
             name: this.runtimeType.toString());
         return "N/A";
     }
