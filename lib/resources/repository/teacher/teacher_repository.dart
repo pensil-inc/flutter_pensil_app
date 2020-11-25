@@ -12,33 +12,39 @@ class TeacherRepository {
   final ApiGateway gatway;
   final SessionService sessionService;
   final SharedPrefrenceHelper pref;
-  TeacherRepository(this.gatway,this.sessionService, this.pref);
-  
-  Future<List<String>> getSubjectList()async{
+  TeacherRepository(this.gatway, this.sessionService, this.pref);
+
+  Future<List<String>> getSubjectList() async {
     // final list = await pref.getSubjects();
     //   if(list != null){
     //     return list.subjects;
     //   }
     return gatway.getSubjectList();
   }
- Future<List<ActorModel>> getStudentList()async{
-  //  final list = await pref.getStudents();
-  //     if(list != null){
-  //       return list.students;
-  //     }
-     return gatway.getStudentList();
-  }
-  Future<bool> createPoll(PollModel model)async{
-    return gatway.createPoll(model);
-  }
-  Future<VideoModel> addVideo(VideoModel model){
-    return gatway.addVideo(model); 
+
+  Future<List<ActorModel>> getStudentList() async {
+    //  final list = await pref.getStudents();
+    //     if(list != null){
+    //       return list.students;
+    //     }
+    return gatway.getStudentList();
   }
 
-  Future<bool> uploadFile(File file,String id,{bool isVideo = false}){
-    return gatway.uploadFile(file,id,isVideo:isVideo);
+  Future<bool> createPoll(PollModel model) async {
+    return gatway.createPoll(model);
   }
-  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model){
+
+  Future<VideoModel> addVideo(VideoModel model) {
+    return gatway.addVideo(model);
+  }
+
+  Future<bool> uploadFile(File file, String id,
+      {bool isVideo = false, bool isAnouncement = false}) {
+    return gatway.uploadFile(file, id,
+        isVideo: isVideo, isAnouncement: isAnouncement);
+  }
+
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model) {
     return gatway.uploadMaterial(model);
   }
 }

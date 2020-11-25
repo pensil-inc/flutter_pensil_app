@@ -12,7 +12,7 @@ import 'package:flutter_pensil_app/model/video_model.dart';
 abstract class ApiGateway {
   Future<dynamic> getUser();
   Future<bool> createBatch(BatchModel model);
-  Future<bool> createAnnouncement(AnnouncementModel model);
+  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model);
   Future<VideoModel> addVideo(VideoModel model);
   Future<ActorModel> login(ActorModel model);
   Future<List<BatchModel>> getBatches();
@@ -23,7 +23,8 @@ abstract class ApiGateway {
   Future<List<String>> getSubjectList();
   Future<List<NotificationModel>> getStudentNotificationsList();
   Future<List<VideoModel>> getVideosList(String batchId);
-  Future<bool> uploadFile(File file, String id, {bool isVideo = false});
+  Future<bool> uploadFile(File file, String id,
+      {bool isVideo = false, bool isAnouncement = false});
   Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model);
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
   Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId);

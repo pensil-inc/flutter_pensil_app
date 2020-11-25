@@ -47,14 +47,16 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<bool> createAnnouncement(AnnouncementModel model) async {
+  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model) async {
     try {
-      final data = model.toJson();
+      final mapJson = model.toJson();
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       var response = await _dioClient.post(Constants.annoucenment,
-          data: data, options: Options(headers: header));
-      return true;
+          data: mapJson, options: Options(headers: header));
+      final map = _dioClient.getJsonBody(response);
+      final data = AnnouncementModel.fromJson(map["announcement"]);
+      return data;
     } catch (error) {
       throw error;
     }
@@ -226,7 +228,8 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<bool> uploadFile(File file, String id, {bool isVideo = false}) async {
+  Future<bool> uploadFile(File file, String id,
+      {bool isVideo = false, bool isAnouncement = false}) async {
     try {
       String fileName = file.path.split('/').last;
 
@@ -239,7 +242,11 @@ class ApiGatewayImpl implements ApiGateway {
 
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      String path = isVideo ? Constants.video : Constants.material;
+      String path = isAnouncement
+          ? Constants.annoucenment
+          : isVideo
+              ? Constants.video
+              : Constants.material;
       await _dioClient.post(path + "/$id/upload",
           data: data, options: Options(headers: header));
       return true;

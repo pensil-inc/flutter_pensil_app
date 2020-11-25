@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
@@ -90,6 +94,17 @@ class _CreateBatchState extends State<CreateAnnouncement> {
             list, Provider.of<HomeState>(context, listen: false), batchList));
   }
 
+  void pickFile() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      final state = Provider.of<AnnouncementState>(context, listen: false);
+      state.setImageForAnnouncement = File(file.path);
+    }
+  }
+
   void createAnnouncement() async {
     final state = Provider.of<AnnouncementState>(context, listen: false);
     // validate batch name and batch description
@@ -100,26 +115,31 @@ class _CreateBatchState extends State<CreateAnnouncement> {
     }
 
     isLoading.value = true;
-
     final addNewAnnouncment = await state.createAnnouncement(
         title: _title.text,
         description: _description.text,
         batches: batchList.value);
     isLoading.value = false;
     if (addNewAnnouncment != null) {
-      Alert.sucess(context,
-          message: "Announcement created sucessfully!!", title: "Message");
-      if (widget.onAnnouncementCreated != null) {
-        widget.onAnnouncementCreated();
-      }
-      final homeState = Provider.of<HomeState>(context, listen: false);
-      homeState.getAnnouncemantList();
+      Alert.sucess(
+        context,
+        message: "Announcement created sucessfully!!",
+        title: "Message",
+        onPressed: () {
+          if (widget.onAnnouncementCreated != null) {
+            widget.onAnnouncementCreated();
+          }
+          final homeState = Provider.of<HomeState>(context, listen: false);
+          homeState.getAnnouncemantList();
+          Navigator.pop(context);
+        },
+      );
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",
           title: "Message",
-          height: 170);
-      Navigator.pop(context);
+          height: 170,
+          onPressed: () {});
     }
   }
 
@@ -189,7 +209,71 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                     ),
                   ],
                 ),
-                SizedBox(height: 150),
+
+                Consumer<AnnouncementState>(
+                  builder: (context, state, child) {
+                    if (state.file != null)
+                      return Stack(
+                        children: [
+                          Container(
+                            width: AppTheme.fullWidth(context) - 32,
+                            height: 230,
+                            margin: EdgeInsets.symmetric(vertical: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: FileImage(state.file),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 15,
+                            right: 0,
+                            child: Container(
+                              color: Theme.of(context).disabledColor,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.cancel_outlined,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
+                              ).ripple(() {
+                                state.removeAnnouncementImage();
+                              }),
+                            ).circular,
+                          )
+                        ],
+                      );
+                    return Column(
+                      children: [
+                        Container(
+                          width: AppTheme.fullWidth(context),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 16),
+                          decoration: AppTheme.outline(context),
+                          child: Column(
+                            children: <Widget>[
+                              Text("Browse Image",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(fontWeight: FontWeight.bold)),
+                              Image.asset(Images.uploadVideo, height: 25).vP16,
+                              Text("Image format should be png, jpeg, and jpg",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                          fontSize: 12, color: PColors.gray)),
+                            ],
+                          ),
+                        ).ripple(pickFile),
+                        SizedBox(height: 150),
+                      ],
+                    );
+                  },
+                ),
                 PFlatButton(
                   label: "Create",
                   isLoading: isLoading,

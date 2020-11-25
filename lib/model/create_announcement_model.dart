@@ -31,13 +31,14 @@ class AnnouncementListResponse {
 
 class AnnouncementModel {
   AnnouncementModel(
-      {this.title,
+      {this.id,
+      this.title,
       this.description,
       this.isForAll,
       this.batches,
       this.createdAt,
       this.owner});
-
+  final String id;
   final String description;
   final String title;
   final bool isForAll;
@@ -52,6 +53,7 @@ class AnnouncementModel {
 
   factory AnnouncementModel.fromJson(Map<String, dynamic> json) =>
       AnnouncementModel(
+        id: json["id"] == null ? null : json["id"],
         description: json["description"] == null ? null : json["description"],
         title: json["title"] == null ? null : json["title"],
         isForAll: json["isForAll"] == null ? null : json["isForAll"],
@@ -66,6 +68,7 @@ class AnnouncementModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id == null ? null : id,
         "title": title == null ? null : title,
         "description": description == null ? null : description,
         "isForAll": isForAll == null ? null : isForAll,
