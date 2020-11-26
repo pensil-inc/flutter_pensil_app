@@ -44,20 +44,25 @@ class _PollOptionState extends State<PollOption> {
 
   @override
   Widget build(BuildContext context) {
-    return PTextField(
-      type: Type.text,
-      controller: controller,
-      hintText: "Enter option ${widget.index}",
-      suffixIcon: widget.index < 2
-          ? null
-          : IconButton(
-              icon: Icon(Icons.cancel),
-              onPressed: () {
-                controller.removeListener(writeData);
-                Provider.of<PollState>(context, listen: false)
-                    .removePollOption(widget.index);
-              },
-            ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: PTextField(
+        type: Type.text,
+        controller: controller,
+        hintText: "Enter option ${widget.index}",
+        maxLines: null,
+        height: null,
+        suffixIcon: widget.index < 2
+            ? null
+            : IconButton(
+                icon: Icon(Icons.cancel),
+                onPressed: () {
+                  controller.removeListener(writeData);
+                  Provider.of<PollState>(context, listen: false)
+                      .removePollOption(widget.index);
+                },
+              ),
+      ),
     );
   }
 }

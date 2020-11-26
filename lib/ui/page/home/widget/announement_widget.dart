@@ -43,18 +43,36 @@ class AnnouncementWidget extends StatelessWidget {
                 children: <Widget>[
                   Text(model.description),
                   SizedBox(height: 8),
+                  if (model.image != null && model.image.isNotEmpty) ...[
+                    CachedNetworkImage(imageUrl: model.image),
+                    SizedBox(height: 8),
+                  ],
                   Align(
                     alignment: Alignment.bottomRight,
-                    child: Text(
-                      Utility.toTimeOfDate(model.createdAt),
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1
-                          .copyWith(fontSize: 12, fontWeight: FontWeight.w500),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (model.owner != null && model.owner.name != null)
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              "by ${model.owner.name} ~ ",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        Text(
+                          Utility.toTimeOfDate(model.createdAt),
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              fontSize: 12, fontWeight: FontWeight.w500),
+                        ),
+                      ],
                     ),
                   ),
-                  if (model.image != null && model.image.isNotEmpty)
-                    CachedNetworkImage(imageUrl: model.image)
                 ],
               ),
             ),

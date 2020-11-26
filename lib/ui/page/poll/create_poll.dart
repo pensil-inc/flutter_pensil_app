@@ -186,7 +186,10 @@ class _CreateBatchState extends State<CreatePoll> {
                   controller: _question,
                   label: "Poll question",
                   hintText: "Enter question",
+                  maxLines: null,
+                  height: null,
                 ),
+                SizedBox(height: 15),
                 _title(context, "Poll Expire time"),
                 SizedBox(height: 5),
                 Container(
@@ -215,7 +218,7 @@ class _CreateBatchState extends State<CreatePoll> {
                         );
                       },
                     )),
-                SizedBox(height: 10),
+                SizedBox(height: 15),
                 _title(context, "Options"),
                 SizedBox(height: 5),
                 Consumer<PollState>(
