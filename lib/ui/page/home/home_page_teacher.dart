@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
+import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart';
 import 'package:flutter_pensil_app/ui/page/auth/login.dart';
@@ -130,14 +131,13 @@ class _TeacherHomePageState extends State<TeacherHomePage>
   Widget _title(String text) {
     return Padding(
       padding: EdgeInsets.only(
-        top: 16,
+        top: 8,
         left: 16,
       ),
       child: Text(text,
-          style: Theme.of(context)
-              .textTheme
-              .headline6
-              .copyWith(fontSize: 24, fontWeight: FontWeight.bold)),
+          style: Theme.of(context).textTheme.headline5.copyWith(
+                fontSize: 20,
+              )),
     );
   }
 
@@ -167,6 +167,23 @@ class _TeacherHomePageState extends State<TeacherHomePage>
               if (state.batchList == null) return Ploader();
               return CustomScrollView(
                 slivers: <Widget>[
+                  FutureBuilder(
+                      future: state.getUser(),
+                      builder: (context, AsyncSnapshot<ActorModel> snapShot) {
+                        if (snapShot.hasData) {
+                          return SliverToBoxAdapter(
+                            child: Text("Hi, ${snapShot.data.name}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(fontSize: 22))
+                                .hP16
+                                .pT(10),
+                          );
+                        } else {
+                          return SliverToBoxAdapter(child: SizedBox.shrink());
+                        }
+                      }),
                   // if (!(state.batchList != null && state.batchList.isNotEmpty))
                   //   SliverList(
                   //     delegate: SliverChildListDelegate(
@@ -214,7 +231,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _title("${state.batchList.length} Batches"),
+                          _title("You have ${state.batchList.length} Batches"),
                           SizedBox(height: 5),
                           Container(
                             height: 150,

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Timer extends StatefulWidget {
-  Timer({Key key, this.duration, this.onTimerComplete,this.onTimerChanged, this.timeTaken}) : super(key: key);
+  Timer(
+      {Key key,
+      this.duration,
+      this.onTimerComplete,
+      this.onTimerChanged,
+      this.timeTaken})
+      : super(key: key);
   final Function(String) onTimerComplete;
   final Function(String) timeTaken;
   final ValueChanged<String> onTimerChanged;
@@ -25,10 +31,9 @@ class _TimerState extends State<Timer> with TickerProviderStateMixin {
     super.initState();
 
     _controller = AnimationController(
-        vsync: this, duration: Duration(seconds: 10) // gameData.levelClock is a user entered number elsewhere in the applciation
-        );
+        vsync: this, duration: Duration(minutes: widget.duration));
     animation = StepTween(
-      begin: 10, //widget.duration, // THIS IS A USER ENTERED NUMBER
+      begin: widget.duration * 60, // THIS IS A USER ENTERED NUMBER
       end: 0,
     ).animate(_controller)
       ..addListener(listner);
@@ -41,23 +46,23 @@ class _TimerState extends State<Timer> with TickerProviderStateMixin {
   }
 
   void listner() {
-    Duration anticlockTimer = Duration(seconds:10- animation.value);
+    Duration anticlockTimer = Duration(seconds: 10 - animation.value);
     String antotimerText =
-          '${anticlockTimer.inMinutes.remainder(60).toString()}:${anticlockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
+        '${anticlockTimer.inMinutes.remainder(60).toString()}:${anticlockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
+    antotimerText = antotimerText.replaceAll("-", "");
     widget.timeTaken(antotimerText + " min");
-
+    print(antotimerText);
     Duration clockTimer = Duration(seconds: animation.value);
-      String timerText =
-          '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
+    String timerText =
+        '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
     if (animation.value == 0) {
       _controller.stop();
-      
+
       widget.onTimerComplete("$timerText time left");
     }
     widget.onTimerChanged("$timerText time left");
   }
 }
-
 
 class Countdown extends AnimatedWidget {
   Countdown({
@@ -68,13 +73,18 @@ class Countdown extends AnimatedWidget {
   @override
   build(BuildContext context) {
     Duration clockTimer = Duration(seconds: animation.value);
-    String timerText = '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
+    String timerText =
+        '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
 
     // print('animation.value  ${animation.value} ');
     // print('inMinutes ${clockTimer.inMinutes.toString()}');
     // print('inSeconds ${clockTimer.inSeconds.toString()}');
     // print('inSeconds.remainder ${clockTimer.inSeconds.remainder(60).toString()}');
 
-    return Text("$timerText min left", style: Theme.of(context).textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold));
+    return Text("$timerText min left",
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1
+            .copyWith(fontWeight: FontWeight.bold));
   }
 }

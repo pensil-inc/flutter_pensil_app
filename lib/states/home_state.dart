@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter_pensil_app/helper/enum.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
+import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
@@ -13,6 +14,7 @@ class HomeState extends BaseState {
   List<AnnouncementModel> announcementList;
   List<PollModel> polls;
   String userId;
+  Future<ActorModel> user;
   bool isTeacher = true;
 
   Future getBatchList() async {
@@ -77,8 +79,15 @@ class HomeState extends BaseState {
   void logout() {
     batchList = null;
     polls = null;
+    userId = null;
     announcementList = null;
     final pref = GetIt.instance<SharedPrefrenceHelper>();
     pref.cleaPrefrenceValues();
+  }
+
+  Future<ActorModel> getUser() {
+    final pref = GetIt.instance<SharedPrefrenceHelper>();
+    user = user ?? pref.getUserProfile();
+    return user;
   }
 }

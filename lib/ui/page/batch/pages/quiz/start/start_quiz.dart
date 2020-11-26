@@ -254,11 +254,13 @@ class _StartQuizPageState extends State<StartQuizPage> {
         Navigator.pop(context);
         final state = Provider.of<QuizState>(context, listen: false);
         Navigator.pushReplacement(
-            context,
-            QuizRasultPage.getRoute(
-                model: state.quizModel,
-                batchId: state.batchId,
-                timeTaken: timeTaken));
+          context,
+          QuizRasultPage.getRoute(
+            model: state.quizModel,
+            batchId: state.batchId,
+            timeTaken: timeTaken,
+          ),
+        );
       },
       child: Container(
         child: Column(
