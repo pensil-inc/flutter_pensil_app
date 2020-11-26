@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter_pensil_app/helper/utility.dart';
+
 class PollResponseModel {
   PollResponseModel({
     this.polls,
@@ -119,7 +121,7 @@ class PollModel {
         "question": question == null ? null : question,
         "options":
             options == null ? null : List<dynamic>.from(options.map((x) => x)),
-        "endTime": endTime == null ? null : endTime.toIso8601String(),
+        "endTime": endTime == null ? null : Utility.toformattedDate3(endTime),
         "batches":
             batches == null ? null : List<dynamic>.from(batches.map((x) => x)),
         "isForAll": isForAll == null ? null : isForAll,

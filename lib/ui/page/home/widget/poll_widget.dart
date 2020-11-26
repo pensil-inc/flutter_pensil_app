@@ -88,10 +88,10 @@ class PollWidget extends StatelessWidget {
               children: model.options.map((e) {
             return _option(context, e);
           }).toList()),
-          if (hideFinishButton && !model.endTime.isBefore(DateTime.now())) ...[
-            SizedBox(height: 10),
-            _secondaryButton(context, label: "Finish", onPressed: () {})
-          ]
+          // if (hideFinishButton && !model.endTime.isBefore(DateTime.now())) ...[
+          //   SizedBox(height: 10),
+          //   _secondaryButton(context, label: "Finish", onPressed: () {})
+          // ]
         ],
       ),
     );

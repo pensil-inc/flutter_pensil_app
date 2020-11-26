@@ -4,7 +4,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as custom;
 
 class Utility {
-  static void displaySnackbar(BuildContext context, {String msg = "Feature is under development", GlobalKey<ScaffoldState> key}) {
+  static void displaySnackbar(BuildContext context,
+      {String msg = "Feature is under development",
+      GlobalKey<ScaffoldState> key}) {
     final snackBar = SnackBar(content: Text(msg));
     if (key != null && key.currentState != null) {
       key.currentState.hideCurrentSnackBar();
@@ -18,7 +20,7 @@ class Utility {
   static launchOnWeb(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
-    } 
+    }
   }
 
   static String toDMYformate(DateTime date) {
@@ -31,6 +33,10 @@ class Utility {
 
   static String toformattedDate2(DateTime date) {
     return DateFormat('dd-MMM-yyyy hh:mm a').format(date);
+  }
+
+  static String toformattedDate3(DateTime date) {
+    return DateFormat('yyyy-MM-dd hh:mm').format(date);
   }
 
   static String toTimeOfDay(DateTime date) {
@@ -74,8 +80,9 @@ class Utility {
     }
     return msg;
   }
+
   static void launchURL(BuildContext context, String url) async {
-    if(url == null){
+    if (url == null) {
       return;
     }
     try {
