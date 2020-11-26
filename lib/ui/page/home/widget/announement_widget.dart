@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
@@ -15,7 +16,8 @@ class AnnouncementWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: AppTheme.decoration(context).copyWith(color: Theme.of(context).primaryColor),
+      decoration: AppTheme.decoration(context)
+          .copyWith(color: Theme.of(context).primaryColor),
       child: Row(
         children: [
           Expanded(
@@ -25,7 +27,7 @@ class AnnouncementWidget extends StatelessWidget {
                   Images.megaphone,
                   fit: BoxFit.contain,
                   width: 30,
-                  height:30,
+                  height: 30,
                 ),
               ),
             ),
@@ -45,9 +47,14 @@ class AnnouncementWidget extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: Text(
                       Utility.toTimeOfDate(model.createdAt),
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(fontSize: 12, fontWeight: FontWeight.w500),
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1
+                          .copyWith(fontSize: 12, fontWeight: FontWeight.w500),
                     ),
-                  )
+                  ),
+                  if (model.image != null && model.image.isNotEmpty)
+                    CachedNetworkImage(imageUrl: model.image)
                 ],
               ),
             ),

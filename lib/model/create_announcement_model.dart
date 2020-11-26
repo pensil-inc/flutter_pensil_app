@@ -35,6 +35,7 @@ class AnnouncementModel {
       this.title,
       this.description,
       this.isForAll,
+      this.image,
       this.batches,
       this.createdAt,
       this.owner});
@@ -42,6 +43,7 @@ class AnnouncementModel {
   final String description;
   final String title;
   final bool isForAll;
+  final String image;
   final List<String> batches;
   final DateTime createdAt;
   final ActorModel owner;
@@ -56,6 +58,7 @@ class AnnouncementModel {
         id: json["id"] == null ? null : json["id"],
         description: json["description"] == null ? null : json["description"],
         title: json["title"] == null ? null : json["title"],
+        image: json["image"] == null ? null : json["image"],
         isForAll: json["isForAll"] == null ? null : json["isForAll"],
         batches: json["batches"] == null
             ? null
@@ -70,6 +73,7 @@ class AnnouncementModel {
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
         "title": title == null ? null : title,
+        "image": image == null ? null : image,
         "description": description == null ? null : description,
         "isForAll": isForAll == null ? null : isForAll,
         "batches":
