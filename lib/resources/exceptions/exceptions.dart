@@ -18,7 +18,7 @@ abstract class DiagnosticMessageException implements Exception {
 class ApiException implements Exception {
   final String message;
 
-  ApiException(this.message);
+  ApiException(this.message, {Response<dynamic> response});
 }
 
 class ApiInternalServerException extends ApiException {
@@ -64,7 +64,8 @@ class BadUrlException extends HttpException {
 
 class UnauthorisedException extends HttpException {
   String message;
-  UnauthorisedException(this.message) : super("Unauthorised: $message");
+  UnauthorisedException(this.message, {Response<dynamic> response})
+      : super("Unauthorised: $message");
 }
 
 class ResourceNotFoundException extends HttpException {
@@ -75,10 +76,7 @@ class ResourceNotFoundException extends HttpException {
 }
 
 class InvalidInputException extends HttpException {
-  InvalidInputException(String message)
-      : super(
-          "Invalid Input: $message",
-        );
+  InvalidInputException(String message) : super("Invalid Input: $message");
 }
 
 class ApiUnauthorizedException extends HttpException {

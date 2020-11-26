@@ -30,19 +30,19 @@ class StudentResponseModel {
 }
 
 class ActorModel {
-  ActorModel({
-    this.name,
-    this.email,
-    this.password,
-    this.role,
-    this.mobile,
-    this.token,
-    this.id,
-    this.isVerified,
-    this.lastLoginDate,
-    this.isSelected = false,
-    this.fcmToken,
-  });
+  ActorModel(
+      {this.name,
+      this.email,
+      this.password,
+      this.role,
+      this.mobile,
+      this.token,
+      this.id,
+      this.isVerified,
+      this.lastLoginDate,
+      this.isSelected = false,
+      this.fcmToken,
+      this.otp});
 
   final String name;
   final String email;
@@ -54,6 +54,7 @@ class ActorModel {
   final bool isVerified;
   final DateTime lastLoginDate;
   final String id;
+  final String otp;
   bool isSelected;
 
   factory ActorModel.fromRawJson(String str) =>
@@ -74,6 +75,7 @@ class ActorModel {
         mobile: json["mobile"] == null ? null : json["mobile"],
         token: json["token"] == null ? null : json["token"],
         fcmToken: json["fcmToken"] == null ? null : json["fcmToken"],
+        otp: json["otp"] == null ? null : json["otp"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,7 +89,8 @@ class ActorModel {
         "role": role == null ? null : role,
         "mobile": mobile == null ? null : mobile,
         "token": token == null ? null : token,
-        "fcmToken": fcmToken == null ? null : fcmToken
+        "fcmToken": fcmToken == null ? null : fcmToken,
+        "otp": otp == null ? null : otp
       };
 
   Map<String, dynamic> toJson1() => {
@@ -101,6 +104,7 @@ class ActorModel {
       email: json.containsKey("email") ? json["email"][0] : null,
       mobile: json.containsKey("mobile") ? json["mobile"][0] : null,
       name: json.containsKey("name") ? json["name"][0] : null,
+      otp: json.containsKey("otp") ? json["otp"][0] : null,
       isVerified:
           json.containsKey("isVerified") ? json["isVerified"][0] : null);
 

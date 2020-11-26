@@ -82,7 +82,7 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<ActorModel> register(ActorModel model) async {
+  Future<bool> register(ActorModel model) async {
     try {
       final getit = GetIt.instance<NotificationService>();
       final fcmToken = await getit.getDeviceToken();
@@ -90,6 +90,21 @@ class ApiGatewayImpl implements ApiGateway {
       final data = model.toJson();
       var response = await _dioClient.post(
         Constants.register,
+        data: data,
+      );
+
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<ActorModel> verifyOtp(ActorModel model) async {
+    try {
+      final data = model.toJson();
+      var response = await _dioClient.post(
+        Constants.verifyOtp,
         data: data,
       );
       var map = _dioClient.getJsonBody(response);

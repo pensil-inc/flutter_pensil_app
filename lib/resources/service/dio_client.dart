@@ -98,7 +98,7 @@ class DioClient {
         return BadRequestException(message, response: e.response);
       case 401:
       case 403:
-        return UnauthorisedException(message);
+        return UnauthorisedException(message, response: e.response);
       case 404:
         return ResourceNotFoundException(message, response: e.response);
 
@@ -107,9 +107,7 @@ class DioClient {
       default:
         // throw FetchDataException(
         //     'Error occurred while communicating with server : ${e.response.statusCode}');
-        return ApiException(
-          message,
-        );
+        return ApiException(message, response: e.response);
     }
   }
 

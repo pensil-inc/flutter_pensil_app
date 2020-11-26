@@ -15,7 +15,8 @@ abstract class ApiGateway {
   Future<AnnouncementModel> createAnnouncement(AnnouncementModel model);
   Future<VideoModel> addVideo(VideoModel model);
   Future<ActorModel> login(ActorModel model);
-  Future<ActorModel> register(ActorModel model);
+  Future<bool> register(ActorModel model);
+  Future<ActorModel> verifyOtp(ActorModel model);
   Future<List<BatchModel>> getBatches();
   Future<bool> createPoll(PollModel model);
   Future<List<AnnouncementModel>> getAnnouncemantList();

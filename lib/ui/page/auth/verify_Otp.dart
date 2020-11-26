@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
+import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
-import 'package:flutter_pensil_app/ui/page/auth/verify_Otp.dart';
+import 'package:flutter_pensil_app/ui/page/auth/widgets/Otp_widget.dart';
+import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
+import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-class SignUp extends StatefulWidget {
-  SignUp({Key key}) : super(key: key);
+class VerifyOtpScreen extends StatefulWidget {
+  VerifyOtpScreen({Key key}) : super(key: key);
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (_) => SignUp(),
+      builder: (_) => VerifyOtpScreen(),
     );
   }
 
   @override
-  _SignUpState createState() => _SignUpState();
+  _VerifyOtpScreenState createState() => _VerifyOtpScreenState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   final _formKey = GlobalKey<FormState>();
 
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
@@ -69,22 +73,32 @@ class _SignUpState extends State<SignUp> {
       if (!isValidate) {
         return;
       }
+      FocusManager.instance.primaryFocus.unfocus();
       final state = Provider.of<AuthState>(context, listen: false);
-      state.setEmail = email.text;
-      state.setName = name.text;
-      state.setPassword = password.text;
       isLoading.value = true;
-      final isSucess = await state.register();
-      if (isSucess) {
-        // Alert.sucess(context,
-        //     message: "An OTP is sent to your email address", title: "Message");
-
-        Navigator.push(context, VerifyOtpScreen.getRoute());
+      final isSucess = await state.verifyOtp();
+      if (isSucess != null && isSucess) {
+        Alert.sucess(
+          context,
+          message: "An OTP verfied",
+          title: "Message",
+        );
+        Navigator.pop(context);
+        Navigator.pop(context);
+        final getIt = GetIt.instance;
+        final prefs = getIt<SharedPrefrenceHelper>();
+        final isStudent = await prefs.isStudent();
+        Navigator.of(context).pushAndRemoveUntil(
+          isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
+          (_) => false,
+        );
       } else {
-        Alert.sucess(context,
-            message: "Some error occured. Please try again in some time!!",
-            title: "Message",
-            height: 170);
+        Alert.sucess(
+          context,
+          message: "Some error occured. Please try again in some time!!",
+          title: "Message",
+          height: 170,
+        );
       }
       isLoading.value = false;
     } catch (error) {
@@ -119,42 +133,35 @@ class _SignUpState extends State<SignUp> {
             SizedBox(height: 30),
             Image.asset(Images.logo, width: 50),
             Image.asset(Images.logoText, height: 30),
-            SizedBox(height: 10),
             SizedBox(height: 30),
-            PTextField(
-              type: Type.text,
-              controller: name,
-              label: "Name",
-              hintText: "Enter name.",
+            Text(
+              "Please enter OTP we’ve sent you on ${Provider.of<AuthState>(context, listen: false).email}",
+              style: theme.textTheme.bodyText2.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
             ).hP16,
-            // SizedBox(height: 10),
-            PTextField(
-              type: Type.email,
-              controller: email,
-              label: "Email",
-              hintText: "Enter email here",
-            ).hP16,
-            //  SizedBox(height: 10),
-            // PTextField(
-            //   type: Type.phone,
-            //   controller: mobile,
-            //   label: "mobile",
-            //   hintText: "Enter mobile here",
-            // ).hP16,
-            //  SizedBox(height: 10),
-            PTextField(
-              type: Type.password,
-              controller: password,
-              label: "Password",
-              hintText: "Enter password here",
-            ).hP16,
-            // SizedBox(height: 10),
-
+            SizedBox(height: 10),
+            SizedBox(height: 10),
+            Consumer<AuthState>(
+              builder: (context, state, child) {
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: OTPTextField(
+                    clearOTP: true,
+                    onSubmitted: (val) {
+                      print(val);
+                    },
+                  ),
+                );
+              },
+            ),
             SizedBox(height: 30),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: PFlatButton(
-                  label: "Create",
+                  label: "Verify",
                   color: PColors.secondary,
                   isLoading: isLoading,
                   onPressed: () {
@@ -170,7 +177,6 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: PColors.secondary,
@@ -187,31 +193,8 @@ class _SignUpState extends State<SignUp> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
+                      SizedBox(height: 120),
                       _form(context),
-                      SizedBox(
-                        width: 150,
-                        child: Divider(
-                          color: theme.colorScheme.onPrimary,
-                          thickness: 1,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text("Already have an account ?",
-                              style: theme.textTheme.bodyText2
-                                  .copyWith(color: Colors.white60)),
-                          Text("SIGN IN",
-                                  style: theme.textTheme.bodyText2.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: theme.colorScheme.onPrimary))
-                              .p16
-                              .ripple(() {
-                            Navigator.pop(context);
-                          }),
-                        ],
-                      ),
-                      SizedBox(width: 40)
                     ],
                   ),
                 ),

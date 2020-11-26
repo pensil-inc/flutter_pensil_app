@@ -5,6 +5,7 @@ import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/page/auth/signup.dart';
+import 'package:flutter_pensil_app/ui/page/auth/verify_Otp.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
@@ -146,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 14),
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: PFlatButton(
                   label: "Login",
                   color: PColors.secondary,

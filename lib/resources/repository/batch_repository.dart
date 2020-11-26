@@ -28,7 +28,11 @@ class BatchRepository {
   }
 
   Future<bool> register(ActorModel model) async {
-    var actor = await gatway.register(model);
+    return gatway.register(model);
+  }
+
+  Future<dynamic> verifyOtp(ActorModel model) async {
+    var actor = await gatway.verifyOtp(model);
     await sessionService.saveSession(actor);
     return true;
   }
