@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "680271036691-fd769bsahfda3utc4pqnkri4l9ha0fra.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pensil.pensilapp",
+            "certificate_hash": "9de309e80db3f39ce864ebdb5eb057b1201d3eb0"
+          }
+        },
+        {
           "client_id": "680271036691-48s384oggpmp6cp59a8dgsg0aplng95b.apps.googleusercontent.com",
           "client_type": 3
         }

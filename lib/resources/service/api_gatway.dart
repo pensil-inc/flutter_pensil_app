@@ -16,6 +16,7 @@ abstract class ApiGateway {
   Future<VideoModel> addVideo(VideoModel model);
   Future<ActorModel> login(ActorModel model);
   Future<bool> register(ActorModel model);
+  Future<ActorModel> loginWithGoogle(String token);
   Future<ActorModel> verifyOtp(ActorModel model);
   Future<List<BatchModel>> getBatches();
   Future<bool> createPoll(PollModel model);

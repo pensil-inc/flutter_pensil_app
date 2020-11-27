@@ -7,6 +7,7 @@ class Constants {
   static const String annoucenment = 'announcement';
   static const String assignment = 'assignment';
   static const String login = 'login';
+  static const String googleAuth = 'auth/google';
   static const String register = 'register';
   static const String verifyOtp = 'verify-otp';
   static const String poll = 'poll';

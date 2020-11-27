@@ -63,38 +63,6 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  void _submit(BuildContext context) async {
-    try {
-      final isValidate = _formKey.currentState.validate();
-      if (!isValidate) {
-        return;
-      }
-      final state = Provider.of<AuthState>(context, listen: false);
-      state.setEmail = email.text;
-      state.setName = name.text;
-      state.setPassword = password.text;
-      isLoading.value = true;
-      final isSucess = await state.register();
-      if (isSucess) {
-        // Alert.sucess(context,
-        //     message: "An OTP is sent to your email address", title: "Message");
-
-        Navigator.push(context, VerifyOtpScreen.getRoute());
-      } else {
-        Alert.sucess(context,
-            message: "Some error occured. Please try again in some time!!",
-            title: "Message",
-            height: 170);
-      }
-      isLoading.value = false;
-    } catch (error) {
-      isLoading.value = false;
-      print("SCreen ${error.message}");
-      Utility.displaySnackbar(context, msg: error.message, key: scaffoldKey);
-    }
-    print("End");
-  }
-
   Widget _form(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
@@ -168,6 +136,38 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+  void _submit(BuildContext context) async {
+    try {
+      final isValidate = _formKey.currentState.validate();
+      if (!isValidate) {
+        return;
+      }
+      final state = Provider.of<AuthState>(context, listen: false);
+      state.setEmail = email.text;
+      state.setName = name.text;
+      state.setPassword = password.text;
+      isLoading.value = true;
+      final isSucess = await state.register();
+      if (isSucess) {
+        // Alert.sucess(context,
+        //     message: "An OTP is sent to your email address", title: "Message");
+
+        Navigator.push(context, VerifyOtpScreen.getRoute());
+      } else {
+        Alert.sucess(context,
+            message: "Some error occured. Please try again in some time!!",
+            title: "Message",
+            height: 170);
+      }
+      isLoading.value = false;
+    } catch (error) {
+      isLoading.value = false;
+      print("SCreen ${error.message}");
+      Utility.displaySnackbar(context, msg: error.message, key: scaffoldKey);
+    }
+    print("End");
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -207,6 +207,8 @@ class _SignUpState extends State<SignUp> {
                                       color: theme.colorScheme.onPrimary))
                               .p16
                               .ripple(() {
+                            Provider.of<AuthState>(context, listen: false)
+                                .clearData();
                             Navigator.pop(context);
                           }),
                         ],

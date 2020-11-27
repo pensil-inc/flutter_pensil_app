@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pensil_app/resources/exceptions/exceptions.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/states/base_state.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthState extends BaseState {
   String email;
@@ -23,7 +26,7 @@ class AuthState extends BaseState {
     }
   }
 
-  /// To set mobile no for signup
+  /// To set mobile no for signup and Forgot password
   set setMobile(String value) {
     mobile = value;
   }
@@ -50,6 +53,15 @@ class AuthState extends BaseState {
     } on UnauthorisedException catch (error, strackTrace) {
       log("Login", error: error.message, stackTrace: strackTrace);
       throw (Exception(error.message));
+    } on UnprocessableException catch (error, strackTrace) {
+      final map = json.decode(error.message) as Map<String, dynamic>;
+      ActorModel model = ActorModel.fromError(map);
+      log("Login",
+          error: error.message,
+          stackTrace: strackTrace,
+          name: "UnprocessableException");
+      throw (Exception(
+          model.email ?? model.password ?? model.mobile ?? model.name));
     } catch (error, strackTrace) {
       log("error", error: error, stackTrace: strackTrace);
       return false;
@@ -66,13 +78,13 @@ class AuthState extends BaseState {
     } on ApiException catch (error, strackTrace) {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
-      log("Login",
+      log("register",
           error: error.message, stackTrace: strackTrace, name: "ApiException");
       throw (Exception(model.email ?? model.password ?? model.mobile));
     } on UnprocessableException catch (error, strackTrace) {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
-      log("Login",
+      log("register",
           error: error.message,
           stackTrace: strackTrace,
           name: "UnprocessableException");
@@ -93,7 +105,7 @@ class AuthState extends BaseState {
 
   Future<bool> verifyOtp() async {
     try {
-      var model = ActorModel(email: email, otp: otp);
+      var model = ActorModel(email: email, otp: otp, mobile: mobile);
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
       return await repo.verifyOtp(model);
@@ -119,5 +131,73 @@ class AuthState extends BaseState {
       log("error", error: error, stackTrace: strackTrace, name: "verifyOtp");
       return false;
     }
+  }
+
+  /// Create user from `google login`
+  /// If user is new then it create a new user
+  /// If user is old then it just `authenticate` user and return firebase user data
+  Future<bool> handleGoogleSignIn() async {
+    try {
+      /// Record log in firebase kAnalytics about Google login
+      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+      final GoogleSignIn _googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        throw Exception('Google login cancelled by user');
+      }
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // final AuthCredential credential = GoogleAuthProvider.credential(
+      //   accessToken: googleAuth.accessToken,
+      //   idToken: googleAuth.idToken,
+      // );
+      final getit = GetIt.instance;
+      final repo = getit.get<BatchRepository>();
+      return repo.loginWithGoogle(googleAuth.idToken);
+    } on PlatformException catch (error) {
+      log("PlatformException", error: error, name: "GoogleSignIn");
+      return false;
+    } catch (error) {
+      log("PlatformException", error: error, name: "GoogleSignIn");
+      return false;
+    }
+  }
+
+  Future<bool> forgetPassword() async {
+    try {
+      var model = ActorModel(email: email, mobile: mobile);
+      final getit = GetIt.instance;
+      final repo = getit.get<BatchRepository>();
+      return await repo.login(model);
+    } on ApiException catch (error, strackTrace) {
+      final map = json.decode(error.message) as Map<String, dynamic>;
+      ActorModel model = ActorModel.fromError(map);
+      log("forgetPassword", error: error.message, stackTrace: strackTrace);
+      throw (Exception(model.email ?? model.password ?? model.mobile));
+    } on UnauthorisedException catch (error, strackTrace) {
+      log("forgetPassword", error: error.message, stackTrace: strackTrace);
+      throw (Exception(error.message));
+    } on UnprocessableException catch (error, strackTrace) {
+      final map = json.decode(error.message) as Map<String, dynamic>;
+      ActorModel model = ActorModel.fromError(map);
+      log("forgetPassword",
+          error: error.message,
+          stackTrace: strackTrace,
+          name: "UnprocessableException");
+      throw (Exception(
+          model.email ?? model.password ?? model.mobile ?? model.name));
+    } catch (error, strackTrace) {
+      log("error", error: error, stackTrace: strackTrace);
+      return false;
+    }
+  }
+
+  void clearData() {
+    email = null;
+    password = null;
+    mobile = null;
+    name = null;
+    otp = null;
   }
 }

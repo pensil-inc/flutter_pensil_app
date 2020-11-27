@@ -116,6 +116,25 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
+  Future<ActorModel> loginWithGoogle(String token) async {
+    try {
+      // final getit = GetIt.instance<NotificationService>();
+      // final fcmToken = await getit.getDeviceToken();
+      // model.fcmToken = fcmToken;
+      // final data = model.toJson();
+      final header = {"Authorization": "Bearer " + token};
+      var response = await _dioClient.post(Constants.googleAuth,
+          // data: data,
+          options: Options(headers: header));
+      var map = _dioClient.getJsonBody(response);
+      var actor = ActorModel.fromJson(map["user"]);
+      return actor;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
   Future<List<BatchModel>> getBatches() async {
     try {
       String token = await pref.getAccessToken();

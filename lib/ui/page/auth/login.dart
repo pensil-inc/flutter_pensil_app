@@ -4,6 +4,7 @@ import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
+import 'package:flutter_pensil_app/ui/page/auth/forgot_password.dart';
 import 'package:flutter_pensil_app/ui/page/auth/signup.dart';
 import 'package:flutter_pensil_app/ui/page/auth/verify_Otp.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
@@ -76,28 +77,32 @@ class _LoginPageState extends State<LoginPage> {
       state.setPassword = password.text;
       isLoading.value = true;
       final isSucess = await state.login();
-      if (isSucess) {
-        Alert.sucess(context,
-            message: "Announcement created sucessfully!!", title: "Message");
-        final getIt = GetIt.instance;
-        final prefs = getIt<SharedPrefrenceHelper>();
-        final isStudent = await prefs.isStudent();
-        Navigator.of(context).pushAndRemoveUntil(
-          isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
-          (_) => false,
-        );
-      } else {
-        Alert.sucess(context,
-            message: "Some error occured. Please try again in some time!!",
-            title: "Message",
-            height: 170);
-        Navigator.pop(context);
-      }
+      checkLoginStatus(isSucess);
     } catch (error) {
       print("SCreen ${error.message}");
       Utility.displaySnackbar(context, msg: error.message, key: scaffoldKey);
     }
     isLoading.value = false;
+  }
+
+  void checkLoginStatus(bool isSucess) async {
+    if (isSucess) {
+      // Alert.sucess(context,
+      //     message: "Announcement created sucessfully!!", title: "Message");
+      final getIt = GetIt.instance;
+      final prefs = getIt<SharedPrefrenceHelper>();
+      final isStudent = await prefs.isStudent();
+      Navigator.of(context).pushAndRemoveUntil(
+        isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
+        (_) => false,
+      );
+    } else {
+      Alert.sucess(context,
+          message: "Some error occured. Please try again in some time!!",
+          title: "Message",
+          height: 170);
+      Navigator.pop(context);
+    }
   }
 
   Widget _form(BuildContext context) {
@@ -143,7 +148,11 @@ class _LoginPageState extends State<LoginPage> {
               child: Text("Forgot password?",
                       style: theme.textTheme.button
                           .copyWith(color: PColors.secondary, fontSize: 12))
-                  .hP16,
+                  .p16
+                  .ripple(() {
+                Provider.of<AuthState>(context, listen: false).clearData();
+                Navigator.push(context, ForgotPasswordPage.getRoute());
+              }),
             ),
             SizedBox(height: 14),
             Padding(
@@ -189,7 +198,11 @@ class _LoginPageState extends State<LoginPage> {
           Spacer(),
         ],
       ),
-    );
+    ).ripple(() async {
+      var isSucess = await Provider.of<AuthState>(context, listen: false)
+          .handleGoogleSignIn();
+      checkLoginStatus(isSucess);
+    });
   }
 
   @override
@@ -234,6 +247,8 @@ class _LoginPageState extends State<LoginPage> {
                                       .copyWith(fontWeight: FontWeight.bold))
                               .p16
                               .ripple(() {
+                            Provider.of<AuthState>(context, listen: false)
+                                .clearData();
                             Navigator.push(context, SignUp.getRoute());
                           }),
                         ],

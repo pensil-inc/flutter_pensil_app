@@ -40,7 +40,10 @@ dependencies:
   file_picker: ^2.0.7
   add_thumbnail: ^0.0.2
   image_picker: ^0.6.7+11
+  google_sign_in: "^4.5.1"
   contacts_service: ^0.4.6
+  firebase_core: "^0.5.2+1"
+  firebase_auth: "^0.18.3+1"
   advance_pdf_viewer: ^1.2.0
   webview_flutter: ^0.3.22+1
   firebase_messaging: ^7.0.3

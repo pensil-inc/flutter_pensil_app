@@ -31,6 +31,12 @@ class BatchRepository {
     return gatway.register(model);
   }
 
+  Future<bool> loginWithGoogle(String token) async {
+    var actor = await gatway.loginWithGoogle(token);
+    await sessionService.saveSession(actor);
+    return true;
+  }
+
   Future<dynamic> verifyOtp(ActorModel model) async {
     var actor = await gatway.verifyOtp(model);
     await sessionService.saveSession(actor);

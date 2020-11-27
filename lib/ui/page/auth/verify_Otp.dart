@@ -47,6 +47,22 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     super.initState();
   }
 
+  Widget _title(String text) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 8,
+        left: 16,
+      ),
+      child: Text(
+        text,
+        style: Theme.of(context)
+            .textTheme
+            .headline6
+            .copyWith(fontSize: 26, color: Colors.white),
+      ),
+    );
+  }
+
   Positioned _background(BuildContext context) {
     return Positioned(
       top: -AppTheme.fullHeight(context) * .5,
@@ -55,7 +71,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         height: AppTheme.fullHeight(context),
         width: AppTheme.fullHeight(context),
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: PColors.secondary,
             borderRadius: BorderRadius.circular(500),
             boxShadow: <BoxShadow>[
               BoxShadow(
@@ -111,6 +127,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
 
   Widget _form(BuildContext context) {
     final theme = Theme.of(context);
+    final state = Provider.of<AuthState>(context, listen: false);
     return Container(
       // height: AppTheme.fullHeight(context) * .7,
       width: AppTheme.fullWidth(context) - 32,
@@ -121,7 +138,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Color(0xffeaeaea),
-            offset: Offset(0, -4),
+            offset: Offset(4, 4),
             blurRadius: 10,
           )
         ],
@@ -135,7 +152,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
             Image.asset(Images.logoText, height: 30),
             SizedBox(height: 30),
             Text(
-              "Please enter OTP we’ve sent you on ${Provider.of<AuthState>(context, listen: false).email}",
+              "Please enter OTP we’ve sent you on ${state.email ?? state.mobile}",
               style: theme.textTheme.bodyText2.copyWith(
                 fontWeight: FontWeight.w500,
               ),
@@ -179,7 +196,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: PColors.secondary,
+      backgroundColor: PColors.white,
       body: Container(
         height: AppTheme.fullHeight(context),
         child: SafeArea(
@@ -194,6 +211,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 120),
+                      _title("Verify OTP"),
                       _form(context),
                     ],
                   ),
