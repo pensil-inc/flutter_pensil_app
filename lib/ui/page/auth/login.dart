@@ -35,16 +35,27 @@ class _LoginPageState extends State<LoginPage> {
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  ValueNotifier<bool> useMobile = ValueNotifier<bool>(false);
 
   TextEditingController email;
   TextEditingController password;
+  TextEditingController mobile;
   CustomLoader loader;
   @override
   void initState() {
     email = TextEditingController();
     password = TextEditingController();
+    mobile = TextEditingController();
     loader = CustomLoader();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    mobile.dispose();
+    super.dispose();
   }
 
   Positioned _background(BuildContext context) {
@@ -76,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
       FocusManager.instance.primaryFocus.unfocus();
       final state = Provider.of<AuthState>(context, listen: false);
       state.setEmail = email.text;
+      state.setMobile = mobile.text;
       state.setPassword = password.text;
       isLoading.value = true;
       final isSucess = await state.login();
@@ -133,19 +145,56 @@ class _LoginPageState extends State<LoginPage> {
             Image.asset(Images.logoText, height: 30),
             SizedBox(height: 10),
             SizedBox(height: 40),
-            PTextField(
-              type: Type.text,
-              controller: email,
-              label: "Email ID/Mobile No.",
-              hintText: "Enter email/mobile no.",
-            ).hP16,
+            ValueListenableBuilder<bool>(
+                valueListenable: useMobile,
+                builder: (context, value, child) {
+                  return customSwitcherWidget(
+                      duraton: Duration(milliseconds: 300),
+                      child: value
+                          ? PTextField(
+                              key: ValueKey(1),
+                              type: Type.email,
+                              controller: email,
+                              label: "Email ID",
+                              hintText: "Enter your email id",
+                              height: null,
+                            ).hP16
+                          : PTextField(
+                              key: ValueKey(2),
+                              type: Type.phone,
+                              controller: mobile,
+                              label: "Mobile No.",
+                              height: null,
+                              hintText: "Enter your mobile no",
+                            ).hP16);
+                }),
+            ValueListenableBuilder<bool>(
+                valueListenable: useMobile,
+                builder: (context, value, child) {
+                  return Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      value ? "Use Phone Number" : "Use Email Id",
+                      style: theme.textTheme.button
+                          .copyWith(color: PColors.secondary, fontSize: 12),
+                    ).p(8).ripple(() {
+                      useMobile.value = !useMobile.value;
+                      if (value) {
+                        email.clear();
+                      } else {
+                        mobile.clear();
+                      }
+                    }).pR(8),
+                  );
+                }),
             // SizedBox(height: 10),
             PTextField(
-              type: Type.password,
-              controller: password,
-              label: "Password",
-              hintText: "Enter password here",
-            ).hP16,
+                    type: Type.password,
+                    controller: password,
+                    label: "Password",
+                    hintText: "Enter password here",
+                    height: null)
+                .hP16,
             Align(
               alignment: Alignment.centerRight,
               child: Text("Forgot password?",
@@ -172,6 +221,17 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget customSwitcherWidget(
+      {@required child, Duration duraton = const Duration(milliseconds: 500)}) {
+    return AnimatedSwitcher(
+      duration: duraton,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return ScaleTransition(child: child, scale: animation);
+      },
+      child: child,
     );
   }
 

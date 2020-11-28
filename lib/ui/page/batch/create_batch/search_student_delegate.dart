@@ -6,11 +6,11 @@ class StudentSearch extends SearchDelegate<ActorModel> {
   final List<ActorModel> list;
   List<ActorModel> templist;
   CreateBatchStates state;
-  StudentSearch(this.list, this.state,this.student) {
+  StudentSearch(this.list, this.state, this.student) {
     student.value = list;
   }
 
-  ValueNotifier<List<ActorModel>> student ;
+  ValueNotifier<List<ActorModel>> student;
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -64,14 +64,18 @@ class StudentSearch extends SearchDelegate<ActorModel> {
                 ),
                 textAlign: TextAlign.start,
               ),
-              subtitle: Text(templist[index].mobile),
+              subtitle: Text(templist[index].mobile ?? "N/A"),
               trailing: isSelected(templist[index], listenableList)
                   ? Icon(Icons.check_box)
                   : null,
               onTap: () {
                 var model = templist[index];
-                var selected = listenableList.firstWhere((element) => compare(element, model)).isSelected;
-                listenableList.firstWhere((element) => compare(element, model)).isSelected = !selected;
+                var selected = listenableList
+                    .firstWhere((element) => compare(element, model))
+                    .isSelected;
+                listenableList
+                    .firstWhere((element) => compare(element, model))
+                    .isSelected = !selected;
                 student.value = List.from(listenableList);
                 student.notifyListeners();
               },

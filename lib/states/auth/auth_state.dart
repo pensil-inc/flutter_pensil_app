@@ -21,13 +21,7 @@ class AuthState extends BaseState {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   set setEmail(String value) {
-    if (value.contains("@") || value.contains(".")) {
-      email = value;
-      mobile = null;
-    } else {
-      mobile = value;
-      email = null;
-    }
+    email = value;
   }
 
   /// To set mobile no for signup and Forgot password
@@ -35,12 +29,20 @@ class AuthState extends BaseState {
     mobile = value;
   }
 
+  /// used on regiser screen
   set setName(String value) {
     name = value;
   }
 
+  /// method is used on update password, login, register screen
   set setPassword(String value) {
     password = value;
+  }
+
+  /// method used on verify OTP screen
+  void saveOTP(String otp) {
+    this.otp = otp;
+    notifyListeners();
   }
 
   Future<bool> login() async {
@@ -97,6 +99,7 @@ class AuthState extends BaseState {
     }
   }
 
+  /// method is used for update password
   Future<bool> updateUser() async {
     try {
       var model = ActorModel(password: password);
@@ -121,13 +124,6 @@ class AuthState extends BaseState {
       log("error", error: error, stackTrace: strackTrace);
       return false;
     }
-  }
-
-  void saveOTP(String otp) {
-    this.otp = otp;
-
-    print("Values Saved!!");
-    notifyListeners();
   }
 
   Future<bool> verifyOtp() async {
@@ -195,6 +191,7 @@ class AuthState extends BaseState {
     }
   }
 
+  /// method is used to sent OTP either on email or mobile
   Future<bool> forgetPassword() async {
     try {
       var model = ActorModel(email: email, mobile: mobile);
@@ -227,17 +224,17 @@ class AuthState extends BaseState {
     }
   }
 
+  void logout() {
+    _googleSignIn.signOut();
+    _firebaseAuth.signOut();
+    clearData();
+  }
+
   void clearData() {
     email = null;
     password = null;
     mobile = null;
     name = null;
     otp = null;
-  }
-
-  void logout() {
-    _googleSignIn.signOut();
-    _firebaseAuth.signOut();
-    clearData();
   }
 }

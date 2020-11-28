@@ -180,18 +180,21 @@ class CreateBatchStates extends BaseState {
     try {
       final repo = getit.get<TeacherRepository>();
       studentsList = await repo.getStudentList();
-      studentsList.toSet().toList();
-
-      final ids = studentsList.map((e) => e.mobile).toSet();
-      studentsList.retainWhere((x) => ids.remove(x.mobile));
-      if (selectedStudentsList != null && selectedStudentsList.isNotEmpty) {
-        studentsList.forEach((student) {
-          var isAvailable =
-              selectedStudentsList.any((element) => student.id == element.id);
-          print(student.id);
-          student.isSelected = isAvailable;
-        });
+      if (studentsList != null && studentsList.isNotEmpty) {
+        studentsList.removeWhere((element) => element.mobile == null);
+        studentsList.toSet().toList();
+        final ids = studentsList.map((e) => e.mobile).toSet();
+        studentsList.retainWhere((x) => ids.remove(x.mobile));
+        if (selectedStudentsList != null && selectedStudentsList.isNotEmpty) {
+          studentsList.forEach((student) {
+            var isAvailable =
+                selectedStudentsList.any((element) => student.id == element.id);
+            print(student.id);
+            student.isSelected = isAvailable;
+          });
+        }
       }
+
       await getSubjectList();
       notifyListeners();
     } catch (error, strackTrace) {

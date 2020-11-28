@@ -185,8 +185,11 @@ class _StudentHomePageState extends State<StudentHomePage>
   @override
   Widget build(BuildContext context) {
     return HomeScaffold<HomeState>(
-      floatingButtons: _floatingActionButtonColumn(),
-      floatingActionButton: _floatingActionButton(),
+      // floatingButtons: _floatingActionButtonColumn(),
+      // floatingActionButton: _floatingActionButton(),
+      onNotificationTap: () {
+        Navigator.push(context, NotificationPage.getRoute());
+      },
       builder: (context, state, child) {
         if (state.batchList == null) return Ploader();
         return CustomScrollView(

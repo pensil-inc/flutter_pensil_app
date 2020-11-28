@@ -151,6 +151,9 @@ class _TeacherHomePageState extends State<TeacherHomePage>
     return HomeScaffold<HomeState>(
       floatingButtons: _floatingActionButtonColumn(),
       floatingActionButton: _floatingActionButton(),
+      onNotificationTap: () {
+        print("Notoficaion");
+      },
       builder: (context, state, child) {
         if (state.batchList == null) return Ploader();
         return CustomScrollView(

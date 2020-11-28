@@ -33,15 +33,20 @@ class _NotificationPageState extends State<NotificationPage> {
         margin: EdgeInsets.symmetric(vertical: 8),
         decoration: AppTheme.decoration(context),
         child: ListTile(
-          title: Text(model.title, style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 14)),
-          trailing: Text(Utility.getPassedTime(model.createdAt.toIso8601String()), style: Theme.of(context).textTheme.subtitle1.copyWith(fontSize: 12)),
+          title: Text(model.title,
+              style:
+                  Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 14)),
+          trailing: Text(
+              Utility.getPassedTime(model.createdAt.toIso8601String()),
+              style:
+                  Theme.of(context).textTheme.subtitle1.copyWith(fontSize: 12)),
         ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Notificaions"),
+      appBar: CustomAppBar("Notifications"),
       body: Container(
         child: Consumer<NotificationState>(
           builder: (context, state, child) {
