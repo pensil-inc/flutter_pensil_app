@@ -2,19 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
-import 'package:flutter_pensil_app/helper/utility.dart';
-import 'package:flutter_pensil_app/model/batch_model.dart';
-import 'package:flutter_pensil_app/model/create_announcement_model.dart';
+import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
-import 'package:flutter_pensil_app/ui/page/auth/login.dart';
-import 'package:flutter_pensil_app/ui/page/home/student_list_preview.dart';
+import 'package:flutter_pensil_app/ui/page/home/home_Scaffold.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/batch_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
 import 'package:flutter_pensil_app/ui/page/notification/notifications_page.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
-import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
 import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
+import 'package:flutter_pensil_app/ui/widget/p_title_text.dart';
 import 'package:provider/provider.dart';
 
 class StudentHomePage extends StatefulWidget {
@@ -55,10 +52,10 @@ class _StudentHomePageState extends State<StudentHomePage>
 
   animate() {
     if (!isOpened) {
+      _angle = .785;
       _animationController.forward();
-      _angle = 0;
     } else {
-      _angle = _animationController.value * 45 / 360 * pi * 2;
+      _angle = 0;
       _animationController.reverse();
     }
 
@@ -104,29 +101,24 @@ class _StudentHomePageState extends State<StudentHomePage>
   }
 
   Widget _floatingActionButtonColumn() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        // _smallFabButton(
-        //   Images.people,
-        //   text: 'Create Batch',
-        //   animationValue: 2,
-        //   onPressed: () {
-        //     animate();
-        //      Navigator.push(context, CreateBatch.getRoute());
-        //   },
-        // ),
-        _smallFabButton(
-          Images.announcements,
-          text: 'Notifications',
-          animationValue: 1,
-          onPressed: () {
-            animate();
-            Navigator.push(context, NotificationPage.getRoute());
-          },
-        ),
-      ],
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 500),
+      opacity: showFabButton ? 1 : 0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          _smallFabButton(
+            Images.announcements,
+            text: 'Notifications',
+            animationValue: 1,
+            onPressed: () {
+              animate();
+              Navigator.push(context, NotificationPage.getRoute());
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -186,139 +178,112 @@ class _StudentHomePageState extends State<StudentHomePage>
         top: 16,
         left: 16,
       ),
-      child: Text(text,
-          style: Theme.of(context)
-              .textTheme
-              .headline6
-              .copyWith(fontSize: 20, fontWeight: FontWeight.bold)),
+      child: PTitleText(text),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return HomeScaffold<HomeState>(
+      floatingButtons: _floatingActionButtonColumn(),
       floatingActionButton: _floatingActionButton(),
-      appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.dehaze),
-            onPressed: () {},
-          ),
-          title: Title(color: PColors.black, child: Text("Student Home page")),
-          actions: <Widget>[
-            Center(
-              child: SizedBox(
-                height: 40,
-                child: OutlineButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(context, LoginPage.getRoute());
-                    },
-                    child: Text("Sign out")),
+      builder: (context, state, child) {
+        if (state.batchList == null) return Ploader();
+        return CustomScrollView(
+          slivers: <Widget>[
+            if (!(state.batchList != null && state.batchList.isNotEmpty))
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    FutureBuilder(
+                        future: state.getUser(),
+                        builder: (context, AsyncSnapshot<ActorModel> snapShot) {
+                          if (snapShot.hasData) {
+                            return PTitleTextBold("Hi, ${snapShot.data.name}")
+                                .hP16
+                                .pT(10);
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        }),
+                    _title("My Batches"),
+                    SizedBox(height: 20),
+                    Container(
+                        height: 100,
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        decoration: AppTheme.outline(context),
+                        width: AppTheme.fullWidth(context),
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("You have no batch",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(
+                                      color: PColors.gray,
+                                    )),
+                            SizedBox(height: 10),
+                            Text("Ask your teacher to add you in a batch!!",
+                                style: Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ))
+                  ],
+                ),
               ),
-            ).hP16,
-          ]),
-      body: Stack(
-        children: <Widget>[
-          Consumer<HomeState>(
-            builder: (context, state, child) {
-              if (state.batchList == null) return Ploader();
-              return CustomScrollView(
-                slivers: <Widget>[
-                  if (!(state.batchList != null && state.batchList.isNotEmpty))
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          _title("My Batches"),
-                          SizedBox(height: 20),
-                          Container(
-                              height: 100,
-                              margin: EdgeInsets.symmetric(horizontal: 16),
-                              decoration: AppTheme.outline(context),
-                              width: AppTheme.fullWidth(context),
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text("You have no batch",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .copyWith(
-                                            color: PColors.gray,
-                                          )),
-                                  SizedBox(height: 10),
-                                  Text(
-                                      "Ask your teacher to add you in a batch!!",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1),
-                                ],
-                              ))
-                        ],
+            if (state.batchList != null && state.batchList.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _title("${state.batchList.length} Batches"),
+                    SizedBox(height: 5),
+                    Container(
+                      height: 150,
+                      width: AppTheme.fullWidth(context),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.batchList.length,
+                        itemBuilder: (context, index) {
+                          return BatchWidget(
+                            state.batchList[index],
+                            isTeacher: false,
+                          );
+                        },
                       ),
                     ),
-                  if (state.batchList != null && state.batchList.isNotEmpty)
-                   SliverToBoxAdapter(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _title("${state.batchList.length} Batches"),
-                          SizedBox(height: 5),
-                          Container(
-                            height: 150,
-                            width: AppTheme.fullWidth(context),
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: state.batchList.length,
-                              itemBuilder: (context, index) {
-                                return BatchWidget(state.batchList[index], isTeacher: false,);
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 10)
-                        ],
-                      ),
-                    ),
-                  if (state.polls != null && state.polls.isNotEmpty)
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == 0) return _title("Today's Poll");
+                    SizedBox(height: 10)
+                  ],
+                ),
+              ),
+            if (state.polls != null && state.polls.isNotEmpty)
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    if (index == 0) return _title("Today's Poll");
 
-                          return PollWidget(
-                              model: state.polls[index - 1],
-                              hideFinishButton: false);
-                        },
-                        childCount: state.polls.length + 1,
-                      ),
-                    ),
-                  if (state.announcementList != null &&
-                      state.announcementList.isNotEmpty)
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == 0) return _title("Announcement");
-                          return AnnouncementWidget(
-                              state.announcementList[index - 1]);
-                        },
-                        childCount: state.announcementList.length + 1,
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-          AnimatedPositioned(
-            bottom: 16 + 60.0,
-            right: 25, //showFabButton ? 25 : 0,
-            duration: Duration(milliseconds: 500),
-            child: AnimatedOpacity(
-              duration: Duration(milliseconds: 500),
-              opacity: showFabButton ? 1 : 0,
-              child: _floatingActionButtonColumn(),
-            ),
-          )
-        ],
-      ),
+                    return PollWidget(
+                        model: state.polls[index - 1], hideFinishButton: false);
+                  },
+                  childCount: state.polls.length + 1,
+                ),
+              ),
+            if (state.announcementList != null &&
+                state.announcementList.isNotEmpty)
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    if (index == 0) return _title("Announcement");
+                    return AnnouncementWidget(
+                        state.announcementList[index - 1]);
+                  },
+                  childCount: state.announcementList.length + 1,
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
