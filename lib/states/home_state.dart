@@ -40,19 +40,19 @@ class HomeState extends BaseState {
       announcementList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       notifyListeners();
     } catch (error) {
-      log("createBatch", error: error, name: this.runtimeType.toString());
+      log("getAnnouncemantList",
+          error: error, name: this.runtimeType.toString());
     }
   }
 
   Future getPollList() async {
     try {
-      final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
       polls = await repo.getPollList();
       polls.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       notifyListeners();
     } catch (error) {
-      log("createBatch", error: error, name: this.runtimeType.toString());
+      log("getPollList", error: error, name: this.runtimeType.toString());
     }
   }
 
@@ -81,6 +81,7 @@ class HomeState extends BaseState {
     polls = null;
     userId = null;
     announcementList = null;
+    user = null;
     final pref = GetIt.instance<SharedPrefrenceHelper>();
     pref.cleaPrefrenceValues();
   }
@@ -89,5 +90,20 @@ class HomeState extends BaseState {
     final pref = GetIt.instance<SharedPrefrenceHelper>();
     user = user ?? pref.getUserProfile();
     return user;
+  }
+
+  Future<bool> deleteBatch(String batchId) async {
+    try {
+      final repo = getit.get<BatchRepository>();
+      var isDeleted = await repo.deleteBatch(batchId);
+      if (isDeleted) {
+        batchList.removeWhere((element) => element.id == batchId);
+      }
+      notifyListeners();
+      return true;
+    } catch (error) {
+      log("deleteBatch", error: error, name: this.runtimeType.toString());
+      return false;
+    }
   }
 }

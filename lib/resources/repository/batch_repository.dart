@@ -57,6 +57,10 @@ class BatchRepository {
     return gatway.getBatches();
   }
 
+  Future<bool> deleteBatch(String batchId) {
+    return gatway.deleteBatch(batchId);
+  }
+
   Future<List<AnnouncementModel>> getAnnouncemantList() {
     return gatway.getAnnouncemantList();
   }

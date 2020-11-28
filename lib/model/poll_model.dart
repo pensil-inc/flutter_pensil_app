@@ -52,7 +52,7 @@ class PollModel {
   final bool isForAll;
   final List<Answer> answers;
   final int totalVotes;
-  final Map<String, int> votes;
+  final Map<String, double> votes;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -65,7 +65,7 @@ class PollModel {
     bool isForAll,
     List<dynamic> answers,
     int totalVotes,
-    Map<String, int> votes,
+    Map<String, double> votes,
     DateTime createdAt,
     DateTime updatedAt,
   }) =>
@@ -107,7 +107,7 @@ class PollModel {
         votes: json["votes"] == null
             ? null
             : Map.from(json["votes"])
-                .map((k, v) => MapEntry<String, int>(k, v)),
+                .map((k, v) => MapEntry<String, double>(k, v)),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),
@@ -144,7 +144,7 @@ class PollModel {
     return perc;
   }
 
-  int voteOnOption(String key) {
+  double voteOnOption(String key) {
     return this.votes[key];
   }
 

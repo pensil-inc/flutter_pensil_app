@@ -64,6 +64,22 @@ class DioClient {
     }
   }
 
+  Future<Response<T>> delete<T>(
+    String endpoint, {
+    data,
+    Options options,
+  }) async {
+    try {
+      return await _dio.delete(
+        '$baseEndpoint$endpoint',
+        data: data,
+        options: options,
+      );
+    } on DioError catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   Map<String, dynamic> getJsonBody<T>(Response<T> response) {
     try {
       return response.data as Map<String, dynamic>;

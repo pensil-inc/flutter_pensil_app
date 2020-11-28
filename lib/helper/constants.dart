@@ -51,4 +51,8 @@ class Constants {
   static String editBatchDetail(String batchId) {
     return "$batch/$batchId";
   }
+
+  static String deleteBatch(String batchId) {
+    return "$batch/$batchId";
+  }
 }

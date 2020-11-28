@@ -320,11 +320,14 @@ class _CreateBatchState extends State<CreateBatch> {
                 _secondaryButton(context,
                     label: "Pick Student", onPressed: displayStudentsList),
                 SizedBox(height: 10),
-                PFlatButton(
-                  label: "Create",
-                  isLoading: isLoading,
-                  onPressed: createBatch,
-                ),
+                Consumer<CreateBatchStates>(builder: (context, state, child) {
+                  return PFlatButton(
+                    label: state.isEditBatch ? "Update" : "Create",
+                    isLoading: isLoading,
+                    onPressed: createBatch,
+                  );
+                }),
+
                 SizedBox(height: 16),
               ],
             ),

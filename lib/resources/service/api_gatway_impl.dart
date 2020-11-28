@@ -190,6 +190,22 @@ class ApiGatewayImpl implements ApiGateway {
     }
   }
 
+  @override
+  Future<bool> deleteBatch(String batchId) async {
+    try {
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+
+      await _dioClient.delete(
+        Constants.deleteBatch(batchId),
+        options: Options(headers: header),
+      );
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   Future<bool> createPoll(PollModel model) async {
     try {
       final data = model.toJson();

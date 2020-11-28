@@ -21,6 +21,7 @@ abstract class ApiGateway {
   Future<ActorModel> loginWithGoogle(String token);
   Future<ActorModel> verifyOtp(ActorModel model);
   Future<List<BatchModel>> getBatches();
+  Future<bool> deleteBatch(String batchId);
   Future<bool> createPoll(PollModel model);
   Future<List<AnnouncementModel>> getAnnouncemantList();
   Future<List<PollModel>> getPollList();

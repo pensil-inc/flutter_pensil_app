@@ -4,6 +4,7 @@ import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
+import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
 import 'package:flutter_pensil_app/ui/page/auth/forgot_password.dart';
 import 'package:flutter_pensil_app/ui/page/auth/signup.dart';
 import 'package:flutter_pensil_app/ui/page/auth/verify_Otp.dart';
@@ -37,11 +38,12 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController email;
   TextEditingController password;
-
+  CustomLoader loader;
   @override
   void initState() {
     email = TextEditingController();
     password = TextEditingController();
+    loader = CustomLoader();
     super.initState();
   }
 
@@ -103,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
           height: 170);
       Navigator.pop(context);
     }
+    loader.hideLoader();
   }
 
   Widget _form(BuildContext context) {
@@ -173,36 +176,38 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _googleLogin(BuildContext context) {
-    return Container(
-      height: 50,
-      margin: EdgeInsets.all(16),
-      width: AppTheme.fullWidth(context) - 32,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimary,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Color(0xffeaeaea),
-            offset: Offset(4, 4),
-            blurRadius: 10,
-          )
-        ],
-      ),
-      child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Image.asset("assets/images/google_icon.png", height: 30),
-          Spacer(),
-          Text("Continue with Google"),
-          Spacer(),
-        ],
-      ),
-    ).ripple(() async {
-      var isSucess = await Provider.of<AuthState>(context, listen: false)
-          .handleGoogleSignIn();
-      checkLoginStatus(isSucess);
-    });
+    return Center(
+      child: Container(
+        height: 50,
+        width: AppTheme.fullWidth(context) - 32,
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onPrimary,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color(0xffeaeaea),
+              offset: Offset(4, 4),
+              blurRadius: 10,
+            )
+          ],
+        ),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Image.asset("assets/images/google_icon.png", height: 30),
+            Spacer(),
+            Text("Continue with Google"),
+            Spacer(),
+          ],
+        ),
+      ).ripple(() async {
+        loader.showLoader(context);
+        var isSucess = await Provider.of<AuthState>(context, listen: false)
+            .handleGoogleSignIn();
+        checkLoginStatus(isSucess);
+      }).p16,
+    );
   }
 
   @override

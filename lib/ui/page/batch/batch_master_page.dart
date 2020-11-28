@@ -3,11 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/quiz/quiz_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
 import 'package:flutter_pensil_app/states/teacher/create_batch_state.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
+import 'package:flutter_pensil_app/ui/kit/alert.dart';
+import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
 import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart';
 import 'package:flutter_pensil_app/ui/page/batch/create_batch/create_batch.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_assignment_page.dart';
@@ -16,6 +19,7 @@ import 'package:flutter_pensil_app/ui/page/batch/pages/detail/batch_detail_page.
 import 'package:flutter_pensil_app/ui/page/batch/pages/material/upload_material.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/add_video_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/batch_videos_page.dart';
+import 'package:flutter_pensil_app/model/choice.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/fab/animated_fab.dart';
 import 'package:flutter_pensil_app/ui/widget/fab/fab_button.dart';
@@ -55,15 +59,21 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
   TabController _tabController;
   bool isOpened = false;
   AnimationController _animationController;
-  Animation<double> _animateIcon;
   Curve _curve = Curves.easeOut;
+  CustomLoader loader;
   Animation<double> _translateButton;
   ValueNotifier<bool> showFabButton = ValueNotifier<bool>(false);
   ValueNotifier<int> currentPageNo = ValueNotifier<int>(0);
 
+  List<Choice> choices = [
+    Choice(title: 'Edit', index: 0),
+    Choice(title: 'Delete', index: 1),
+  ];
+
   @override
   void initState() {
     super.initState();
+    loader = CustomLoader();
     model = widget.model;
     setupAnimations();
     _tabController = TabController(length: 4, vsync: this)
@@ -85,9 +95,9 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
 
   @override
   void dispose() {
-    // showFabButton.dispose();
-    // _animationController.dispose();
-    // _tabController.dispose();
+    showFabButton.dispose();
+    _animationController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -103,8 +113,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
           ..addListener(() {
             setState(() {});
           });
-    _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+
     _translateButton = Tween<double>(
       begin: 100,
       end: 0,
@@ -209,6 +218,22 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
         .getBatchAnnouncementList();
   }
 
+  void deleteBatch() async {
+    Alert.yesOrNo(context,
+        message: "Are you sure, you want to delete this batch ?",
+        title: "Message",
+        barrierDismissible: true,
+        onCancel: () {}, onYes: () async {
+      loader.showLoader(context);
+      final isDeleted = await Provider.of<HomeState>(context, listen: false)
+          .deleteBatch(widget.model.id);
+      if (isDeleted) {
+        Navigator.pop(context);
+      }
+      loader.hideLoader();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -234,17 +259,36 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
           ),
           actions: [
             if (widget.isTeacher)
-              Center(
-                child: SizedBox(
-                  height: 40,
-                  child: OutlineButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context, CreateBatch.getRoute(model: widget.model));
-                      },
-                      child: Text("Edit")),
-                ),
-              ).hP16,
+              PopupMenuButton<Choice>(
+                onSelected: (d) {
+                  if (d.index == 1) {
+                    deleteBatch();
+                  } else if (d.index == 0) {
+                    Navigator.push(
+                        context, CreateBatch.getRoute(model: widget.model));
+                  }
+                },
+                padding: EdgeInsets.zero,
+                offset: Offset(40, 20),
+                color: Colors.white,
+                itemBuilder: (BuildContext context) {
+                  return choices.map((Choice choice) {
+                    return PopupMenuItem<Choice>(
+                        value: choice, child: Text(choice.title));
+                  }).toList();
+                },
+              ),
+            // Center(
+            //   child: SizedBox(
+            //     height: 40,
+            //     child: OutlineButton(
+            //         onPressed: () {
+            //           Navigator.push(
+            //               context, CreateBatch.getRoute(model: widget.model));
+            //         },
+            //         child: Text("Edit")),
+            //   ),
+            // ).hP16,
           ],
         ),
         body: Stack(

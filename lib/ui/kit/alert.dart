@@ -63,15 +63,19 @@ class Alert {
   }
 
   static void yesOrNo(BuildContext context,
-      {String message, String title, Function onYes, Function onCancel}) async {
+      {String message,
+      String title,
+      Function onYes,
+      Function onCancel,
+      bool barrierDismissible = true}) async {
     await showDialog(
       context: context,
+      barrierDismissible: barrierDismissible,
       child: Dialog(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         child: Container(
-          padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-          height: 150, //MediaQuery.of(context).size.height * .3,
+          padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
           width: MediaQuery.of(context).size.width * .75,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -79,23 +83,20 @@ class Alert {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(title,
                   style: Theme.of(context)
                       .typography
                       .dense
-                      .headline5
+                      .headline6
                       .copyWith(color: Colors.black)),
-              SizedBox(height: 16),
+              SizedBox(height: 12),
               Text(message,
-                  style: Theme.of(context)
-                      .typography
-                      .dense
-                      .bodyText2
-                      .copyWith(color: Colors.black),
+                  style: Theme.of(context).typography.dense.bodyText2.copyWith(
+                      color: Colors.black, fontWeight: FontWeight.w400),
                   textAlign: TextAlign.center),
-              Spacer(),
+              SizedBox(height: 16),
               ButtonBar(
                 alignment: MainAxisAlignment.center,
                 buttonAlignedDropdown: true,
@@ -106,17 +107,21 @@ class Alert {
                         Navigator.pop(context);
                       },
                       child: Text("Cancel")),
+                  SizedBox(width: 12),
                   RaisedButton(
                     onPressed: () {
                       Navigator.pop(context);
+                      if (onYes != null) {
+                        onYes();
+                      }
                     },
-                    child: Text("Sign In", textAlign: TextAlign.center),
-                    elevation: 5,
+                    child: Text("Confirm", textAlign: TextAlign.center),
+                    elevation: 1,
                     color: Theme.of(context).primaryColor,
                     padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                        EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
                     shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
+                        borderRadius: new BorderRadius.circular(20.0)),
                   ),
                 ],
               )
