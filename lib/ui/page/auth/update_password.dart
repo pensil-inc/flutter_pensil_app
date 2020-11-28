@@ -1,45 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
+import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
-import 'package:flutter_pensil_app/ui/page/auth/update_password.dart';
-import 'package:flutter_pensil_app/ui/page/auth/widgets/Otp_widget.dart';
+import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
+import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
+import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-class VerifyOtpScreen extends StatefulWidget {
-  VerifyOtpScreen({Key key}) : super(key: key);
+class UpdatePasswordPage extends StatefulWidget {
+  UpdatePasswordPage({Key key}) : super(key: key);
 
   static MaterialPageRoute getRoute() {
     return MaterialPageRoute(
-      builder: (_) => VerifyOtpScreen(),
+      builder: (_) => UpdatePasswordPage(),
     );
   }
 
   @override
-  _VerifyOtpScreenState createState() => _VerifyOtpScreenState();
+  _UpdatePasswordPageState createState() => _UpdatePasswordPageState();
 }
 
-class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
+class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
   final _formKey = GlobalKey<FormState>();
 
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  TextEditingController email;
-  TextEditingController name;
+  TextEditingController confirmPassword;
   TextEditingController password;
-  TextEditingController mobile;
 
   @override
   void initState() {
-    name = TextEditingController();
-    email = TextEditingController();
+    confirmPassword = TextEditingController();
     password = TextEditingController();
-    mobile = TextEditingController();
     super.initState();
   }
 
@@ -85,39 +84,45 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
       if (!isValidate) {
         return;
       }
+      if (password.text != confirmPassword.text) {
+        Utility.displaySnackbar(context,
+            msg: "Confirm password and password did not match",
+            key: scaffoldKey);
+        return;
+      }
       FocusManager.instance.primaryFocus.unfocus();
       final state = Provider.of<AuthState>(context, listen: false);
+      state.setPassword = password.text;
       isLoading.value = true;
-      final isSucess = await state.verifyOtp();
-      if (isSucess != null && isSucess) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.of(context).push(UpdatePasswordPage.getRoute());
-      } else {
-        Alert.sucess(
-          context,
-          message: "Some error occured. Please try again in some time!!",
-          title: "Message",
-          height: 170,
-        );
-      }
-      isLoading.value = false;
+      final isSucess = await state.updateUser();
+      checkPasswordStatus(isSucess);
     } catch (error) {
-      isLoading.value = false;
       print("SCreen ${error.message}");
       Utility.displaySnackbar(context, msg: error.message, key: scaffoldKey);
-      // Navigator.pop(context);
-      // Navigator.pop(context);
-      // Navigator.of(context).push(UpdatePasswordPage.getRoute());
     }
-    print("End");
+    isLoading.value = false;
+  }
+
+  void checkPasswordStatus(bool isSucess) async {
+    if (isSucess) {
+      final getIt = GetIt.instance;
+      final prefs = getIt<SharedPrefrenceHelper>();
+      final isStudent = await prefs.isStudent();
+      Navigator.of(context).pushAndRemoveUntil(
+        isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
+        (_) => false,
+      );
+    } else {
+      Alert.sucess(context,
+          message: "Some error occured. Please try again in some time!!",
+          title: "Message",
+          height: 170);
+    }
   }
 
   Widget _form(BuildContext context) {
     final theme = Theme.of(context);
-    final state = Provider.of<AuthState>(context, listen: false);
     return Container(
-      // height: AppTheme.fullHeight(context) * .7,
       width: AppTheme.fullWidth(context) - 32,
       margin: EdgeInsets.symmetric(vertical: 32) + EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
@@ -138,42 +143,34 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
             SizedBox(height: 30),
             Image.asset(Images.logo, width: 50),
             Image.asset(Images.logoText, height: 30),
-            SizedBox(height: 30),
-            Text(
-              "Please enter OTP we’ve sent you on ${state.email ?? state.mobile}",
-              style: theme.textTheme.bodyText2.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
+            SizedBox(height: 10),
+            SizedBox(height: 40),
+            PTextField(
+              type: Type.password,
+              controller: password,
+              label: "New password",
+              hintText: "Enter new password",
             ).hP16,
-            SizedBox(height: 10),
-            SizedBox(height: 10),
-            Consumer<AuthState>(
-              builder: (context, state, child) {
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  margin: EdgeInsets.symmetric(horizontal: 16),
-                  child: OTPTextField(
-                    clearOTP: true,
-                    onSubmitted: (val) {
-                      print(val);
-                    },
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 30),
+            // SizedBox(height: 10),
+            PTextField(
+              type: Type.password,
+              controller: confirmPassword,
+              label: "Confirm password",
+              hintText: "Enter confirm password here",
+            ).hP16,
+
+            SizedBox(height: 14),
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: PFlatButton(
-                  label: "Verify",
-                  color: PColors.secondary,
-                  isLoading: isLoading,
-                  onPressed: () {
-                    _submit(context);
-                  },
-                )),
-            SizedBox(height: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: PFlatButton(
+                label: "Update",
+                color: PColors.secondary,
+                isLoading: isLoading,
+                onPressed: () {
+                  _submit(context);
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -182,9 +179,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: PColors.white,
       body: Container(
         height: AppTheme.fullHeight(context),
         child: SafeArea(
@@ -199,8 +196,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 120),
-                      _title("Verify OTP"),
+                      _title("Update Password"),
                       _form(context),
+                      SizedBox(height: 40),
                     ],
                   ),
                 ),

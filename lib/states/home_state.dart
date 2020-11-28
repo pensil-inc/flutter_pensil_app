@@ -27,8 +27,8 @@ class HomeState extends BaseState {
       final repo = getit.get<BatchRepository>();
       batchList = await repo.getBatch();
       notifyListeners();
-    } catch (error, strackTrace) {
-      log("getBatchList", error: error, stackTrace: strackTrace);
+    } catch (error) {
+      log("getBatchList", error: error, name: this.runtimeType.toString());
     }
   }
 
@@ -39,8 +39,8 @@ class HomeState extends BaseState {
       announcementList = await repo.getAnnouncemantList();
       announcementList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       notifyListeners();
-    } catch (error, strackTrace) {
-      log("createBatch", error: error, stackTrace: strackTrace);
+    } catch (error) {
+      log("createBatch", error: error, name: this.runtimeType.toString());
     }
   }
 
@@ -51,8 +51,8 @@ class HomeState extends BaseState {
       polls = await repo.getPollList();
       polls.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       notifyListeners();
-    } catch (error, strackTrace) {
-      log("createBatch", error: error, stackTrace: strackTrace);
+    } catch (error) {
+      log("createBatch", error: error, name: this.runtimeType.toString());
     }
   }
 

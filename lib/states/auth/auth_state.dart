@@ -16,6 +16,10 @@ class AuthState extends BaseState {
   String name;
   String otp;
 
+  bool isSignInWithGoogle;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   set setEmail(String value) {
     if (value.contains("@") || value.contains(".")) {
       email = value;
@@ -45,21 +49,18 @@ class AuthState extends BaseState {
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
       return await repo.login(model);
-    } on ApiException catch (error, strackTrace) {
+    } on ApiException catch (error) {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
-      log("Login", error: error.message, stackTrace: strackTrace);
+      log("Login", error: error.message);
       throw (Exception(model.email ?? model.password ?? model.mobile));
-    } on UnauthorisedException catch (error, strackTrace) {
-      log("Login", error: error.message, stackTrace: strackTrace);
+    } on UnauthorisedException catch (error) {
+      log("Login", error: error.message);
       throw (Exception(error.message));
-    } on UnprocessableException catch (error, strackTrace) {
+    } on UnprocessableException catch (error) {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
-      log("Login",
-          error: error.message,
-          stackTrace: strackTrace,
-          name: "UnprocessableException");
+      log("Login", error: error.message, name: "UnprocessableException");
       throw (Exception(
           model.email ?? model.password ?? model.mobile ?? model.name));
     } catch (error, strackTrace) {
@@ -92,6 +93,32 @@ class AuthState extends BaseState {
           model.email ?? model.password ?? model.mobile ?? model.name));
     } catch (error, strackTrace) {
       log("error", error: error, stackTrace: strackTrace, name: "register");
+      return false;
+    }
+  }
+
+  Future<bool> updateUser() async {
+    try {
+      var model = ActorModel(password: password);
+      final getit = GetIt.instance;
+      final repo = getit.get<BatchRepository>();
+      return await repo.updateUser(model);
+    } on ApiException catch (error) {
+      final map = json.decode(error.message) as Map<String, dynamic>;
+      ActorModel model = ActorModel.fromError(map);
+      log("Login", error: error.message);
+      throw (Exception(model.email ?? model.password ?? model.mobile));
+    } on UnauthorisedException catch (error) {
+      log("Login", error: error.message);
+      throw (Exception(error.message));
+    } on UnprocessableException catch (error) {
+      final map = json.decode(error.message) as Map<String, dynamic>;
+      ActorModel model = ActorModel.fromError(map);
+      log("Login", error: error.message, name: "UnprocessableException");
+      throw (Exception(
+          model.email ?? model.password ?? model.mobile ?? model.name));
+    } catch (error, strackTrace) {
+      log("error", error: error, stackTrace: strackTrace);
       return false;
     }
   }
@@ -139,8 +166,7 @@ class AuthState extends BaseState {
   Future<bool> handleGoogleSignIn() async {
     try {
       /// Record log in firebase kAnalytics about Google login
-      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-      final GoogleSignIn _googleSignIn = GoogleSignIn();
+
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         throw Exception('Google login cancelled by user');
@@ -148,15 +174,20 @@ class AuthState extends BaseState {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // final AuthCredential credential = GoogleAuthProvider.credential(
-      //   accessToken: googleAuth.accessToken,
-      //   idToken: googleAuth.idToken,
-      // );
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      var user = (await _firebaseAuth.signInWithCredential(credential));
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
-      return repo.loginWithGoogle(googleAuth.idToken);
+      isSignInWithGoogle = true;
+      return repo.loginWithGoogle(user.user.uid);
     } on PlatformException catch (error) {
       log("PlatformException", error: error, name: "GoogleSignIn");
+      return false;
+    } on ResourceNotFoundException catch (error) {
+      log("ResourceNotFoundException", error: error, name: "GoogleSignIn");
       return false;
     } catch (error) {
       log("PlatformException", error: error, name: "GoogleSignIn");
@@ -169,14 +200,17 @@ class AuthState extends BaseState {
       var model = ActorModel(email: email, mobile: mobile);
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
-      return await repo.login(model);
-    } on ApiException catch (error, strackTrace) {
+      return await repo.forgotPassword(model);
+    } on ApiException catch (error) {
       final map = json.decode(error.message) as Map<String, dynamic>;
       ActorModel model = ActorModel.fromError(map);
-      log("forgetPassword", error: error.message, stackTrace: strackTrace);
+      log("forgetPassword", error: error.message);
       throw (Exception(model.email ?? model.password ?? model.mobile));
-    } on UnauthorisedException catch (error, strackTrace) {
-      log("forgetPassword", error: error.message, stackTrace: strackTrace);
+    } on UnauthorisedException catch (error) {
+      log(
+        "forgetPassword",
+        error: error.message,
+      );
       throw (Exception(error.message));
     } on UnprocessableException catch (error, strackTrace) {
       final map = json.decode(error.message) as Map<String, dynamic>;
@@ -199,5 +233,11 @@ class AuthState extends BaseState {
     mobile = null;
     name = null;
     otp = null;
+  }
+
+  void logout() {
+    _googleSignIn.signOut();
+    _firebaseAuth.signOut();
+    clearData();
   }
 }

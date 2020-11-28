@@ -69,6 +69,7 @@ class ApiGatewayImpl implements ApiGateway {
       final fcmToken = await getit.getDeviceToken();
       model.fcmToken = fcmToken;
       final data = model.toJson();
+      data.removeWhere((key, value) => value == null);
       var response = await _dioClient.post(
         Constants.login,
         data: data,
@@ -100,12 +101,48 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
+  Future<bool> forgotPassword(ActorModel model) async {
+    try {
+      final data = model.toJson();
+      data.removeWhere((key, value) => value == null);
+      await _dioClient.post(Constants.forgotPassword, data: data);
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
   Future<ActorModel> verifyOtp(ActorModel model) async {
     try {
       final data = model.toJson();
+      data.removeWhere((key, value) => value == null);
       var response = await _dioClient.post(
         Constants.verifyOtp,
         data: data,
+      );
+      var map = _dioClient.getJsonBody(response);
+      var actor = ActorModel.fromJson(map["user"]);
+      return actor;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<ActorModel> updateUser(ActorModel model) async {
+    try {
+      final data = model.toJson();
+      String token = await pref.getAccessToken();
+      final header = {
+        "Authorization": "Bearer " +
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc1ZlcmlmaWVkIjp0cnVlLCJsYXN0TG9naW5EYXRlIjoiMjAyMC0xMC0yOVQwNjozNDoyMC42MTNaIiwibmFtZSI6Ik5ldyBVc2VyIiwibW9iaWxlIjoiODIxODU3ODQ5OSIsInJvbGUiOiJzdHVkZW50IiwiY3JlYXRlZEF0IjoiMjAyMC0xMC0xMFQxNDozOToxMi42ODFaIiwidXBkYXRlZEF0IjoiMjAyMC0xMC0yOVQwNjozNDoyMC42MjBaIiwiZmNtVG9rZW4iOiJkNUZ5ZktVNVNXeVQzT1ZJT0hPVks3OkFQQTkxYkhOSTZnd1FuclVWZEVoYWY2am9RRkpHZm84V2Zid1EtdzJNNWM3MjB5NkxxZk1ya3lPTUNrbHBtRkVNU25JNnp5aFZWQ0xRS3pGbU53TTl4c2std0F6SG4yRlMwd1JGTEZBU3k1TUhkWm9pLUxEdDJwMy1KRFBOMEtWc19WakQxYW5CQjY3IiwiaWQiOiI1ZjgxYzc5MGJhZjY2NDAwMTdkOGNjY2IiLCJpYXQiOjE2MDM5NTMyNjB9.UTcM3OUTai8RT0mnAf5vnIBbIIfrcrzVipE3hH1oRp4"
+      };
+      data.removeWhere((key, value) => value == null);
+      var response = await _dioClient.post(
+        Constants.profile,
+        data: data,
+        options: Options(headers: header),
       );
       var map = _dioClient.getJsonBody(response);
       var actor = ActorModel.fromJson(map["user"]);
@@ -123,7 +160,7 @@ class ApiGatewayImpl implements ApiGateway {
       // model.fcmToken = fcmToken;
       // final data = model.toJson();
       final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.post(Constants.googleAuth,
+      var response = await _dioClient.get(Constants.googleAuth,
           // data: data,
           options: Options(headers: header));
       var map = _dioClient.getJsonBody(response);

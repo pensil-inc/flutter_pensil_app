@@ -189,7 +189,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       state.setEmail = email.text;
       state.setMobile = mobile.text;
       isLoading.value = true;
-      final isSucess = await state.login();
+      final isSucess = await state.forgetPassword();
       checkLoginStatus(isSucess);
     } catch (error) {
       print("SCreen ${error.message}");
