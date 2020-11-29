@@ -42,6 +42,7 @@ class ActorModel {
       this.lastLoginDate,
       this.isSelected = false,
       this.fcmToken,
+      this.otpErrorMsg,
       this.otp});
 
   final String name;
@@ -54,7 +55,8 @@ class ActorModel {
   final bool isVerified;
   final DateTime lastLoginDate;
   final String id;
-  final String otp;
+  final int otp;
+  final String otpErrorMsg;
   bool isSelected;
 
   factory ActorModel.fromRawJson(String str) =>
@@ -104,7 +106,7 @@ class ActorModel {
       email: json.containsKey("email") ? json["email"][0] : null,
       mobile: json.containsKey("mobile") ? json["mobile"][0] : null,
       name: json.containsKey("name") ? json["name"][0] : null,
-      otp: json.containsKey("otp") ? json["otp"][0] : null,
+      otpErrorMsg: json.containsKey("otp") ? json["otp"][0] : null,
       isVerified:
           json.containsKey("isVerified") ? json["isVerified"][0] : null);
 
