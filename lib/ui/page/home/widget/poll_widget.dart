@@ -46,9 +46,7 @@ class PollWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(e),
-            Text(model.percent(e).toStringAsFixed(1) +
-                "%" +
-                " (${model.voteOnOption(e)})"),
+            Text(model.percent(e).toStringAsFixed(1) + "%"),
           ],
         ),
       ).ripple(() {

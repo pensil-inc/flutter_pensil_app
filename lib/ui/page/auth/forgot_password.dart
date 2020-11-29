@@ -5,6 +5,7 @@ import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/page/auth/signup.dart';
+import 'package:flutter_pensil_app/ui/page/auth/update_password.dart';
 import 'package:flutter_pensil_app/ui/page/auth/verify_Otp.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
@@ -201,7 +202,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   void checkLoginStatus(bool isSucess) async {
     if (isSucess) {
-      Navigator.push(context, VerifyOtpScreen.getRoute());
+      Navigator.push(context, VerifyOtpScreen.getRoute(onSucess: () {
+        Navigator.pop(context);
+        // Navigator.pop(context);
+        Navigator.of(context).push(UpdatePasswordPage.getRoute());
+      }));
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",

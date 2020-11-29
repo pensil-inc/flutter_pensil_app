@@ -50,6 +50,9 @@ class _OTPTextFieldState extends State<OTPTextField> {
 
   @override
   void dispose() {
+    if (!mounted) {
+      return;
+    }
     _otp1.dispose();
     _otp2.dispose();
     _otp3.dispose();

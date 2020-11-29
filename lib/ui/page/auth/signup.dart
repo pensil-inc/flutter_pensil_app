@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
+import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/page/auth/verify_Otp.dart';
+import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
+import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 import 'package:flutter_pensil_app/ui/widget/p_button.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
@@ -152,7 +156,15 @@ class _SignUpState extends State<SignUp> {
         // Alert.sucess(context,
         //     message: "An OTP is sent to your email address", title: "Message");
 
-        Navigator.push(context, VerifyOtpScreen.getRoute());
+        Navigator.push(context, VerifyOtpScreen.getRoute(onSucess: () async {
+          final getIt = GetIt.instance;
+          final prefs = getIt<SharedPrefrenceHelper>();
+          final isStudent = await prefs.isStudent();
+          Navigator.of(context).pushAndRemoveUntil(
+            isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
+            (_) => false,
+          );
+        }));
       } else {
         Alert.sucess(context,
             message: "Some error occured. Please try again in some time!!",

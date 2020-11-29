@@ -128,7 +128,7 @@ class AuthState extends BaseState {
 
   Future<bool> verifyOtp() async {
     try {
-      var model = ActorModel(email: email, otp: otp, mobile: mobile);
+      var model = ActorModel(email: email, otp: int.parse(otp), mobile: mobile);
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
       return await repo.verifyOtp(model);
@@ -149,7 +149,7 @@ class AuthState extends BaseState {
       ActorModel model = ActorModel.fromError(map);
       log("UnprocessableException",
           error: error.message, stackTrace: strackTrace, name: "verifyOtp");
-      throw (Exception(model.email ?? model.mobile ?? model.otp));
+      throw (Exception(model.email ?? model.mobile ?? model.otpErrorMsg));
     } catch (error, strackTrace) {
       log("error", error: error, stackTrace: strackTrace, name: "verifyOtp");
       return false;

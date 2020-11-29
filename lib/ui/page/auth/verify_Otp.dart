@@ -10,11 +10,11 @@ import 'package:flutter_pensil_app/ui/widget/p_button.dart';
 import 'package:provider/provider.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
-  VerifyOtpScreen({Key key}) : super(key: key);
-
-  static MaterialPageRoute getRoute() {
+  VerifyOtpScreen({Key key, this.onSucess}) : super(key: key);
+  final Function onSucess;
+  static MaterialPageRoute getRoute({Function onSucess}) {
     return MaterialPageRoute(
-      builder: (_) => VerifyOtpScreen(),
+      builder: (_) => VerifyOtpScreen(onSucess: onSucess),
     );
   }
 
@@ -90,9 +90,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
       isLoading.value = true;
       final isSucess = await state.verifyOtp();
       if (isSucess != null && isSucess) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.of(context).push(UpdatePasswordPage.getRoute());
+        widget.onSucess();
       } else {
         Alert.sucess(
           context,
@@ -106,9 +104,6 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
       isLoading.value = false;
       print("SCreen ${error.message}");
       Utility.displaySnackbar(context, msg: error.message, key: scaffoldKey);
-      // Navigator.pop(context);
-      // Navigator.pop(context);
-      // Navigator.of(context).push(UpdatePasswordPage.getRoute());
     }
     print("End");
   }

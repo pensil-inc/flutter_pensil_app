@@ -4,6 +4,7 @@ import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
+import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_student.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_page_teacher.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
@@ -108,10 +109,16 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
       final getIt = GetIt.instance;
       final prefs = getIt<SharedPrefrenceHelper>();
       final isStudent = await prefs.isStudent();
-      Navigator.of(context).pushAndRemoveUntil(
-        isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
-        (_) => false,
-      );
+      Alert.sucess(context,
+          message: "Your password is updated. Please login to continue",
+          title: "Message",
+          height: 170, onPressed: () {
+        Navigator.of(context).pushAndRemoveUntil(
+          // isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
+          LoginPage.getRoute(),
+          (_) => false,
+        );
+      });
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",

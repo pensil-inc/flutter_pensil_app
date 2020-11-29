@@ -12,41 +12,38 @@ class PValidator {
         return "Invalid invalidEmail";
       }
       if (value.isEmpty) {
-        return "Invalid fieldEmptyText";
+        return "email field can not be empty";
       }
       if (!value.startsWith(RegExp(r'[A-Za-z]'))) {
-        return "Invalid invalidEmail";
+        return "Invalid email format";
       }
-      if (value.length > 32) {
-        return "Invalid emailMustBeLessThan";
+      if (value.length > 42) {
+        return "email length is too long";
       }
       if (value.length < 6) {
-        return "Invalid emailIsShort";
+        return "email length is too short";
       }
       if (!value.contains("@")) {
-        return "Invalid invalidEmail";
-      }
-      if (!value.contains(".com")) {
-        return "Invalid invalidEmail";
+        return "Invalid email format";
       }
       return null;
     };
 
     Function(String) nameValidators = (String value) {
       if (value.isEmpty) {
-        return "Invalid fieldEmptyText";
+        return "Name field can not be empty";
       }
       if (value.length > 32) {
-        return "Invalid nameMustBeLessThan";
+        return "Name length can not be greter then 32";
       }
       if (!value.startsWith(RegExp(r'[A-za-z]'))) {
-        return "Invalid invalidName";
+        return "Invalid name format";
       }
       if (value.length < 3) {
-        return "Invalid invalidName";
+        return "Name length can not be lesser then 3 charater";
       }
       if (value.contains(RegExp(r'[0-9]'))) {
-        return "Invalid invalidName";
+        return "Invalid name format";
       }
 
       return null;
@@ -54,24 +51,24 @@ class PValidator {
 
     Function(String) phoneValidtors = (String value) {
       if (value.isEmpty) {
-        return "Invalid fieldEmptyText";
+        return "Mobile field can not be empty";
       }
       if (value.length < 10) {
-        return "Invalid phoneNumberMustBeLess";
+        return "Mobile field length can not be lesser then 10 character";
       }
       if (value.contains(RegExp(r'[A-Z]')) ||
           value.contains(RegExp(r'[a-z]')) ||
-          value.contains(".com")) {
-        return "Invalid onlyTenDigits";
+          value.contains(".")) {
+        return "Invalid mobile format";
       }
       if (value.length > 10) {
-        return "Invalid invalidPhoneNumber";
+        return "Mobile field length can not be greter then 10";
       }
       if (!RegExp(r"[0-9]{10}").hasMatch(value)) {
-        return "Invalid invalidPhoneNumber";
+        return "Invalid mobile field";
       }
       if (!value.startsWith(RegExp(r"[0-9]"))) {
-        return "Invalid invalidPhoneNumber";
+        return "Invalid mobile field";
       }
       return null;
     };

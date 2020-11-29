@@ -106,8 +106,8 @@ class PollModel {
             : List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x))),
         votes: json["votes"] == null
             ? null
-            : Map.from(json["votes"])
-                .map((k, v) => MapEntry<String, double>(k, v)),
+            : Map.from(json["votes"]).map((k, v) =>
+                MapEntry<String, double>(k, double.parse(v.toString()))),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),
@@ -130,7 +130,8 @@ class PollModel {
         "totalVotes": totalVotes == null ? null : totalVotes,
         "votes": votes == null
             ? null
-            : Map.from(votes).map((k, v) => MapEntry<String, dynamic>(k, v)),
+            : Map.from(votes).map((k, v) =>
+                MapEntry<String, dynamic>(k, double.parse(v.toString()))),
         "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
         "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
       };
@@ -140,7 +141,7 @@ class PollModel {
     if (total == 0) {
       return 0;
     }
-    final perc = (total * 100) / this.totalVotes;
+    final perc = (total * 100); // / this.totalVotes;
     return perc;
   }
 
