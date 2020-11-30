@@ -56,6 +56,12 @@ class HomeState extends BaseState {
     }
   }
 
+  void savePollSelection(PollModel model) {
+    var copyModel = polls.firstWhere((e) => e.id == model.id);
+    copyModel = model;
+    notifyListeners();
+  }
+
   Future castVoteOnPoll(String pollId, String vote) async {
     if (isTeacher) {
       print("Teacher can't cast vote");

@@ -50,7 +50,13 @@ class PollWidget extends StatelessWidget {
           ],
         ),
       ).ripple(() {
-        submitVote(context, e);
+        if (model.isMyVote(
+            Provider.of<HomeState>(context, listen: false).userId, e)) {
+          print("Already voted");
+          return;
+        }
+        model.selection = MySelection(choice: e, isSelected: true);
+        Provider.of<HomeState>(context, listen: false).savePollSelection(model);
       }),
     );
   }
@@ -86,10 +92,13 @@ class PollWidget extends StatelessWidget {
               children: model.options.map((e) {
             return _option(context, e);
           }).toList()),
-          // if (hideFinishButton && !model.endTime.isBefore(DateTime.now())) ...[
-          //   SizedBox(height: 10),
-          //   _secondaryButton(context, label: "Finish", onPressed: () {})
-          // ]
+          if (model.selection.isSelected &&
+              !model.endTime.isBefore(DateTime.now())) ...[
+            SizedBox(height: 10),
+            _secondaryButton(context, label: "Submit", onPressed: () {
+              submitVote(context, model.selection.choice);
+            })
+          ]
         ],
       ),
     );

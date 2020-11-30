@@ -30,19 +30,19 @@ class PollResponseModel {
 }
 
 class PollModel {
-  PollModel({
-    this.id,
-    this.question,
-    this.options,
-    this.endTime,
-    this.batches,
-    this.isForAll,
-    this.answers,
-    this.totalVotes,
-    this.votes,
-    this.createdAt,
-    this.updatedAt,
-  });
+  PollModel(
+      {this.id,
+      this.question,
+      this.options,
+      this.endTime,
+      this.batches,
+      this.isForAll,
+      this.answers,
+      this.totalVotes,
+      this.votes,
+      this.createdAt,
+      this.updatedAt,
+      this.selection});
 
   final String id;
   final String question;
@@ -55,6 +55,7 @@ class PollModel {
   final Map<String, double> votes;
   final DateTime createdAt;
   final DateTime updatedAt;
+  MySelection selection;
 
   PollModel copyWith({
     String id,
@@ -89,32 +90,29 @@ class PollModel {
   String toRawJson() => json.encode(toJson());
 
   factory PollModel.fromJson(Map<String, dynamic> json) => PollModel(
-        id: json["id"] == null ? null : json["id"],
-        question: json["question"] == null ? null : json["question"],
-        totalVotes: json["totalVotes"] == null ? null : json["totalVotes"],
-        options: json["options"] == null
-            ? null
-            : List<String>.from(json["options"].map((x) => x)),
-        endTime:
-            json["endTime"] == null ? null : DateTime.parse(json["endTime"]),
-        batches: json["batches"] == null
-            ? null
-            : List<dynamic>.from(json["batches"].map((x) => x)),
-        isForAll: json["isForAll"] == null ? null : json["isForAll"],
-        answers: json["answers"] == null
-            ? null
-            : List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x))),
-        votes: json["votes"] == null
-            ? null
-            : Map.from(json["votes"]).map((k, v) =>
-                MapEntry<String, double>(k, double.parse(v.toString()))),
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? null
-            : DateTime.parse(json["updatedAt"]),
-      );
+      id: json["id"] == null ? null : json["id"],
+      question: json["question"] == null ? null : json["question"],
+      totalVotes: json["totalVotes"] == null ? null : json["totalVotes"],
+      options: json["options"] == null
+          ? null
+          : List<String>.from(json["options"].map((x) => x)),
+      endTime: json["endTime"] == null ? null : DateTime.parse(json["endTime"]),
+      batches: json["batches"] == null
+          ? null
+          : List<dynamic>.from(json["batches"].map((x) => x)),
+      isForAll: json["isForAll"] == null ? null : json["isForAll"],
+      answers: json["answers"] == null
+          ? null
+          : List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x))),
+      votes: json["votes"] == null
+          ? null
+          : Map.from(json["votes"]).map((k, v) =>
+              MapEntry<String, double>(k, double.parse(v.toString()))),
+      createdAt:
+          json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+      updatedAt:
+          json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+      selection: MySelection());
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
@@ -191,4 +189,11 @@ class Answer {
         "studentId": studentId == null ? null : studentId,
         "option": option == null ? null : option,
       };
+}
+
+class MySelection {
+  final bool isSelected;
+  final String choice;
+
+  MySelection({this.isSelected = false, this.choice});
 }
