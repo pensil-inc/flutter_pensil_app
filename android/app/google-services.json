@@ -42,6 +42,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680271036691:android:7fde0d3db3d3f95e619ae6",
+        "android_client_info": {
+          "package_name": "com.pensil.shaanApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680271036691-o0fn265ga9c8cpm4v6ml8orvq5c6iue1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pensil.shaanApp",
+            "certificate_hash": "9de309e80db3f39ce864ebdb5eb057b1201d3eb0"
+          }
+        },
+        {
+          "client_id": "680271036691-48s384oggpmp6cp59a8dgsg0aplng95b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvhdfnReuUbbGGHdxah1CNHIVo7R1Mf54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680271036691-48s384oggpmp6cp59a8dgsg0aplng95b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
