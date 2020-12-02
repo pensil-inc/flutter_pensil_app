@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 class BatchTimeSlotModel extends Equatable {
   String day;
@@ -10,9 +11,11 @@ class BatchTimeSlotModel extends Equatable {
   int dayOfWeek;
   bool isValidStartEntry;
   bool isValidEndEntry;
+  String key;
 
   BatchTimeSlotModel(
       {this.day,
+      this.key,
       this.startTime,
       this.endTime,
       this.index,
@@ -21,6 +24,7 @@ class BatchTimeSlotModel extends Equatable {
       this.isValidEndEntry = true});
   factory BatchTimeSlotModel.initial() {
     return BatchTimeSlotModel(
+      key: UniqueKey().toString(),
       index: 0,
       day: "Mon",
       startTime: "Start time",

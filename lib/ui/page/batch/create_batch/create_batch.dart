@@ -275,14 +275,25 @@ class _CreateBatchState extends State<CreateBatch> {
                             children: state.timeSlots.map((e) {
                             var index = state.timeSlots.indexOf(e);
                             var model = state.timeSlots[index];
-                            return BatchTimeSlotWidget(
-                              model: model,
-                              indexValue: index,
-                            ).vP5;
+                            return Dismissible(
+                              confirmDismiss: (val) async {
+                                var isRemoved = Provider.of<CreateBatchStates>(
+                                        context,
+                                        listen: false)
+                                    .removeTimeSlot(model);
+                                return Future.value(isRemoved);
+                              },
+                              key: UniqueKey(),
+                              child: BatchTimeSlotWidget(
+                                model: model,
+                                indexValue: index,
+                              ).vP5,
+                            );
                           }).toList());
                   },
                 ),
                 _secondaryButton(context, label: "Add Class", onPressed: () {
+                  FocusManager.instance.primaryFocus.unfocus();
                   Provider.of<CreateBatchStates>(context, listen: false)
                       .setTimeSlots(BatchTimeSlotModel.initial());
                 }),

@@ -161,7 +161,6 @@ class BatchTimeSlotWidget extends StatelessWidget {
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
     String formattedTime = localizations.formatTimeOfDay(selectedTime,
         alwaysUse24HourFormat: true);
-    print(formattedTime);
     return formattedTime;
   }
 

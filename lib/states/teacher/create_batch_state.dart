@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
@@ -34,6 +35,7 @@ class CreateBatchStates extends BaseState {
     timeSlots.forEach((clas) {
       clas.index = counter;
       counter++;
+      clas.key = UniqueKey().toString();
     });
     selectedSubjects = model.subject;
     selectedStudentsList.forEach((model) {
@@ -66,6 +68,19 @@ class CreateBatchStates extends BaseState {
     model.index = timeSlots.length;
     timeSlots.add(model);
     notifyListeners();
+  }
+
+  bool removeTimeSlot(BatchTimeSlotModel model) {
+    if (timeSlots.length == 1) {
+      return false;
+    }
+    timeSlots.removeWhere((element) => element.key == model.key);
+    timeSlots.forEach((element) {
+      element.index = timeSlots.indexOf(element);
+    });
+    // timeSlots.add(model);
+    notifyListeners();
+    return true;
   }
 
   set setSelectedSubjects(String name) {
@@ -167,7 +182,7 @@ class CreateBatchStates extends BaseState {
       // print(model.toJson());
       final repo = getit.get<BatchRepository>();
       await repo.createBatch(model);
-      // print(model.toJson());
+      // timeSlots.forEach((e) => print(e.toJson()));
       // return Future.value(null);
       return model;
     } catch (error, strackTrace) {
