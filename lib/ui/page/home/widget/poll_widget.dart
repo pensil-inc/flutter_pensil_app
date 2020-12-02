@@ -44,8 +44,9 @@ class PollWidget extends StatelessWidget {
                 : AppTheme.outline(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(e),
+            Text(e).extended,
             Text(model.percent(e).toStringAsFixed(1) + "%"),
           ],
         ),

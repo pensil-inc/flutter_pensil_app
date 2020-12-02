@@ -176,38 +176,38 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                 }
               },
             ),
-            // if (!(state.batchList != null && state.batchList.isNotEmpty))
-            //   SliverList(
-            //     delegate: SliverChildListDelegate(
-            //       [
-            //         _title("Batches"),
-            //         SizedBox(height: 20),
-            //         Container(
-            //             height: 100,
-            //             margin: EdgeInsets.symmetric(horizontal: 16),
-            //             decoration: AppTheme.outline(context),
-            //             width: AppTheme.fullWidth(context),
-            //             alignment: Alignment.center,
-            //             child: Column(
-            //               mainAxisAlignment: MainAxisAlignment.center,
-            //               children: <Widget>[
-            //                 Text("You haven't created any batch yet",
-            //                     style: Theme.of(context)
-            //                         .textTheme
-            //                         .headline6
-            //                         .copyWith(
-            //                           color: PColors.gray,
-            //                         )),
-            //                 SizedBox(height: 10),
-            //                 Text("Tap on below fab button to create new",
-            //                     style: Theme.of(context)
-            //                         .textTheme
-            //                         .bodyText1),
-            //               ],
-            //             ))
-            //       ],
-            //     ),
-            //   ),
+            if (!(state.batchList != null && state.batchList.isNotEmpty))
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    _title("Batches"),
+                    SizedBox(height: 20),
+                    Container(
+                      height: 100,
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: AppTheme.outline(context),
+                      width: AppTheme.fullWidth(context),
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("You haven't created any batch yet",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .copyWith(
+                                    color: PColors.gray,
+                                  )),
+                          SizedBox(height: 10),
+                          Text("Tap on below fab button to create new",
+                              style: Theme.of(context).textTheme.bodyText1),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20)
+                  ],
+                ),
+              ),
             if (state.batchList != null && state.batchList.isNotEmpty)
               // SliverList(
               //   delegate: SliverChildBuilderDelegate(
@@ -249,7 +249,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          _title("Today's Poll"),
+                          _title("Poll"),
                           OutlineButton(
                             onPressed: () {
                               Navigator.push(context, CreatePoll.getRoute());

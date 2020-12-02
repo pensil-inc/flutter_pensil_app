@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -34,8 +34,8 @@ dependencies:
   get_it: ^5.0.1
   equatable: ^1.2.0
   provider: ^4.3.2+2
+  url_launcher: ^5.7.2
   yoyo_player: ^0.1.0
-  better_player: ^0.0.29+1
   filter_list: ^0.0.5
   file_picker: ^2.0.7
   add_thumbnail: ^0.0.2
@@ -43,6 +43,7 @@ dependencies:
   google_sign_in: "^4.5.1"
   contacts_service: ^0.4.6
   firebase_core: "^0.5.2+1"
+  better_player: ^0.0.29+1
   firebase_auth: "^0.18.3+1"
   advance_pdf_viewer: ^1.2.0
   webview_flutter: ^0.3.22+1
@@ -51,11 +52,16 @@ dependencies:
   shared_preferences: ^0.5.12
   permission_handler: ^5.0.1+1
   cached_network_image: ^2.2.0+1
-  url_launcher: ^5.7.2
+  flutter_launcher_icons: "^0.7.3"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/images/bramhAppLogo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

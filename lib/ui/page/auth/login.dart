@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/config/config.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
@@ -141,10 +142,10 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: <Widget>[
             SizedBox(height: 30),
-            Image.asset(Images.logo, width: 50),
-            Image.asset(Images.logoText, height: 30),
-            SizedBox(height: 10),
-            SizedBox(height: 40),
+            Image.asset(AppConfig.of(context).config.appIcon, width: 150),
+            // Image.asset(Images.logoText, height: 30),
+            // SizedBox(height: 10),
+            SizedBox(height: 30),
             ValueListenableBuilder<bool>(
                 valueListenable: useMobile,
                 builder: (context, value, child) {

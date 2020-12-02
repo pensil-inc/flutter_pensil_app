@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/config/config.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/ui/page/auth/login.dart';
@@ -29,16 +30,18 @@ class _SplashPageState extends State<SplashPage> {
       print("***************** Auto Login ***********************");
       final isStudent = await prefs.isStudent();
       Navigator.of(context).pushAndRemoveUntil(
-          isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
-          (_) => false,);
-    }else{
-      Navigator.pushReplacement(context,LoginPage.getRoute());
+        isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
+        (_) => false,
+      );
+    } else {
+      Navigator.pushReplacement(context, LoginPage.getRoute());
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       body: Container(
         height: AppTheme.fullHeight(context) - 50,
         width: AppTheme.fullWidth(context),
@@ -46,8 +49,9 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(Images.logo, width: 100),
-            Image.asset(Images.logoText, height: 70),
+            Image.asset(AppConfig.of(context).config.appIcon,
+                width: AppTheme.fullWidth(context) * .7),
+            // Image.asset(Images.logoText, height: 70),
           ],
         ),
       ),

@@ -1,5 +1,7 @@
 class Constants {
   static const String productionBaseUrl = "http://34.222.54.250:3000/api/";
+  static const String shaanAppBaseUrl = "http://34.222.54.250:3002/api/";
+  static const String bramhAppBaseUrl = "http://34.222.54.250:3001/api/";
 
   static const String developmentBaseUrl =
       "https://pensil-staging.herokuapp.com/api";
