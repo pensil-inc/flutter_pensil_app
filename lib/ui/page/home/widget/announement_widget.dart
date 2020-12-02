@@ -4,6 +4,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
+import 'package:flutter_pensil_app/ui/widget/image_viewer.dart';
 
 class AnnouncementWidget extends StatelessWidget {
   const AnnouncementWidget(
@@ -44,7 +45,11 @@ class AnnouncementWidget extends StatelessWidget {
                   Text(model.description),
                   SizedBox(height: 8),
                   if (model.image != null && model.image.isNotEmpty) ...[
-                    CachedNetworkImage(imageUrl: model.image),
+                    CachedNetworkImage(imageUrl: model.image, height: 120)
+                        .ripple(() {
+                      Navigator.push(
+                          context, ImageViewer.getRoute(model.image));
+                    }),
                     SizedBox(height: 8),
                   ],
                   Align(

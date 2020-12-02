@@ -4,6 +4,7 @@ import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/detail/student_list.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_avatar.dart';
@@ -105,6 +106,17 @@ class BatchDetailPage extends StatelessWidget {
                   SizedBox(width: 10),
                   _title(context, "${model.studentModel.length} Student",
                       fontSize: 18),
+                  Spacer(),
+                  SizedBox(
+                    height: 30,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            StudentListPage.getRoute(model.studentModel));
+                      },
+                      child: Text("View All"),
+                    ),
+                  )
                 ],
               ).hP16,
               _students(theme),

@@ -7,13 +7,14 @@ import 'package:flutter_pensil_app/ui/app.dart';
 import 'package:flutter_pensil_app/ui/page/splash.dart';
 
 void main() async {
-  final config = shaanConfig();
+  final config = devConfig();
+  final shaanConfig = shaanAppConfig();
   final bramConfig = bramhAppConfig();
-  setUpDependency(bramConfig);
+  setUpDependency(config);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final configuredApp = AppConfig(
-    config: bramConfig,
+    config: config,
     child: PensilApp(home: SplashPage()),
   );
   runApp(configuredApp);

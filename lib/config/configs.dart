@@ -5,7 +5,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 devConfig() => Config(
       appName: 'Pensil [DEV]',
       appIcon: Images.logo,
-      apiBaseUrl: Constants.developmentBaseUrl,
+      apiBaseUrl: Constants.productionBaseUrl,
       appToken: '',
       apiLogging: true,
       diagnostic: true,
@@ -19,7 +19,7 @@ bramhAppConfig() => Config(
       apiLogging: false,
       diagnostic: false,
     );
-shaanConfig() => Config(
+shaanAppConfig() => Config(
       appName: 'Shaan IAS Academy',
       appIcon: Images.logoShaan,
       apiBaseUrl: Constants.shaanAppBaseUrl,
