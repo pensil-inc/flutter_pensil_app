@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/config/config.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
@@ -131,7 +132,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         child: Column(
           children: <Widget>[
             SizedBox(height: 20),
-            Image.asset(Images.logo, width: 150),
+            Image.asset(AppConfig.of(context).config.appIcon, width: 150),
             // Image.asset(Images.logoText, height: 30),
             SizedBox(height: 10),
             Text(
