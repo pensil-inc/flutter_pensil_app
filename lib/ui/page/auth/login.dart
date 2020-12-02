@@ -141,10 +141,10 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: <Widget>[
             SizedBox(height: 30),
-            Image.asset(Images.logo, width: 50),
-            Image.asset(Images.logoText, height: 30),
-            SizedBox(height: 10),
-            SizedBox(height: 40),
+            Image.asset(Images.logo, width: 150),
+            // Image.asset(Images.logoText, height: 30),
+            // SizedBox(height: 10),
+            SizedBox(height: 30),
             ValueListenableBuilder<bool>(
                 valueListenable: useMobile,
                 builder: (context, value, child) {

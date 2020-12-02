@@ -23,3 +23,10 @@ releaseConfig() => Config(
       apiLogging: false,
       diagnostic: false,
     );
+shaanConfig() => Config(
+      appName: 'Shaan IAS Academy',
+      apiBaseUrl: Constants.shaanAppBaseUrl,
+      appToken: '',
+      apiLogging: false,
+      diagnostic: false,
+    );

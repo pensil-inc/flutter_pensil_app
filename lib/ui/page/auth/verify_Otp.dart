@@ -130,10 +130,10 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
-            Image.asset(Images.logo, width: 50),
-            Image.asset(Images.logoText, height: 30),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
+            Image.asset(Images.logo, width: 150),
+            // Image.asset(Images.logoText, height: 30),
+            SizedBox(height: 10),
             Text(
               "Please enter OTP we’ve sent you on ${state.email ?? state.mobile}",
               style: theme.textTheme.bodyText2.copyWith(

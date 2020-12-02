@@ -147,11 +147,10 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
-            Image.asset(Images.logo, width: 50),
-            Image.asset(Images.logoText, height: 30),
-            SizedBox(height: 10),
-            SizedBox(height: 40),
+            // SizedBox(height: 20),
+            Image.asset(Images.logo, width: 150),
+            // Image.asset(Images.logoText, height: 30),
+            SizedBox(height: 20),
             PTextField(
               type: Type.password,
               controller: password,

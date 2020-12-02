@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/config/config.dart';
+import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
@@ -38,11 +40,10 @@ class HomeScaffold<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.dehaze),
-          ),
-          title: Title(color: PColors.black, child: Text("Pensil Institute")),
+          leading: Image.asset(Images.logo),
+          title: Title(
+              color: PColors.black,
+              child: Text(AppConfig.of(context).config.appName)),
           actions: <Widget>[
             IconButton(
               onPressed: onNotificationTap,

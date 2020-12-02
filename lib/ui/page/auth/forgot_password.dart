@@ -102,10 +102,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
-            Image.asset(Images.logo, width: 50),
-            Image.asset(Images.logoText, height: 30),
-            SizedBox(height: 10),
+            // SizedBox(height: 30),
+            Image.asset(Images.logo, width: 150),
+            // Image.asset(Images.logoText, height: 30),
             SizedBox(height: 40),
             ValueListenableBuilder<bool>(
                 valueListenable: useMobile,
@@ -196,6 +195,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       print("SCreen ${error.message}");
       Utility.displaySnackbar(context, msg: error.message, key: scaffoldKey);
       // Navigator.push(context, VerifyOtpScreen.getRoute());
+      Navigator.of(context).push(UpdatePasswordPage.getRoute());
     }
     isLoading.value = false;
   }

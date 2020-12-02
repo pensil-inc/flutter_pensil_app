@@ -29,10 +29,11 @@ class _SplashPageState extends State<SplashPage> {
       print("***************** Auto Login ***********************");
       final isStudent = await prefs.isStudent();
       Navigator.of(context).pushAndRemoveUntil(
-          isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
-          (_) => false,);
-    }else{
-      Navigator.pushReplacement(context,LoginPage.getRoute());
+        isStudent ? StudentHomePage.getRoute() : TeacherHomePage.getRoute(),
+        (_) => false,
+      );
+    } else {
+      Navigator.pushReplacement(context, LoginPage.getRoute());
     }
   }
 
@@ -46,8 +47,8 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(Images.logo, width: 100),
-            Image.asset(Images.logoText, height: 70),
+            Image.asset(Images.logo, width: AppTheme.fullWidth(context) * .7),
+            // Image.asset(Images.logoText, height: 70),
           ],
         ),
       ),
