@@ -156,6 +156,15 @@ class PollModel {
     }
     return false;
   }
+
+  bool isVoted(String userId) {
+    assert(userId != null,
+        "User id Required to check if user has voted or not on poll");
+    if (answers.isEmpty) {
+      return false;
+    }
+    return answers.any((element) => element.studentId == userId);
+  }
 }
 
 class Answer {
@@ -194,6 +203,7 @@ class Answer {
 class MySelection {
   final bool isSelected;
   final String choice;
+  bool loading;
 
-  MySelection({this.isSelected = false, this.choice});
+  MySelection({this.choice, this.isSelected = false, this.loading = false});
 }

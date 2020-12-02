@@ -62,16 +62,17 @@ class HomeState extends BaseState {
     notifyListeners();
   }
 
-  Future castVoteOnPoll(String pollId, String vote) async {
+  Future castVoteOnPoll(PollModel poll, String vote) async {
     if (isTeacher) {
       print("Teacher can't cast vote");
       return;
     }
+    poll.selection.loading = true;
     var model = await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
-      return await repo.castVoteOnPoll(pollId, vote);
+      return await repo.castVoteOnPoll(poll.id, vote);
     }, label: "castVoteOnPoll");
 
     if (model != null) {
@@ -79,6 +80,7 @@ class HomeState extends BaseState {
       polls[dt] = model;
       print("Voted sucess");
     }
+    poll.selection.loading = false;
     isBusy = false;
   }
 
