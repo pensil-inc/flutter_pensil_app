@@ -61,9 +61,17 @@ class PollWidget extends StatelessWidget {
         ),
       ).ripple(() {
         final state = Provider.of<HomeState>(context, listen: false);
-        if (state.isTeacher || model.selection.loading) {
+
+        /// Teacher cannot vote
+        /// If user already submitted his vote and api is calling
+        /// If poll is expired then student cannot cast his vote
+        if (state.isTeacher ||
+            model.selection.loading ||
+            model.endTime.isBefore(DateTime.now())) {
           return;
         }
+
+        //Restrict user to vote more then 1 time
         final userId = Provider.of<HomeState>(context, listen: false).userId;
         if (model.isVoted(userId)) {
           print("Already voted");
@@ -76,18 +84,13 @@ class PollWidget extends StatelessWidget {
   }
 
   void submitVote(context, String answer) {
-    if (model.isMyVote(
-        Provider.of<HomeState>(context, listen: false).userId, answer)) {
-      print("Already voted");
-      return;
-    }
+    ///Restrict user to tap repeatatively to submit vote
     final state = Provider.of<HomeState>(context, listen: false);
     if (state.isBusy) {
       return;
     }
-    if (!model.endTime.isBefore(DateTime.now())) {
-      state.castVoteOnPoll(model, answer);
-    }
+
+    state.castVoteOnPoll(model, answer);
   }
 
   @override
@@ -107,6 +110,11 @@ class PollWidget extends StatelessWidget {
               children: model.options.map((e) {
             return _option(context, e);
           }).toList()),
+
+          /// Restrict user to vote If
+          /// He is a teacher
+          /// He is already Voted
+          /// Poll is exired
           if (!state.isTeacher &&
               !model.isVoted(state.userId) &&
               model.selection.isSelected &&
