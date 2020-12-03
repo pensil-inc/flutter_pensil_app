@@ -105,14 +105,14 @@ class VideoState extends BaseState {
     }, label: "getVideosList");
   }
 
-  Future<bool> deleteVideo(String batchId) async {
+  Future<bool> deleteVideo(String videoId) async {
     try {
-      var isDeleted = await deleteById(Constants.deleteVideo(batchId));
+      var isDeleted = await deleteById(Constants.deleteVideo(videoId));
       if (isDeleted) {
-        list.removeWhere((element) => element.id == batchId);
+        list.removeWhere((element) => element.id == videoId);
       }
       notifyListeners();
-      return true;
+      return isDeleted;
     } catch (error) {
       log("deleteVideo", error: error, name: this.runtimeType.toString());
       return false;

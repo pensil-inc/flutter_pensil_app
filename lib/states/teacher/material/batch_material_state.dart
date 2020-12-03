@@ -1,4 +1,6 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
 import 'package:flutter_pensil_app/resources/repository/teacher/teacher_repository.dart';
@@ -37,7 +39,12 @@ class BatchMaterialState extends BaseState {
     final data = await execute(() async {
       assert(title != null);
       assert(subject != null);
-      var model = BatchMaterialModel(title: title, description: description, subject: subject, batchId: batchId, articleUrl: fileUrl);
+      var model = BatchMaterialModel(
+          title: title,
+          description: description,
+          subject: subject,
+          batchId: batchId,
+          articleUrl: fileUrl);
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
       return await repo.uploadMaterial(model);
@@ -46,11 +53,10 @@ class BatchMaterialState extends BaseState {
       await upload(data.id);
       isBusy = false;
       return true;
-    }else if(fileUrl != null){
+    } else if (fileUrl != null) {
       isBusy = true;
       return false;
-    }
-     else {
+    } else {
       isBusy = false;
       return false;
     }
@@ -58,7 +64,6 @@ class BatchMaterialState extends BaseState {
 
   Future<bool> upload(String id) async {
     return await execute(() async {
-
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
@@ -78,5 +83,19 @@ class BatchMaterialState extends BaseState {
       notifyListeners();
       isBusy = false;
     }, label: "getBatchMaterialList");
+  }
+
+  Future deleteMaterial(String id) async {
+    try {
+      var isDeleted = await deleteById(Constants.deleteMeterial(id));
+      if (isDeleted) {
+        list.removeWhere((element) => element.id == id);
+      }
+      notifyListeners();
+      return isDeleted;
+    } catch (error) {
+      log("deleteMaterial", error: error, name: this.runtimeType.toString());
+      return false;
+    }
   }
 }

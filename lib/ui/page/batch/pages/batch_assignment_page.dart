@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/quiz/quiz_state.dart';
+import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/quiz/quiz_list_page.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
 import 'package:provider/provider.dart';
 
 class BatchAssignmentPage extends StatelessWidget {
-  const BatchAssignmentPage({Key key, this.model}) : super(key: key);
+  const BatchAssignmentPage({Key key, this.model, this.loader})
+      : super(key: key);
   final BatchModel model;
-  static MaterialPageRoute getRoute(BatchModel model) {
+  final CustomLoader loader;
+  static MaterialPageRoute getRoute(BatchModel model, CustomLoader loader) {
     return MaterialPageRoute(
-        builder: (_) => BatchAssignmentPage(
-              model: model,
-            ));
+        builder: (_) => BatchAssignmentPage(model: model, loader: loader));
   }
 
   Widget noQuiz(BuildContext context) {
@@ -31,7 +32,9 @@ class BatchAssignmentPage extends StatelessWidget {
                     color: PColors.gray,
                   )),
           SizedBox(height: 10),
-          Text("No Assignment is uploaded yet for this batch!!", style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+          Text("No Assignment is uploaded yet for this batch!!",
+              style: Theme.of(context).textTheme.bodyText1,
+              textAlign: TextAlign.center),
         ],
       ),
     );
@@ -44,7 +47,8 @@ class BatchAssignmentPage extends StatelessWidget {
         if (state.isBusy) {
           return Ploader();
         }
-        if (!(state.assignmentsList != null && state.assignmentsList.isNotEmpty)) {
+        if (!(state.assignmentsList != null &&
+            state.assignmentsList.isNotEmpty)) {
           return noQuiz(context);
         }
         return QuizListPage();
