@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
     final theme = Theme.of(context);
     return Container(
       width: AppTheme.fullWidth(context) - 32,
-      margin: EdgeInsets.symmetric(vertical: 32) + EdgeInsets.only(top: 16),
+      margin: EdgeInsets.symmetric(vertical: 16) + EdgeInsets.only(top: 32),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(15),
@@ -290,7 +290,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: <Widget>[
                       _form(context),
-                      SizedBox(height: 40),
                       _googleLogin(context),
                       SizedBox(height: 10),
                       SizedBox(

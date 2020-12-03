@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
+import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
 import 'package:flutter_pensil_app/resources/repository/teacher/teacher_repository.dart';
@@ -46,14 +45,19 @@ class VideoState extends BaseState {
       }
       assert(subject != null);
       var model = VideoModel(
-          title: title, description: description, subject: subject, videoUrl: videoUrl ?? "https://truetechpro.snovasys.io/dashboard-management/dashboard/42cf1a89-801e-407f-9eb0-aad1a186637e", batchId: batchId, thumbnailUrl: thumbnailUrl);
-      final getit = GetIt.instance;
+          title: title,
+          description: description,
+          subject: subject,
+          videoUrl: videoUrl ?? "",
+          batchId: batchId,
+          thumbnailUrl: thumbnailUrl);
       final repo = getit.get<TeacherRepository>();
 
       final data = await execute(() async {
         return await repo.addVideo(model);
       }, label: "addVideo");
       if (data != null) {
+        /// If video is uploaded
         if (file != null) {
           bool ok = await upload(data.id);
           isBusy = false;
@@ -63,6 +67,11 @@ class VideoState extends BaseState {
             return false;
           }
         }
+
+        /// If video link is used
+        else {
+          return true;
+        }
       }
       return false;
     } catch (error, strackTrace) {
@@ -71,6 +80,7 @@ class VideoState extends BaseState {
     }
   }
 
+  /// Upload video file to server
   Future<bool> upload(String id) async {
     return await execute(() async {
       isBusy = true;
@@ -80,6 +90,7 @@ class VideoState extends BaseState {
     }, label: "Upload Video");
   }
 
+  /// Fetch video list related to a batch from server
   Future getVideosList() async {
     await execute(() async {
       isBusy = true;
@@ -92,5 +103,19 @@ class VideoState extends BaseState {
       notifyListeners();
       isBusy = false;
     }, label: "getVideosList");
+  }
+
+  Future<bool> deleteVideo(String batchId) async {
+    try {
+      var isDeleted = await deleteById(Constants.deleteVideo(batchId));
+      if (isDeleted) {
+        list.removeWhere((element) => element.id == batchId);
+      }
+      notifyListeners();
+      return true;
+    } catch (error) {
+      log("deleteVideo", error: error, name: this.runtimeType.toString());
+      return false;
+    }
   }
 }

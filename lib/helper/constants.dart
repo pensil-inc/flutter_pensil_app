@@ -57,4 +57,8 @@ class Constants {
   static String deleteBatch(String batchId) {
     return "$batch/$batchId";
   }
+
+  static String deleteVideo(String batchId) {
+    return "$video/$batchId";
+  }
 }

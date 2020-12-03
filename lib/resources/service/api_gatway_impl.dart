@@ -188,13 +188,13 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<bool> deleteBatch(String batchId) async {
+  Future<bool> deleteBatch(String typeAndId) async {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
 
       await _dioClient.delete(
-        Constants.deleteBatch(batchId),
+        typeAndId,
         options: Options(headers: header),
       );
       return true;

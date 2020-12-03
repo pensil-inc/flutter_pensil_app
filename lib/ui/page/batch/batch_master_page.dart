@@ -297,7 +297,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
               controller: _tabController,
               children: [
                 BatchDetailPage(model: model),
-                BatchVideosPage(),
+                BatchVideosPage(loader: loader),
                 BatchAssignmentPage(),
                 BatchStudyMaterialPage()
               ],

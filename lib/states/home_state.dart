@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/helper/enum.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
@@ -103,7 +104,7 @@ class HomeState extends BaseState {
   Future<bool> deleteBatch(String batchId) async {
     try {
       final repo = getit.get<BatchRepository>();
-      var isDeleted = await repo.deleteBatch(batchId);
+      var isDeleted = await repo.deleteById(Constants.deleteBatch(batchId));
       if (isDeleted) {
         batchList.removeWhere((element) => element.id == batchId);
       }
