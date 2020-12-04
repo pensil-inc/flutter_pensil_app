@@ -31,7 +31,8 @@ abstract class ApiGateway {
   Future<List<VideoModel>> getVideosList(String batchId);
   Future<bool> uploadFile(File file, String id,
       {bool isVideo = false, bool isAnouncement = false});
-  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model);
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model,
+      {bool isEdit});
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
   Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId);
   Future<List<AssignmentModel>> getAssignmentList(String batchId);

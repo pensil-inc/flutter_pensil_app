@@ -4,6 +4,7 @@ import 'package:add_thumbnail/add_thumbnail.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
+import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
@@ -17,15 +18,35 @@ import 'package:provider/provider.dart';
 class UploadMaterialPage extends StatefulWidget {
   final String subject;
   final BatchMaterialState state;
-  const UploadMaterialPage({Key key, this.subject, this.state})
+  final BatchMaterialModel materialModel;
+  const UploadMaterialPage(
+      {Key key, this.subject, this.state, this.materialModel})
       : super(key: key);
   static MaterialPageRoute getRoute(String subject, String batchId,
-      {BatchMaterialState state}) {
+      {BatchMaterialState state, bool isEdit}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<BatchMaterialState>(
         create: (context) =>
             BatchMaterialState(subject: subject, batchId: batchId),
         child: UploadMaterialPage(subject: subject, state: state),
+      ),
+    );
+  }
+
+  static MaterialPageRoute getEditRoute(BatchMaterialModel materialModel,
+      {BatchMaterialState state, bool isEdit}) {
+    return MaterialPageRoute(
+      builder: (_) => ChangeNotifierProvider<BatchMaterialState>(
+        create: (context) => BatchMaterialState(
+          subject: materialModel.subject,
+          batchId: materialModel.batchId,
+          materialModel: materialModel,
+          isEditMode: true,
+        ),
+        child: UploadMaterialPage(
+            subject: materialModel.subject,
+            materialModel: materialModel,
+            state: state),
       ),
     );
   }
@@ -43,12 +64,13 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
   ValueNotifier<List<BatchModel>> batchList =
       ValueNotifier<List<BatchModel>>([]);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  List<String> urlList = ["https://www.youtube.com/watch?v=uv54ec8Pg1k"];
+  List<String> urlList = [""];
   @override
   void initState() {
-    _description = TextEditingController();
-    _title = TextEditingController();
-    _link = TextEditingController();
+    _description =
+        TextEditingController(text: widget.materialModel?.description ?? "");
+    _title = TextEditingController(text: widget.materialModel?.title ?? "");
+    _link = TextEditingController(text: widget.materialModel?.articleUrl ?? "");
     // batchList.value = Provider.of<HomeState>(context).batchList;
     super.initState();
   }
@@ -69,18 +91,18 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
             .copyWith(fontWeight: FontWeight.bold, fontSize: 16));
   }
 
-  Widget _secondaryButton(BuildContext context,
-      {String label, Function onPressed}) {
-    final theme = Theme.of(context);
-    return OutlineButton.icon(
-        onPressed: onPressed,
-        icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
-        label: Text(
-          label,
-          style: theme.textTheme.button
-              .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
-        ));
-  }
+  // Widget _secondaryButton(BuildContext context,
+  //     {String label, Function onPressed}) {
+  //   final theme = Theme.of(context);
+  //   return OutlineButton.icon(
+  //       onPressed: onPressed,
+  //       icon: Icon(Icons.add_circle, color: PColors.primary, size: 17),
+  //       label: Text(
+  //         label,
+  //         style: theme.textTheme.button
+  //             .copyWith(color: PColors.primary, fontWeight: FontWeight.bold),
+  //       ));
+  // }
 
   void pickFile() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
@@ -105,13 +127,23 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
     if (_link.text != null && _link.text.isNotEmpty) {
       state.setArticleUrl(_link.text);
     }
+
+    if (_link.text.isEmpty &&
+        state.file == null &&
+        state.materialModel.file == null) {
+      print("Add one resource");
+      return;
+    }
     isLoading.value = true;
 
     final isOk = await state.uploadMaterial(_title.text, _description.text);
     isLoading.value = false;
     if (isOk) {
-      Alert.sucess(context,
-          message: "Material added sucessfully!!", title: "Message");
+      String message = "Material added sucessfully!!";
+      if (state.isEditMode) {
+        message = "Material updated sucessfully!!";
+      }
+      Alert.sucess(context, message: message, title: "Message");
       await widget.state.getBatchMaterialList();
     } else {
       Alert.sucess(context,
@@ -251,11 +283,14 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
                   return SizedBox();
                 },
               ),
-              PFlatButton(
-                label: "Create",
-                isLoading: isLoading,
-                onPressed: saveVideo,
-              ).p16,
+              Consumer<BatchMaterialState>(builder: (context, state, child) {
+                return PFlatButton(
+                  label: state.isEditMode ? "Update" : "Create",
+                  isLoading: isLoading,
+                  onPressed: saveVideo,
+                ).p16;
+              }),
+
               SizedBox(height: 16),
             ],
           ),

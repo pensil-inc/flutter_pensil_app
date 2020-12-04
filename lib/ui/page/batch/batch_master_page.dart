@@ -299,7 +299,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
                 BatchDetailPage(model: model),
                 BatchVideosPage(loader: loader),
                 BatchAssignmentPage(loader: loader),
-                BatchStudyMaterialPage(loader: loader)
+                BatchStudyMaterialPage(model: model, loader: loader)
               ],
             ),
             if (widget.isTeacher)

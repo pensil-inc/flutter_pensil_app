@@ -359,12 +359,15 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model) async {
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model,
+      {bool isEdit = false}) async {
     try {
       final data = model.toJson();
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.post(Constants.material,
+      final endpoint =
+          isEdit ? Constants.crudMaterial(model.id) : Constants.material;
+      final response = await _dioClient.post(endpoint,
           data: data, options: Options(headers: header));
       final map = _dioClient.getJsonBody(response);
       print(map);

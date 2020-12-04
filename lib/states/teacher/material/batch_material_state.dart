@@ -8,9 +8,16 @@ import 'package:flutter_pensil_app/states/base_state.dart';
 import 'package:get_it/get_it.dart';
 
 class BatchMaterialState extends BaseState {
-  BatchMaterialState({String subject, String batchId}) {
+  BatchMaterialState({
+    String subject,
+    String batchId,
+    BatchMaterialModel materialModel,
+    bool isEditMode = false,
+  }) {
     this.batchId = batchId;
     this.subject = subject;
+    this.materialModel = materialModel ?? BatchMaterialModel();
+    this.isEditMode = isEditMode;
   }
   String batchId;
   String articleUrl;
@@ -18,6 +25,8 @@ class BatchMaterialState extends BaseState {
   String title;
   String subject;
   File file;
+  bool isEditMode = false;
+  BatchMaterialModel materialModel;
 
   /// Container all video list
   List<BatchMaterialModel> list;
@@ -39,7 +48,7 @@ class BatchMaterialState extends BaseState {
     final data = await execute(() async {
       assert(title != null);
       assert(subject != null);
-      var model = BatchMaterialModel(
+      var model = materialModel.copyWith(
           title: title,
           description: description,
           subject: subject,
@@ -47,15 +56,27 @@ class BatchMaterialState extends BaseState {
           articleUrl: fileUrl);
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-      return await repo.uploadMaterial(model);
+      return await repo.uploadMaterial(model, isEdit: isEditMode);
     }, label: "uploadMaterial");
+
+    /// If received data from api and we have material to upload
     if (data != null && file != null) {
       await upload(data.id);
       isBusy = false;
       return true;
-    } else if (fileUrl != null) {
-      isBusy = true;
-      return false;
+    }
+
+    /// In material edit mode file url is not null
+    /// It means a file is already avilable at server
+    else if (materialModel.file != null) {
+      isBusy = false;
+      return true;
+    }
+
+    /// If we have article Url
+    else if (fileUrl != null) {
+      isBusy = false;
+      return true;
     } else {
       isBusy = false;
       return false;
@@ -87,7 +108,7 @@ class BatchMaterialState extends BaseState {
 
   Future deleteMaterial(String id) async {
     try {
-      var isDeleted = await deleteById(Constants.deleteMeterial(id));
+      var isDeleted = await deleteById(Constants.crudMaterial(id));
       if (isDeleted) {
         list.removeWhere((element) => element.id == id);
       }

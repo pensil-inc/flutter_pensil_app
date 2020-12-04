@@ -62,7 +62,7 @@ class Constants {
     return "$video/$id";
   }
 
-  static String deleteMeterial(String id) {
+  static String crudMaterial(String id) {
     return "$material/$id";
   }
 }

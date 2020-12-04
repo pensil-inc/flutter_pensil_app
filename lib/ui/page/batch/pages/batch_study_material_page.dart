@@ -7,6 +7,7 @@ import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/material/upload_material.dart';
 import 'package:flutter_pensil_app/ui/page/batch/widget/tile_action_widget.dart';
 import 'package:flutter_pensil_app/ui/page/common/pdf_view.dart';
 import 'package:flutter_pensil_app/ui/page/common/web_view.page.dart';
@@ -95,7 +96,7 @@ class BatchStudyMaterialPage extends StatelessWidget {
             if (Provider.of<HomeState>(context).isTeacher)
               TileActionWidget(
                 onDelete: () => deleteVideo(context, model.id),
-                onEdit: () {},
+                onEdit: () => editMaterial(context, model),
               ),
           ],
         ));
@@ -144,8 +145,7 @@ class BatchStudyMaterialPage extends StatelessWidget {
     if (model.file != null || model.articleUrl != null) {
       if (model.articleUrl != null) {
         Utility.launchURL(context, model.articleUrl ?? model.file);
-      }
-      if (model.file.contains("pdf")) {
+      } else if (model.file.contains("pdf")) {
         Navigator.push(
             context, PdfViewPage.getRoute(model.file, title: model.title));
       } else {
@@ -169,6 +169,16 @@ class BatchStudyMaterialPage extends StatelessWidget {
       }
       loader.hideLoader();
     });
+  }
+
+  void editMaterial(context, BatchMaterialModel model) {
+    Navigator.push(
+      context,
+      UploadMaterialPage.getEditRoute(
+        model,
+        state: Provider.of<BatchMaterialState>(context, listen: false),
+      ),
+    );
   }
 
   @override

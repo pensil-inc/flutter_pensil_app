@@ -44,7 +44,8 @@ class TeacherRepository {
         isVideo: isVideo, isAnouncement: isAnouncement);
   }
 
-  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model) {
-    return gatway.uploadMaterial(model);
+  Future<BatchMaterialModel> uploadMaterial(BatchMaterialModel model,
+      {bool isEdit}) {
+    return gatway.uploadMaterial(model, isEdit: isEdit);
   }
 }
