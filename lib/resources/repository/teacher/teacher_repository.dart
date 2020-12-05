@@ -34,8 +34,8 @@ class TeacherRepository {
     return gatway.createPoll(model);
   }
 
-  Future<VideoModel> addVideo(VideoModel model) {
-    return gatway.addVideo(model);
+  Future<VideoModel> addVideo(VideoModel model, {bool isEdit}) {
+    return gatway.addVideo(model, isEdit: isEdit);
   }
 
   Future<bool> uploadFile(File file, String id,

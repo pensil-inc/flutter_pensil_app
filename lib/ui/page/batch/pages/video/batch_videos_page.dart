@@ -10,6 +10,7 @@ import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/video/add_video_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/video_player_pag2e.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/video_player_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/widget/tile_action_widget.dart';
@@ -106,7 +107,7 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
             if (Provider.of<HomeState>(context).isTeacher)
               TileActionWidget(
                 onDelete: () => deleteVideo(model.id),
-                onEdit: () {},
+                onEdit: () => editVideo(model),
               ),
           ],
         ));
@@ -181,6 +182,16 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
       }
       widget.loader.hideLoader();
     });
+  }
+
+  void editVideo(VideoModel model) {
+    Navigator.push(
+      context,
+      AddVideoPage.getEditRoute(
+        model,
+        state: Provider.of<VideoState>(context, listen: false),
+      ),
+    );
   }
 
   @override

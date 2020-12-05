@@ -13,7 +13,7 @@ abstract class ApiGateway {
   Future<dynamic> getUser();
   Future<bool> createBatch(BatchModel model);
   Future<AnnouncementModel> createAnnouncement(AnnouncementModel model);
-  Future<VideoModel> addVideo(VideoModel model);
+  Future<VideoModel> addVideo(VideoModel model, {bool isEdit});
   Future<ActorModel> login(ActorModel model);
   Future<bool> register(ActorModel model);
   Future<ActorModel> updateUser(ActorModel model);

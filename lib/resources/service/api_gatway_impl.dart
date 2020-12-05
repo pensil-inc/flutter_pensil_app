@@ -299,12 +299,13 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<VideoModel> addVideo(VideoModel model) async {
+  Future<VideoModel> addVideo(VideoModel model, {bool isEdit = false}) async {
     try {
       final data = model.toJson();
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      final response = await _dioClient.post(Constants.video,
+      final endpoint = isEdit ? Constants.crudVideo(model.id) : Constants.video;
+      final response = await _dioClient.post(endpoint,
           data: data, options: Options(headers: header));
       final map = _dioClient.getJsonBody(response);
       final value = VideoModel.fromJson(map["video"]);

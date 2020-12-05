@@ -8,9 +8,19 @@ import 'package:flutter_pensil_app/states/base_state.dart';
 import 'package:get_it/get_it.dart';
 
 class VideoState extends BaseState {
-  VideoState({String subject, String batchId}) {
+  VideoState(
+      {String subject,
+      String batchId,
+      bool isEditMode,
+      VideoModel videoModel}) {
     this.batchId = batchId;
     this.subject = subject;
+    this.isEditMode = isEditMode = false;
+    this.videoModel = videoModel ?? VideoModel();
+    if (videoModel != null) {
+      thumbnailUrl = videoModel.thumbnailUrl;
+      videoUrl = videoModel.videoUrl;
+    }
   }
   String batchId;
   String videoUrl;
@@ -18,6 +28,8 @@ class VideoState extends BaseState {
   String yTitle;
   String subject;
   File file;
+  bool isEditMode = false;
+  VideoModel videoModel;
 
   set setFile(File data) {
     file = data;
@@ -44,7 +56,7 @@ class VideoState extends BaseState {
         return false;
       }
       assert(subject != null);
-      var model = VideoModel(
+      var model = videoModel.copyWith(
           title: title,
           description: description,
           subject: subject,
@@ -54,7 +66,7 @@ class VideoState extends BaseState {
       final repo = getit.get<TeacherRepository>();
 
       final data = await execute(() async {
-        return await repo.addVideo(model);
+        return await repo.addVideo(model, isEdit: isEditMode);
       }, label: "addVideo");
       if (data != null) {
         /// If video is uploaded
@@ -107,7 +119,7 @@ class VideoState extends BaseState {
 
   Future<bool> deleteVideo(String videoId) async {
     try {
-      var isDeleted = await deleteById(Constants.deleteVideo(videoId));
+      var isDeleted = await deleteById(Constants.crudVideo(videoId));
       if (isDeleted) {
         list.removeWhere((element) => element.id == videoId);
       }
