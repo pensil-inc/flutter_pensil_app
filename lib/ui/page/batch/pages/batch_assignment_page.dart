@@ -51,7 +51,7 @@ class BatchAssignmentPage extends StatelessWidget {
             state.assignmentsList.isNotEmpty)) {
           return noQuiz(context);
         }
-        return QuizListPage();
+        return QuizListPage(loader: loader);
       },
     );
   }
