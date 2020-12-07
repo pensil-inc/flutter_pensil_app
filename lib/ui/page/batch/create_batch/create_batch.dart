@@ -1,3 +1,4 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/create_batch_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
+import 'package:flutter_pensil_app/ui/page/batch/create_batch/device_contacts_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/create_batch/search_student_delegate.dart';
 import 'package:flutter_pensil_app/ui/page/batch/create_batch/widget/add_students_widget.dart';
 import 'package:flutter_pensil_app/ui/page/batch/create_batch/widget/batch_time_slots.dart';
@@ -43,6 +45,7 @@ class _CreateBatchState extends State<CreateBatch> {
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
   ValueNotifier<bool> addSubjectLoading = ValueNotifier<bool>(false);
   ValueNotifier<List<ActorModel>> student = ValueNotifier<List<ActorModel>>([]);
+  ValueNotifier<List<Contact>> deviceContact = ValueNotifier<List<Contact>>([]);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
@@ -134,6 +137,14 @@ class _CreateBatchState extends State<CreateBatch> {
             Provider.of<CreateBatchStates>(context, listen: false), student));
   }
 
+  void selectFromDeviceContact() async {
+    final contacts = await Navigator.push(
+        context, AllContactsPage.getRoute(deviceContact.value));
+    if (contacts != null && contacts is List<Contact>) {
+      deviceContact.value = contacts;
+    }
+  }
+
   void addSubjects() async {
     await showDialog(
         context: context,
@@ -191,17 +202,19 @@ class _CreateBatchState extends State<CreateBatch> {
       return;
     }
     //validate Students
-    if (!(state.contactList != null && state.contactList.isNotEmpty)) if (state
-        .studentsList
-        .every((element) => !element.isSelected)) {
-      Utility.displaySnackbar(context,
-          msg: "Please Add students to batch", key: scaffoldKey);
-      return;
+    if (!(state.contactList != null && state.contactList.isNotEmpty) &&
+        deviceContact.value.isEmpty) {
+      if (state.studentsList.every((element) => !element.isSelected)) {
+        Utility.displaySnackbar(context,
+            msg: "Please Add students to batch", key: scaffoldKey);
+        return;
+      }
     }
 
     isLoading.value = true;
     state.setBatchName = _name.text;
     state.setBatchdescription = _description.text;
+    state.setDeviceSelectedContacts(deviceContact.value);
     final newBatch = await state.createBatch();
     isLoading.value = false;
     if (newBatch != null) {
@@ -311,6 +324,9 @@ class _CreateBatchState extends State<CreateBatch> {
                       color: theme.textTheme.subtitle2.color),
                 ).vP8,
                 SizedBox(height: 4),
+                _secondaryButton(context,
+                    label: "Pick Institute Student",
+                    onPressed: displayStudentsList),
                 if (student != null)
                   ValueListenableBuilder<List<ActorModel>>(
                       valueListenable: student,
@@ -328,8 +344,31 @@ class _CreateBatchState extends State<CreateBatch> {
                                     )).p(5))
                                 .toList());
                       }),
+                SizedBox(height: 12),
                 _secondaryButton(context,
-                    label: "Pick Student", onPressed: displayStudentsList),
+                    label: "Select contact from device",
+                    onPressed: selectFromDeviceContact),
+                if (deviceContact.value != null)
+                  ValueListenableBuilder<List<Contact>>(
+                      valueListenable: deviceContact,
+                      builder: (context, listenableList, chils) {
+                        if (listenableList == null) {
+                          return SizedBox();
+                        }
+                        return Wrap(
+                            children: listenableList
+                                .map((e) => CircleAvatar(
+                                    radius: 15,
+                                    child: Text(
+                                      e.displayName
+                                          .substring(0, 2)
+                                          .toUpperCase(),
+                                      style: theme.textTheme.caption.copyWith(
+                                          fontSize: 12,
+                                          color: theme.colorScheme.onPrimary),
+                                    )).p(5))
+                                .toList());
+                      }),
                 SizedBox(height: 10),
                 Consumer<CreateBatchStates>(builder: (context, state, child) {
                   return PFlatButton(

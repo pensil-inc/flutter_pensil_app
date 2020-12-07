@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
@@ -46,6 +47,9 @@ class CreateBatchStates extends BaseState {
   List<Subject> availableSubjects;
 
   List<String> contactList;
+
+  /// list of contacts which is selcted from mobile contacts list
+  List<String> deviceSelectedContacts;
 
   /// selected student's mobile list from availavle students
   List<BatchTimeSlotModel> timeSlots = [BatchTimeSlotModel.initial()];
@@ -143,6 +147,15 @@ class CreateBatchStates extends BaseState {
     notifyListeners();
   }
 
+  /// If any contact no is selcected from mobile contacts list then it should be added
+  void setDeviceSelectedContacts(List<Contact> list) {
+    if (list != null)
+      deviceSelectedContacts =
+          list.map((e) => e.phones.first.value.replaceAll(" ", "")).toList();
+    else
+      deviceSelectedContacts = [];
+  }
+
   bool checkSlotsVAlidations() {
     bool allGood = true;
     timeSlots.forEach((model) {
@@ -152,6 +165,7 @@ class CreateBatchStates extends BaseState {
     return allGood;
   }
 
+  /// If any time slot has default values then it should display error
   void checkSlotsModel(BatchTimeSlotModel model) {
     if (model.startTime == "Start time") {
       model.isValidStartEntry = false;
@@ -163,6 +177,27 @@ class CreateBatchStates extends BaseState {
     } else {
       model.isValidEndEntry = true;
     }
+
+    /// If slots has some time values then compare time
+    if (model.startTime != "Start time" && model.endTime != "End time") {
+      if (int.parse(model.startTime.split(":")[0]) >
+          int.parse(model.endTime.split(":")[0])) {
+        model.isValidEndEntry = false;
+      }
+
+      /// Compare for slots hours
+      /// Start hour should not be greater then endtime hour
+      if (int.parse(model.startTime.split(":")[0]) ==
+          int.parse(model.endTime.split(":")[0])) {
+        /// Compare for slots minutes
+        /// If start and end hors are equal then
+        /// End min should grater then start min
+        if (int.parse(model.startTime.split(":")[1]) >
+            int.parse(model.endTime.split(":")[1])) {
+          model.isValidEndEntry = false;
+        }
+      }
+    }
   }
 
   /// Create batch by calling api
@@ -172,7 +207,8 @@ class CreateBatchStates extends BaseState {
           .where((element) => element.isSelected)
           .map((e) => e.mobile);
       List<String> contacts = new List.from(contactList ?? List<String>())
-        ..addAll(mobile ?? List<String>());
+        ..addAll(mobile ?? List<String>())
+        ..addAll(deviceSelectedContacts);
       final model = editBatch.copyWith(
           name: batchName,
           description: description,

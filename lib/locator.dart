@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_pensil_app/config/config.dart';
@@ -16,19 +17,20 @@ import 'package:get_it/get_it.dart';
 void setUpDependency(Config config) {
   final serviceLocator = GetIt.instance;
 
-  // serviceLocator.registerSingleton<ErrorsProducer>(ErrorsProducer());
-  serviceLocator.registerSingleton<SharedPrefrenceHelper>(SharedPrefrenceHelper());
+  serviceLocator.registerSingleton<ContactsService>(ContactsService());
+  serviceLocator
+      .registerSingleton<SharedPrefrenceHelper>(SharedPrefrenceHelper());
   serviceLocator.registerSingleton(NotificationService(FirebaseMessaging()));
 
   /// Initilise nitificaion plugin
   final notifcationService = serviceLocator<NotificationService>();
-    notifcationService.initializeMessages();
-    notifcationService.configure();
+  notifcationService.initializeMessages();
+  notifcationService.configure();
 
   serviceLocator.registerSingleton<ApiGateway>(
     ApiGatewayImpl(
       DioClient(Dio(), baseEndpoint: config.apiBaseUrl, logging: true),
-      pref:GetIt.instance<SharedPrefrenceHelper>(),
+      pref: GetIt.instance<SharedPrefrenceHelper>(),
     ),
   );
   serviceLocator.registerFactory<SessionService>(
