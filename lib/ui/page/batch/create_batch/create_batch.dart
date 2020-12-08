@@ -141,6 +141,7 @@ class _CreateBatchState extends State<CreateBatch> {
     final contacts = await Navigator.push(
         context, AllContactsPage.getRoute(deviceContact.value));
     if (contacts != null && contacts is List<Contact>) {
+      deviceContact.value.clear();
       deviceContact.value = contacts;
     }
   }
