@@ -142,6 +142,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "680271036691-2c1c0bnap0lu1cp5a0uj5u90u9plp8ib.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pensil.successHaryanaApp",
+            "certificate_hash": "03ad72e22b6c5cc482743891b0445869f3c99f07"
+          }
+        },
+        {
           "client_id": "680271036691-dcpg5iiiuigm451figc8d91ca9pq3inf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
