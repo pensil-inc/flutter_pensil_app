@@ -1,6 +1,6 @@
 class Images {
-  static const String logo = 'assets/images/logo/logo.png';
-  static const String logoShaan = 'assets/images/logo/logo.png';
+  static const String logo = 'assets/images/logo/pensilLogo.png';
+  static const String logoShaan = 'assets/images/logo/shaan_tr_logo.png';
   static const String logoBramh = 'assets/images/logo/bramhAppLogo.png';
   static const String logoSucessHaryana =
       'assets/images/logo/successHaryanaLogo.png';
