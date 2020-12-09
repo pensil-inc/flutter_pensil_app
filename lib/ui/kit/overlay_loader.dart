@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/config/config.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 
 class CustomLoader {
@@ -99,7 +100,7 @@ class CustomScreenLoader extends StatelessWidget {
                     ),
               Center(
                 child: Image.asset(
-                  'assets/images/logo.png',
+                  AppConfig.of(context).config.appIcon,
                   height: 40,
                   width: 40,
                   fit: BoxFit.fitHeight,

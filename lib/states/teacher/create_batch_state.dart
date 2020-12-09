@@ -192,7 +192,7 @@ class CreateBatchStates extends BaseState {
         /// Compare for slots minutes
         /// If start and end hors are equal then
         /// End min should grater then start min
-        if (int.parse(model.startTime.split(":")[1]) >
+        if (int.parse(model.startTime.split(":")[1]) >=
             int.parse(model.endTime.split(":")[1])) {
           model.isValidEndEntry = false;
         }

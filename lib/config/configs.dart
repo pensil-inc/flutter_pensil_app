@@ -27,3 +27,11 @@ shaanAppConfig() => Config(
       apiLogging: false,
       diagnostic: false,
     );
+sucessHaryanaAppConfig() => Config(
+      appName: 'Success Haryana',
+      appIcon: Images.logoSucessHaryana,
+      apiBaseUrl: Constants.sucessHaryanaAppBaseUrl,
+      appToken: '',
+      apiLogging: false,
+      diagnostic: false,
+    );

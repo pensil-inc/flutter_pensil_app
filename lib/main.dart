@@ -10,11 +10,12 @@ void main() async {
   final config = devConfig();
   final shaanConfig = shaanAppConfig();
   final bramConfig = bramhAppConfig();
-  setUpDependency(config);
+  final sucessHaryanaConfig = sucessHaryanaAppConfig();
+  setUpDependency(sucessHaryanaConfig);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final configuredApp = AppConfig(
-    config: config,
+    config: sucessHaryanaConfig,
     child: PensilApp(home: SplashPage()),
   );
   runApp(configuredApp);
