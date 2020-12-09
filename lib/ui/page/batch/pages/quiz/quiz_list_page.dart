@@ -58,6 +58,9 @@ class _QuizListPageState extends State<QuizListPage> {
                 ],
               ),
             ).ripple(() {
+              if (Provider.of<HomeState>(context, listen: false).isTeacher) {
+                return;
+              }
               Alert.dialog(
                 context,
                 title: model.title,

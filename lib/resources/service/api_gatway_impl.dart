@@ -173,10 +173,9 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       var token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      String endpoint =
-          await pref.isStudent() ? Constants.studentBatch : Constants.batch;
+      bool isStudent = await pref.isStudent();
       var response = await _dioClient.get(
-        endpoint,
+        Constants.getMyBatches(isStudent),
         options: Options(headers: header),
       );
       var json = _dioClient.getJsonBody(response);
@@ -221,11 +220,11 @@ class ApiGatewayImpl implements ApiGateway {
     try {
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      String endpoint = await pref.isStudent()
-          ? Constants.studentAnnouncements
-          : Constants.annoucenment;
-      final response =
-          await _dioClient.get(endpoint, options: Options(headers: header));
+      bool isStudent = await pref.isStudent();
+
+      final response = await _dioClient.get(
+          Constants.getMyAnnouncement(isStudent),
+          options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = AnnouncementListResponse.fromJson(json);
       return model.announcements;
@@ -419,8 +418,9 @@ class ApiGatewayImpl implements ApiGateway {
       assert(batchId != null);
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
+      var isStudent = await pref.isStudent();
       final response = await _dioClient.get(
-          Constants.getBatchAssignmentList(batchId),
+          Constants.getBatchAssignmentList(batchId, isStudent),
           options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = QuizRepsonseModel.fromJson(json);

@@ -51,7 +51,7 @@ class _TimerState extends State<Timer> with TickerProviderStateMixin {
         '${anticlockTimer.inMinutes.remainder(60).toString()}:${anticlockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
     antotimerText = antotimerText.replaceAll("-", "");
     widget.timeTaken(antotimerText + " min");
-    print(antotimerText);
+    // print(antotimerText);
     Duration clockTimer = Duration(seconds: animation.value);
     String timerText =
         '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';

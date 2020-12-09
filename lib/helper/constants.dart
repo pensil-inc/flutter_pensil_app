@@ -28,6 +28,14 @@ class Constants {
   static const String studentAnnouncements = student + "/my-announcements";
   static const String studentPolls = student + "/my-polls";
 
+  static getMyBatches(bool isStudent) {
+    return isStudent ? studentBatch : Constants.batch;
+  }
+
+  static String getMyAnnouncement(bool isStudent) {
+    return isStudent ? studentAnnouncements : annoucenment;
+  }
+
   static String getBatchMaterialList(String batchId) {
     return "$batch/$batchId/$material";
   }
@@ -40,8 +48,10 @@ class Constants {
     return "$batch/$batchId/$annoucenment";
   }
 
-  static String getBatchAssignmentList(String batchId) {
-    return "$batch/$batchId/$assignment";
+  static String getBatchAssignmentList(String batchId, bool isStudent) {
+    return isStudent
+        ? "student/$batch/$batchId/$assignment"
+        : "$batch/$batchId/$assignment";
   }
 
   static String getBatchAssignmentDetail(String batchId, String assignmentId) {
