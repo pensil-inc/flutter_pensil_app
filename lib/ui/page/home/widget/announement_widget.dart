@@ -5,6 +5,7 @@ import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/image_viewer.dart';
+import 'package:flutter_pensil_app/ui/widget/url_Text.dart';
 
 class AnnouncementWidget extends StatelessWidget {
   const AnnouncementWidget(
@@ -42,7 +43,7 @@ class AnnouncementWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(model.description),
+                  UrlText(text: model.description),
                   SizedBox(height: 8),
                   if (model.image != null && model.image.isNotEmpty) ...[
                     CachedNetworkImage(imageUrl: model.image, height: 120)
