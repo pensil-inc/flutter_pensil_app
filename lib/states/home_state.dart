@@ -50,8 +50,11 @@ class HomeState extends BaseState {
     try {
       final repo = getit.get<BatchRepository>();
       polls = await repo.getPollList();
-      polls.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      notifyListeners();
+      if (polls != null && polls.isNotEmpty) {
+        polls.removeWhere((poll) => poll.endTime.isBefore(DateTime.now()));
+        polls.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        notifyListeners();
+      }
     } catch (error) {
       log("getPollList", error: error, name: this.runtimeType.toString());
     }
