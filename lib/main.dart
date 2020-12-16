@@ -7,7 +7,7 @@ import 'package:flutter_pensil_app/ui/app.dart';
 import 'package:flutter_pensil_app/ui/page/splash.dart';
 
 void main() async {
-  final config = Configs.shaanAppConfig();
+  final config = Configs.devConfig();
 
   setUpDependency(config);
   WidgetsFlutterBinding.ensureInitialized();
