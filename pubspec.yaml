@@ -52,11 +52,17 @@ dependencies:
   url_launcher: ^5.7.2
   webview_flutter: ^0.3.22+1
   yoyo_player: ^0.1.0
+  freezed_annotation: ^0.12.0
+  json_annotation: ^3.1.1
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  build_runner: ^1.10.4
+  freezed: ^0.12.2
+  json_serializable: ^3.5.0
 
 flutter_icons:
   ios: true
