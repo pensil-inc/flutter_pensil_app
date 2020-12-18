@@ -331,8 +331,7 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<bool> uploadFile(File file, String id,
-      {bool isVideo = false, bool isAnouncement = false}) async {
+  Future<bool> uploadFile(File file, String id, {String endpoint}) async {
     try {
       String fileName = file.path.split('/').last;
 
@@ -345,12 +344,7 @@ class ApiGatewayImpl implements ApiGateway {
 
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      String path = isAnouncement
-          ? Constants.annoucenment
-          : isVideo
-              ? Constants.video
-              : Constants.material;
-      await _dioClient.post(path + "/$id/upload",
+      await _dioClient.post(endpoint,
           data: data, options: Options(headers: header));
       return true;
     } catch (error) {

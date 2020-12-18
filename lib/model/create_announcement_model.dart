@@ -36,6 +36,7 @@ class AnnouncementModel {
       this.description,
       this.isForAll,
       this.image,
+      this.file,
       this.batches,
       this.createdAt,
       this.owner});
@@ -44,6 +45,7 @@ class AnnouncementModel {
   final String title;
   final bool isForAll;
   final String image;
+  final String file;
   final List<String> batches;
   final DateTime createdAt;
   final ActorModel owner;
@@ -59,6 +61,7 @@ class AnnouncementModel {
         description: json["description"] == null ? null : json["description"],
         title: json["title"] == null ? null : json["title"],
         image: json["image"] == null ? null : json["image"],
+        file: json["file"] == null ? null : json["file"],
         isForAll: json["isForAll"] == null ? null : json["isForAll"],
         batches: json["batches"] == null
             ? null
@@ -74,6 +77,7 @@ class AnnouncementModel {
         "id": id == null ? null : id,
         "title": title == null ? null : title,
         "image": image == null ? null : image,
+        "file": file == null ? null : file,
         "description": description == null ? null : description,
         "isForAll": isForAll == null ? null : isForAll,
         "batches":

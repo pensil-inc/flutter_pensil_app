@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
@@ -9,18 +10,31 @@ import 'package:get_it/get_it.dart';
 
 class AnnouncementState extends BaseState {
   final String batchId;
-  File file;
+  File imagefile;
+  File docfile;
   bool isForAll = true;
   List<AnnouncementModel> batchAnnouncementList;
 
   AnnouncementState({this.batchId});
   set setImageForAnnouncement(File io) {
-    file = io;
+    imagefile = io;
+    docfile = null;
+    notifyListeners();
+  }
+
+  set setDocForAnnouncement(File io) {
+    docfile = io;
+    imagefile = null;
     notifyListeners();
   }
 
   void removeAnnouncementImage() {
-    file = null;
+    imagefile = null;
+    notifyListeners();
+  }
+
+  void removeAnnouncementDoc() {
+    docfile = null;
     notifyListeners();
   }
 
@@ -66,7 +80,7 @@ class AnnouncementState extends BaseState {
       final repo = getit.get<BatchRepository>();
       final data = await repo.createAnnouncement(model);
       if (data != null) {
-        if (file != null) {
+        if (imagefile != null || docfile != null) {
           var ok = await upload(
             data.id,
           );
@@ -86,11 +100,15 @@ class AnnouncementState extends BaseState {
   }
 
   Future<bool> upload(String id) async {
+    String endpoint = imagefile != null
+        ? Constants.uploadImageInAnnouncement(id)
+        : Constants.uploadDocInAnnouncement(id);
     return await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-      return await repo.uploadFile(file, id, isAnouncement: true);
+      return await repo.uploadFile(imagefile ?? docfile, id,
+          endpoint: endpoint);
     }, label: "Upload Image");
   }
 }

@@ -94,7 +94,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
             list, Provider.of<HomeState>(context, listen: false), batchList));
   }
 
-  void pickFile() async {
+  void pickImage() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       type: FileType.image,
     );
@@ -102,6 +102,18 @@ class _CreateBatchState extends State<CreateAnnouncement> {
       PlatformFile file = result.files.first;
       final state = Provider.of<AnnouncementState>(context, listen: false);
       state.setImageForAnnouncement = File(file.path);
+    }
+  }
+
+  void pickFile() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'doc', 'xlsx', 'xls'],
+    );
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      final state = Provider.of<AnnouncementState>(context, listen: false);
+      state.setDocForAnnouncement = File(file.path);
     }
   }
 
@@ -212,7 +224,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
 
                 Consumer<AnnouncementState>(
                   builder: (context, state, child) {
-                    if (state.file != null)
+                    if (state.imagefile != null)
                       return Stack(
                         children: [
                           Container(
@@ -222,7 +234,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(
-                                image: FileImage(state.file),
+                                image: FileImage(state.imagefile),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -268,12 +280,82 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                                           fontSize: 12, color: PColors.gray)),
                             ],
                           ),
-                        ).ripple(pickFile),
-                        SizedBox(height: 150),
+                        ).ripple(pickImage),
+                        // SizedBox(height: 15),
                       ],
                     );
                   },
                 ),
+                SizedBox(height: 10),
+                Text("---------- OR ----------",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontSize: 12, color: PColors.gray))
+                    .alignCenter,
+                SizedBox(height: 10),
+                Container(
+                  width: AppTheme.fullWidth(context) - 32,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  decoration: AppTheme.outline(context),
+                  child: Column(
+                    children: <Widget>[
+                      Text("Browse file",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(fontWeight: FontWeight.bold)),
+                      Image.asset(Images.uploadVideo, height: 25).vP16,
+                      Text("File should be PDF, DOCX, Sheet, Image",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(fontSize: 12, color: PColors.gray))
+                    ],
+                  ),
+                ).ripple(pickFile),
+                Consumer<AnnouncementState>(
+                  builder: (context, state, child) {
+                    if (state.docfile != null) {
+                      return SizedBox(
+                        height: 65,
+                        width: AppTheme.fullWidth(context),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                SizedBox(
+                                    width: 50,
+                                    child: Image.asset(
+                                      Images.getfiletypeIcon(
+                                          state.docfile.path.split(".").last),
+                                      height: 30,
+                                    )),
+                                Text(state.docfile.path.split("/").last)
+                                    .extended,
+                                // Spacer(),
+                                IconButton(
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(Icons.cancel),
+                                    onPressed: state.removeAnnouncementDoc)
+                              ],
+                            ),
+                            Container(
+                              height: 5,
+                              margin: EdgeInsets.symmetric(horizontal: 16),
+                              width: AppTheme.fullWidth(context),
+                              decoration: BoxDecoration(
+                                  color: Color(0xff0CC476),
+                                  borderRadius: BorderRadius.circular(20)),
+                            )
+                          ],
+                        ),
+                      ).vP8;
+                    }
+                    return SizedBox();
+                  },
+                ),
+                SizedBox(height: 40),
                 PFlatButton(
                   label: "Create",
                   isLoading: isLoading,

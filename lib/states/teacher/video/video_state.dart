@@ -94,11 +94,12 @@ class VideoState extends BaseState {
 
   /// Upload video file to server
   Future<bool> upload(String id) async {
+    String endpoint = Constants.video + "/$id/upload";
     return await execute(() async {
       isBusy = true;
       final getit = GetIt.instance;
       final repo = getit.get<TeacherRepository>();
-      return await repo.uploadFile(file, id, isVideo: true);
+      return await repo.uploadFile(file, id, endpoint: endpoint);
     }, label: "Upload Video");
   }
 

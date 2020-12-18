@@ -53,6 +53,13 @@ class AnnouncementWidget extends StatelessWidget {
                     }),
                     SizedBox(height: 8),
                   ],
+                  if (model.file != null)
+                    RotatedBox(
+                      quarterTurns: 1,
+                      child: Icon(Icons.attach_file_outlined).ripple(() {
+                        Utility.launchOnWeb(model.file);
+                      }),
+                    ).alignCenterRight,
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Row(

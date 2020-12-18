@@ -48,6 +48,14 @@ class Constants {
     return "$batch/$batchId/$annoucenment";
   }
 
+  static String uploadDocInAnnouncement(String announcementId) {
+    return "$annoucenment/$announcementId/doc/upload";
+  }
+
+  static String uploadImageInAnnouncement(String announcementId) {
+    return "$annoucenment/$announcementId/upload";
+  }
+
   static String getBatchAssignmentList(String batchId, bool isStudent) {
     return isStudent
         ? "student/$batch/$batchId/$assignment"

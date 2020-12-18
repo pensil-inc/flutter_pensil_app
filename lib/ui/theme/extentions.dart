@@ -68,7 +68,7 @@ extension CornerRadius on Widget {
         borderRadius: BorderRadius.all(Radius.circular(1000)),
         child: this,
       );
-  ClipRRect  cornerRadius(double value) => ClipRRect(
+  ClipRRect cornerRadius(double value) => ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(value)),
         child: this,
       );
@@ -116,12 +116,17 @@ extension ExAlignment on Widget {
         child: this,
         alignment: Alignment.bottomLeft,
       );
+  Widget get alignCenterRight => Align(
+        child: this,
+        alignment: Alignment.centerRight,
+      );
 }
-extension StringHelper on String{
-  String takeOnly(int value){
-    if(this != null && this.length >=value){
-      return this.substring(0,value);
-    }else{
+
+extension StringHelper on String {
+  String takeOnly(int value) {
+    if (this != null && this.length >= value) {
+      return this.substring(0, value);
+    } else {
       return this;
     }
   }
