@@ -1,5 +1,6 @@
 import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/model/batch_timeline_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
@@ -83,6 +84,10 @@ class BatchRepository {
 
   Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId) {
     return gatway.getBatchAnnouncemantList(batchId);
+  }
+
+  Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId) {
+    return gatway.getBatchDetailTimeLine(batchId);
   }
 
   Future<List<AssignmentModel>> getAssignmentList(String batchId) {

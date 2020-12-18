@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
+import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
+import 'package:flutter_pensil_app/model/create_announcement_model.dart';
+import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
+import 'package:flutter_pensil_app/states/teacher/batch_detail_state.dart';
+import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/detail/student_list.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/material/widget/batch_material_card.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/video/widget/batch_video_Card.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_avatar.dart';
 import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
 import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_pensil_app/ui/theme/theme.dart';
 
 class BatchDetailPage extends StatelessWidget {
-  const BatchDetailPage({Key key, this.model}) : super(key: key);
+  const BatchDetailPage({Key key, this.model, this.loader}) : super(key: key);
   final BatchModel model;
+  final CustomLoader loader;
   static MaterialPageRoute getRoute(BatchModel model) {
-    return MaterialPageRoute(
-        builder: (_) => BatchDetailPage(
-              model: model,
-            ));
+    return MaterialPageRoute(builder: (_) => BatchDetailPage(model: model));
   }
 
   Widget _title(context, String text, {double fontSize = 22}) {
@@ -148,6 +154,33 @@ class BatchDetailPage extends StatelessWidget {
             return SliverToBoxAdapter();
           },
         ),
+        // Batch video, announcement, study material timeline
+        Consumer<BatchDetailState>(builder: (context, state, child) {
+          if (state.timeLineList != null) {
+            return SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final model = state.timeLineList[index];
+                if (model.datum is VideoModel) {
+                  return BatchVideoCard(model: model.datum, loader: loader)
+                      .hP16
+                      .vP4;
+                }
+                if (model.datum is AnnouncementModel) {
+                  return AnnouncementWidget(model.datum).vP4;
+                }
+                if (model.datum is BatchMaterialModel) {
+                  return BatchMaterialCard(model: model.datum, loader: loader)
+                      .hP16
+                      .vP4;
+                }
+                print(
+                    "Unknown item found on batch timeline\n Type: ${model.type}");
+                return SizedBox();
+              }, childCount: state.timeLineList.length),
+            );
+          }
+          return SliverToBoxAdapter();
+        }),
         SliverToBoxAdapter(child: SizedBox(height: 70))
       ],
     );

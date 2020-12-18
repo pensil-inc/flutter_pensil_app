@@ -36,6 +36,12 @@ class Constants {
     return isStudent ? studentAnnouncements : annoucenment;
   }
 
+  static String getMyBatchDetailTimeLine(bool isStudent, String batchId) {
+    return isStudent
+        ? "$student/$batch/$batchId/timeline"
+        : "$batch/$batchId/timeline";
+  }
+
   static String getBatchMaterialList(String batchId) {
     return "$batch/$batchId/$material";
   }

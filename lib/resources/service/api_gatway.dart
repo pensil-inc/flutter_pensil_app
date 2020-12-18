@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/model/batch_timeline_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
@@ -35,6 +36,7 @@ abstract class ApiGateway {
   Future<List<BatchMaterialModel>> getBatchMaterialList(String batchId);
   Future<List<AnnouncementModel>> getBatchAnnouncemantList(String batchId);
   Future<List<AssignmentModel>> getAssignmentList(String batchId);
+  Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId);
   Future<QuizDetailModel> getAssignmentDetailList(
       String batchId, String assgnmentId);
   Future<PollModel> castVoteOnPoll(String pollId, String vote);

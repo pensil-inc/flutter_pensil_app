@@ -6,6 +6,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/quiz/quiz_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
+import 'package:flutter_pensil_app/states/teacher/batch_detail_state.dart';
 import 'package:flutter_pensil_app/states/teacher/create_batch_state.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
@@ -14,7 +15,7 @@ import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
 import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart';
 import 'package:flutter_pensil_app/ui/page/batch/create_batch/create_batch.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/batch_assignment_page.dart';
-import 'package:flutter_pensil_app/ui/page/batch/pages/batch_study_material_page.dart';
+import 'package:flutter_pensil_app/ui/page/batch/pages/material/batch_study_material_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/detail/batch_detail_page.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/material/upload_material.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/add_video_page.dart';
@@ -35,6 +36,8 @@ class BatchMasterDetailPage extends StatefulWidget {
       builder: (_) => MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => VideoState(batchId: model.id)),
+          ChangeNotifierProvider(
+              create: (_) => BatchDetailState(batchId: model.id)),
           ChangeNotifierProvider(
               create: (_) => BatchMaterialState(batchId: model.id)),
           ChangeNotifierProvider(
@@ -85,6 +88,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
       Provider.of<AnnouncementState>(context, listen: false)
           .getBatchAnnouncementList();
       Provider.of<QuizState>(context, listen: false).getQuizList();
+      Provider.of<BatchDetailState>(context, listen: false).getBatchTimeLine();
     });
     super.initState();
   }
@@ -296,7 +300,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
             TabBarView(
               controller: _tabController,
               children: [
-                BatchDetailPage(model: model),
+                BatchDetailPage(model: model, loader: loader),
                 BatchVideosPage(loader: loader),
                 BatchAssignmentPage(loader: loader),
                 BatchStudyMaterialPage(model: model, loader: loader)

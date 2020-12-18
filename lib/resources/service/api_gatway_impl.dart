@@ -5,6 +5,7 @@ import 'package:flutter_pensil_app/helper/constants.dart';
 import 'package:flutter_pensil_app/helper/shared_prefrence_helper.dart';
 import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/model/batch_timeline_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/notification_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
@@ -228,6 +229,24 @@ class ApiGatewayImpl implements ApiGateway {
       var json = _dioClient.getJsonBody(response);
       final model = AnnouncementListResponse.fromJson(json);
       return model.announcements;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<BatchTimeline>> getBatchDetailTimeLine(String batchId) async {
+    try {
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      bool isStudent = await pref.isStudent();
+
+      final response = await _dioClient.get(
+          Constants.getMyBatchDetailTimeLine(isStudent, batchId),
+          options: Options(headers: header));
+      var json = _dioClient.getJsonBody(response);
+      final model = BatchTimelineResponse.fromJson(json);
+      return model.timeline;
     } catch (error) {
       throw error;
     }
