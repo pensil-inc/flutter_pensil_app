@@ -10,6 +10,7 @@ import 'package:flutter_pensil_app/ui/page/home/home_Scaffold.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/batch_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
+import 'package:flutter_pensil_app/ui/page/poll/View_all_poll_page.dart';
 import 'package:flutter_pensil_app/ui/page/poll/create_poll.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/fab/animated_fab.dart';
@@ -113,6 +114,16 @@ class _TeacherHomePageState extends State<TeacherHomePage>
       child: Column(
         children: <Widget>[
           FabButton(
+            icon: Images.megaphone,
+            text: 'Create Poll',
+            animationValue: 3,
+            translateButton: _translateButton,
+            onPressed: () {
+              animate();
+              Navigator.push(context, CreatePoll.getRoute());
+            },
+          ),
+          FabButton(
             icon: Images.peopleWhite,
             text: 'Create Batch',
             animationValue: 2,
@@ -209,16 +220,6 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                 ),
               ),
             if (state.batchList != null && state.batchList.isNotEmpty)
-              // SliverList(
-              //   delegate: SliverChildBuilderDelegate(
-              //     (context, index) {
-              //       if (index == 0)
-              //         return _title("${state.batchList.length} Batches");
-              //       return BatchWidget(state.batchList[index - 1]);
-              //     },
-              //     childCount: state.batchList.length + 1,
-              //   ),
-              // ),
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,19 +241,28 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                   ],
                 ),
               ),
-            if (state.polls != null)
+            if (state.polls != null && state.allPolls != null) ...[
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    SizedBox(height: 16),
+                    Divider(),
+                  ],
+                ),
+              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     if (index == 0)
                       return Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           _title("Poll"),
                           OutlineButton(
                             onPressed: () {
-                              Navigator.push(context, CreatePoll.getRoute());
+                              Navigator.push(
+                                  context, ViewAllPollPage.getRoute());
                             },
                             textColor: Theme.of(context).primaryColor,
                             highlightedBorderColor:
@@ -261,7 +271,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                                 color: Theme.of(context).primaryColor),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4)),
-                            child: Text("Create Poll"),
+                            child: Text("View All"),
                           ).hP16
                         ],
                       );
@@ -270,6 +280,10 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                   childCount: state.polls.length + 1,
                 ),
               ),
+              SliverToBoxAdapter(
+                child: Divider(),
+              ),
+            ],
             if (state.announcementList != null &&
                 state.announcementList.isNotEmpty)
               SliverList(

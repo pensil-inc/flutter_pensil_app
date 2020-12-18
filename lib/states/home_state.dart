@@ -14,6 +14,7 @@ class HomeState extends BaseState {
   List<BatchModel> batchList;
   List<AnnouncementModel> announcementList;
   List<PollModel> polls;
+  List<PollModel> allPolls;
   String userId;
   Future<ActorModel> user;
   bool isTeacher = true;
@@ -51,6 +52,7 @@ class HomeState extends BaseState {
       final repo = getit.get<BatchRepository>();
       polls = await repo.getPollList();
       if (polls != null && polls.isNotEmpty) {
+        allPolls = List.from(polls);
         polls.removeWhere((poll) => poll.endTime.isBefore(DateTime.now()));
         polls.sort((a, b) => b.createdAt.compareTo(a.createdAt));
         notifyListeners();

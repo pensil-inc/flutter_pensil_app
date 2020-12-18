@@ -9,6 +9,7 @@ import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/batch_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
 import 'package:flutter_pensil_app/ui/page/notification/notifications_page.dart';
+import 'package:flutter_pensil_app/ui/page/poll/View_all_poll_page.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_loader.dart';
 import 'package:flutter_pensil_app/ui/widget/p_title_text.dart';
@@ -260,18 +261,50 @@ class _StudentHomePageState extends State<StudentHomePage>
                   ],
                 ),
               ),
-            if (state.polls != null && state.polls.isNotEmpty)
+            if (state.polls != null && state.allPolls != null) ...[
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    SizedBox(height: 16),
+                    Divider(),
+                  ],
+                ),
+              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    if (index == 0) return _title("Today's Poll");
-
+                    if (index == 0)
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          PTitleText("Poll").hP16,
+                          OutlineButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context, ViewAllPollPage.getRoute());
+                            },
+                            textColor: Theme.of(context).primaryColor,
+                            highlightedBorderColor:
+                                Theme.of(context).primaryColor,
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                            child: Text("View All"),
+                          ).hP16
+                        ],
+                      );
                     return PollWidget(
                         model: state.polls[index - 1], hideFinishButton: false);
                   },
                   childCount: state.polls.length + 1,
                 ),
               ),
+              SliverToBoxAdapter(
+                child: Divider(),
+              ),
+            ],
             if (state.announcementList != null &&
                 state.announcementList.isNotEmpty)
               SliverList(
