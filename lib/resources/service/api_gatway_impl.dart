@@ -33,7 +33,6 @@ class ApiGatewayImpl implements ApiGateway {
   Future<bool> createBatch(BatchModel model) async {
     try {
       final data = model.toJson();
-      print(data);
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
       var endpoint = model.id == null
@@ -383,7 +382,6 @@ class ApiGatewayImpl implements ApiGateway {
       final response = await _dioClient.post(endpoint,
           data: data, options: Options(headers: header));
       final map = _dioClient.getJsonBody(response);
-      print(map);
       final ma = BatchMaterialModel.fromJson(map["material"]);
       return ma;
     } catch (error) {

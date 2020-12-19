@@ -4,7 +4,7 @@ import 'package:flutter_pensil_app/config/config.dart';
 import 'package:flutter_pensil_app/config/configs.dart';
 import 'package:flutter_pensil_app/locator.dart';
 import 'package:flutter_pensil_app/ui/app.dart';
-import 'package:flutter_pensil_app/ui/page/splash.dart';
+import 'package:flutter_pensil_app/ui/page/common/splash.dart';
 
 void main() async {
   final config = Configs.devConfig();

@@ -33,8 +33,8 @@ void setUpDependency(Config config) {
       pref: GetIt.instance<SharedPrefrenceHelper>(),
     ),
   );
-  serviceLocator.registerFactory<SessionService>(
-    () => SessionServiceImpl(
+  serviceLocator.registerSingleton<SessionService>(
+    SessionServiceImpl(
       GetIt.instance<ApiGateway>(),
       GetIt.instance<SharedPrefrenceHelper>(),
     ),
