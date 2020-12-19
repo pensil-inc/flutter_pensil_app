@@ -88,6 +88,10 @@ class Constants {
     return "$video/$id";
   }
 
+  static String crudAnnouncement(String id) {
+    return "$annoucenment/$id";
+  }
+
   static String crudMaterial(String id) {
     return "$material/$id";
   }

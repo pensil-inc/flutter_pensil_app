@@ -100,9 +100,9 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
   @override
   void dispose() {
     showFabButton.dispose();
-    if(_animationController != null)
-    _animationController.dispose();
+    if (_animationController != null) _animationController.dispose();
     _tabController.dispose();
+    if (_controller != null) _controller.dispose();
     super.dispose();
   }
 

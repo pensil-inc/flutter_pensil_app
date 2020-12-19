@@ -40,7 +40,7 @@ class HomeScaffold<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: Image.asset(AppConfig.of(context).config.appIcon),
+          leading: Image.asset(AppConfig.of(context).config.appIcon).p(8),
           title: Title(
               color: PColors.black,
               child: Text(AppConfig.of(context).config.appName)),

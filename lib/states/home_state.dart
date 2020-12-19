@@ -120,4 +120,20 @@ class HomeState extends BaseState {
       return false;
     }
   }
+
+  Future<bool> deleteAnnouncement(String announcementId) async {
+    try {
+      var isDeleted =
+          await deleteById(Constants.crudAnnouncement(announcementId));
+      if (isDeleted) {
+        announcementList.removeWhere((element) => element.id == announcementId);
+      }
+      notifyListeners();
+      return isDeleted;
+    } catch (error) {
+      log("deleteAnnouncement",
+          error: error, name: this.runtimeType.toString());
+      return false;
+    }
+  }
 }

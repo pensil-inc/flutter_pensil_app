@@ -111,4 +111,10 @@ class AnnouncementState extends BaseState {
           endpoint: endpoint);
     }, label: "Upload Image");
   }
+
+  void onAnnouncementDeleted(AnnouncementModel model) {
+    if (model == null) return;
+    batchAnnouncementList.removeWhere((element) => element.id == model.id);
+    notifyListeners();
+  }
 }

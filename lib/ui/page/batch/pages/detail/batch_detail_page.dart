@@ -6,6 +6,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
+import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
 import 'package:flutter_pensil_app/states/teacher/batch_detail_state.dart';
 import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
@@ -62,6 +63,11 @@ class BatchDetailPage extends StatelessWidget {
                     ))
                 .toList())
         .p16;
+  }
+
+  void onAnnouncementDeleted(BuildContext context, AnnouncementModel model) {
+    Provider.of<AnnouncementState>(context, listen: false)
+        .onAnnouncementDeleted(model);
   }
 
   @override
@@ -145,7 +151,11 @@ class BatchDetailPage extends StatelessWidget {
                               fontSize: 18)
                           .p16;
                     return AnnouncementWidget(
-                        state.batchAnnouncementList[index - 1]);
+                        state.batchAnnouncementList[index - 1],
+                        isTeacher: Provider.of<HomeState>(context).isTeacher,
+                        loader: loader,
+                        onAnnouncementDeleted: (model) =>
+                            onAnnouncementDeleted(context, model));
                   },
                   childCount: state.batchAnnouncementList.length + 1,
                 ),

@@ -3,6 +3,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/states/auth/auth_state.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
+import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
 import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart';
 import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/batch/create_batch/create_batch.dart';
@@ -36,6 +37,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
   bool isOpened = false;
   AnimationController _animationController;
   Animation<double> _animateIcon;
+  CustomLoader loader;
   Curve _curve = Curves.easeOut;
   Animation<double> _translateButton;
   ValueNotifier<bool> showFabButton = ValueNotifier<bool>(false);
@@ -44,6 +46,7 @@ class _TeacherHomePageState extends State<TeacherHomePage>
   void initState() {
     super.initState();
     setupAnimations();
+    loader = CustomLoader();
     Provider.of<HomeState>(context, listen: false).getBatchList();
     Provider.of<HomeState>(context, listen: false).getAnnouncemantList();
     Provider.of<HomeState>(context, listen: false).getPollList();
@@ -293,7 +296,10 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                       return _title(
                           "${state.announcementList.length} Announcement");
                     return AnnouncementWidget(
-                        state.announcementList[index - 1]);
+                      state.announcementList[index - 1],
+                      isTeacher: true,
+                      loader: loader,
+                    );
                   },
                   childCount: state.announcementList.length + 1,
                 ),
