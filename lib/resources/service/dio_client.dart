@@ -99,12 +99,16 @@ class DioClient {
   }
 
   Exception _handleError(DioError e) {
-    final apiResponse = getJsonBody(e.response);
     String message;
-    if (e.response.statusCode != 422) {
-      message = apiResponse["message"];
+    if (e.response.statusCode == 404 && e.response.data == "Not found!") {
+      message = "Not Found!";
     } else {
-      message = json.encode(apiResponse["errors"]);
+      final apiResponse = getJsonBody(e.response);
+      if (e.response.statusCode != 422) {
+        message = apiResponse["message"];
+      } else {
+        message = json.encode(apiResponse["errors"]);
+      }
     }
 
     switch (e.response.statusCode) {

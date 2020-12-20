@@ -30,7 +30,7 @@ class VideosRsponseModel {
 class VideoModel {
   VideoModel({
     this.id,
-    this.batchId,
+    this.batch,
     this.title,
     this.subject,
     this.description,
@@ -45,7 +45,7 @@ class VideoModel {
   });
 
   final String id;
-  final String batchId;
+  final String batch;
   final String title;
   final String subject;
   final String description;
@@ -65,7 +65,7 @@ class VideoModel {
 
   factory VideoModel.fromJson(Map<String, dynamic> json) => VideoModel(
         id: json["id"] == null ? null : json["id"],
-        batchId: json["batchId"] == null ? null : json["batchId"],
+        batch: json["batch"] == null ? null : json["batch"],
         title: json["title"] == null ? null : json["title"],
         subject: json["subject"] == null ? null : json["subject"],
         description: json["description"] == null ? null : json["description"],
@@ -86,7 +86,7 @@ class VideoModel {
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
-        "batchId": batchId == null ? null : batchId,
+        "batch": batch == null ? null : batch,
         "title": title == null ? null : title,
         "subject": subject == null ? null : subject,
         "description": description == null ? null : description,
@@ -100,25 +100,25 @@ class VideoModel {
         "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
       };
 
-  VideoModel copyWith(
-          {String id,
-          String title,
-          String subject,
-          String batch,
-          String description,
-          String duration,
-          String video,
-          DateTime fileUploadedOn,
-          bool isPrivate,
-          String quality,
-          DateTime createdAt,
-          DateTime updatedAt,
-          String videoUrl,
-          String thumbnailUrl,
-          String batchId}) =>
+  VideoModel copyWith({
+    String id,
+    String title,
+    String subject,
+    String batch,
+    String description,
+    String duration,
+    String video,
+    DateTime fileUploadedOn,
+    bool isPrivate,
+    String quality,
+    DateTime createdAt,
+    DateTime updatedAt,
+    String videoUrl,
+    String thumbnailUrl,
+  }) =>
       VideoModel(
         id: id ?? this.id,
-        batchId: batchId ?? this.batchId,
+        batch: batch ?? this.batch,
         title: title ?? this.title,
         subject: subject ?? this.subject,
         description: description ?? this.description,

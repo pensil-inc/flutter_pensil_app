@@ -47,7 +47,7 @@ class AddVideoPage extends StatefulWidget {
       builder: (_) => ChangeNotifierProvider<VideoState>(
         create: (context) => VideoState(
           subject: videoModel.subject,
-          batchId: videoModel.batchId,
+          batchId: videoModel.batch,
           videoModel: videoModel,
           isEditMode: true,
         ),

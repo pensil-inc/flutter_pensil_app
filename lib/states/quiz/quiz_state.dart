@@ -46,7 +46,7 @@ class QuizState extends BaseState {
 
   Future<bool> deleteQuiz(String videoId) async {
     try {
-      var isDeleted = await deleteById(Constants.crudMaterial(videoId));
+      var isDeleted = await deleteById(Constants.crudAssignment(videoId));
       if (isDeleted) {
         assignmentsList.removeWhere((element) => element.id == videoId);
       }

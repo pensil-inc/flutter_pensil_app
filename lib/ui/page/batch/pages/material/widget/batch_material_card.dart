@@ -14,9 +14,12 @@ import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
 import 'package:provider/provider.dart';
 
 class BatchMaterialCard extends StatelessWidget {
-  const BatchMaterialCard({Key key, this.loader, this.model}) : super(key: key);
+  const BatchMaterialCard(
+      {Key key, this.loader, this.model, this.displayActionButtons = false})
+      : super(key: key);
   final CustomLoader loader;
   final BatchMaterialModel model;
+  final bool displayActionButtons;
 
   Widget _picture(context, String type) {
     // return empty widget if space has no pictures
@@ -131,33 +134,34 @@ class BatchMaterialCard extends StatelessWidget {
                         // Text(model.description,style: Theme.of(context).textTheme.bodyText2,maxLines: 2, ),
                         Spacer(),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              PChip(
-                                backgroundColor: PColors.orange,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      fontSize: 12,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            PChip(
+                              backgroundColor: PColors.orange,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                              borderColor: Colors.transparent,
+                              label: model.subject ?? "N/A",
+                            ),
+                            Text(
+                              Utility.toDMformate(model.createdAt),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(
                                       fontWeight: FontWeight.bold,
-                                    ),
-                                borderColor: Colors.transparent,
-                                label: model.subject ?? "N/A",
-                              ),
-                              Text(Utility.toDMformate(model.createdAt),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color:
-                                              Theme.of(context).disabledColor))
-                            ])
+                                      fontSize: 12,
+                                      color: Theme.of(context).disabledColor),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -165,7 +169,7 @@ class BatchMaterialCard extends StatelessWidget {
               ),
             ),
           ),
-          if (Provider.of<HomeState>(context).isTeacher)
+          if (Provider.of<HomeState>(context).isTeacher && displayActionButtons)
             TileActionWidget(
               onDelete: () => deleteVideo(context, model.id),
               onEdit: () => editMaterial(context, model),

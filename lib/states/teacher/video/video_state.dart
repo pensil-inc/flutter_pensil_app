@@ -15,7 +15,7 @@ class VideoState extends BaseState {
       VideoModel videoModel}) {
     this.batchId = batchId;
     this.subject = subject;
-    this.isEditMode = isEditMode = false;
+    this.isEditMode = isEditMode ?? false;
     this.videoModel = videoModel ?? VideoModel();
     if (videoModel != null) {
       thumbnailUrl = videoModel.thumbnailUrl;
@@ -61,7 +61,7 @@ class VideoState extends BaseState {
           description: description,
           subject: subject,
           videoUrl: videoUrl ?? "",
-          batchId: batchId,
+          batch: batchId,
           thumbnailUrl: thumbnailUrl);
       final repo = getit.get<TeacherRepository>();
 

@@ -135,7 +135,7 @@ class BatchDetailPage extends StatelessWidget {
             ],
           ),
         ),
-        SliverToBoxAdapter(child: Divider(height: 1, thickness: 1).pB(8)),
+        SliverToBoxAdapter(child: Divider(height: 1, thickness: 1)),
         Consumer<AnnouncementState>(
           builder: (context, state, child) {
             if (state.isBusy) {
@@ -164,12 +164,15 @@ class BatchDetailPage extends StatelessWidget {
             return SliverToBoxAdapter();
           },
         ),
+        // SliverToBoxAdapter(child: Divider()),
         // Batch video, announcement, study material timeline
         Consumer<BatchDetailState>(builder: (context, state, child) {
           if (state.timeLineList != null) {
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                final model = state.timeLineList[index];
+                if (index == 0)
+                  return _title(context, "Batch Timeline", fontSize: 18).p16;
+                final model = state.timeLineList[index - 1];
                 if (model.datum is VideoModel) {
                   return BatchVideoCard(model: model.datum, loader: loader)
                       .hP16
@@ -186,7 +189,7 @@ class BatchDetailPage extends StatelessWidget {
                 print(
                     "Unknown item found on batch timeline\n Type: ${model.type}");
                 return SizedBox();
-              }, childCount: state.timeLineList.length),
+              }, childCount: state.timeLineList.length + 1),
             );
           }
           return SliverToBoxAdapter();

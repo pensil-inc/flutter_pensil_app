@@ -15,10 +15,13 @@ import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';
 import 'package:provider/provider.dart';
 
 class BatchVideoCard extends StatelessWidget {
-  const BatchVideoCard({Key key, this.model, this.loader}) : super(key: key);
+  const BatchVideoCard(
+      {Key key, this.model, this.loader, this.displayActionButtons = false})
+      : super(key: key);
 
   final VideoModel model;
   final CustomLoader loader;
+  final bool displayActionButtons;
 
   Widget _picture(String url) {
     // return empty widget if space has no pictures
@@ -165,7 +168,7 @@ class BatchVideoCard extends StatelessWidget {
               ),
             ),
           )),
-          if (Provider.of<HomeState>(context).isTeacher)
+          if (Provider.of<HomeState>(context).isTeacher && displayActionButtons)
             TileActionWidget(
               onDelete: () => deleteVideo(context, model.id),
               onEdit: () => editVideo(context, model),

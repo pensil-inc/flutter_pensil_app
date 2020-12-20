@@ -98,4 +98,8 @@ class Constants {
   static String crudMaterial(String id) {
     return "$material/$id";
   }
+
+  static String crudAssignment(String id) {
+    return "$assignment/$id";
+  }
 }
