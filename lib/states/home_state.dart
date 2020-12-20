@@ -52,9 +52,9 @@ class HomeState extends BaseState {
       final repo = getit.get<BatchRepository>();
       polls = await repo.getPollList();
       if (polls != null && polls.isNotEmpty) {
+        polls.sort((a, b) => b.createdAt.compareTo(a.createdAt));
         allPolls = List.from(polls);
         polls.removeWhere((poll) => poll.endTime.isBefore(DateTime.now()));
-        polls.sort((a, b) => b.createdAt.compareTo(a.createdAt));
         notifyListeners();
       }
     } catch (error) {

@@ -448,8 +448,9 @@ class ApiGatewayImpl implements ApiGateway {
       assert(batchId != null);
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
+      var isStudent = await pref.isStudent();
       final response = await _dioClient.get(
-          Constants.getBatchAssignmentDetail(batchId, assgnmentId),
+          Constants.getBatchAssignmentDetail(batchId, assgnmentId, isStudent),
           options: Options(headers: header));
       var json = _dioClient.getJsonBody(response);
       final model = QuizDetailModel.fromJson(json["assignment"][0]);

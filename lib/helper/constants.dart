@@ -68,8 +68,11 @@ class Constants {
         : "$batch/$batchId/$assignment";
   }
 
-  static String getBatchAssignmentDetail(String batchId, String assignmentId) {
-    return "$student/$batch/$batchId/$assignment/$assignmentId";
+  static String getBatchAssignmentDetail(
+      String batchId, String assignmentId, bool isStudent) {
+    return isStudent
+        ? "$student/$batch/$batchId/$assignment/$assignmentId"
+        : "$batch/$batchId/$assignment/$assignmentId";
   }
 
   static String castStudentVotOnPoll(String pollId) {
