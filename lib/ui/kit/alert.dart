@@ -184,7 +184,7 @@ class Alert {
                                         color: theme.colorScheme.onPrimary),
                                 // maxLines: 1,
                                 // overflow: TextOverflow.ellipsis,
-                              )).extended.vP8,
+                              )).vP8,
                           // Spacer(),
                           Image.asset(Images.cross, height: 30).p(8).ripple(() {
                             if (enableCrossButton) Navigator.pop(context);
