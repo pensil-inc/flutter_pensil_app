@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: <Widget>[
             SizedBox(height: 30),
-            Image.asset(AppConfig.of(context).config.appIcon, width: 150),
+            Image.asset(AppConfig.of(context).config.appIcon, height: 150),
             // Image.asset(Images.logoText, height: 30),
             // SizedBox(height: 10),
             SizedBox(height: 30),

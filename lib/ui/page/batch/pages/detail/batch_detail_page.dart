@@ -13,7 +13,7 @@ import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/detail/student_list.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/material/widget/batch_material_card.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/widget/batch_video_Card.dart';
-import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
+import 'package:flutter_pensil_app/ui/page/home/widget/announcement_widget.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:flutter_pensil_app/ui/widget/p_avatar.dart';
 import 'package:flutter_pensil_app/ui/widget/p_chiip.dart';

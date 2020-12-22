@@ -5,7 +5,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/actor_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_Scaffold.dart';
-import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
+import 'package:flutter_pensil_app/ui/page/home/widget/announcement_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/batch_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
 import 'package:flutter_pensil_app/ui/page/notification/notifications_page.dart';

@@ -8,7 +8,7 @@ import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart
 import 'package:flutter_pensil_app/ui/page/auth/login.dart';
 import 'package:flutter_pensil_app/ui/page/batch/create_batch/create_batch.dart';
 import 'package:flutter_pensil_app/ui/page/home/home_Scaffold.dart';
-import 'package:flutter_pensil_app/ui/page/home/widget/announement_widget.dart';
+import 'package:flutter_pensil_app/ui/page/home/widget/announcement_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/batch_widget.dart';
 import 'package:flutter_pensil_app/ui/page/home/widget/poll_widget.dart';
 import 'package:flutter_pensil_app/ui/page/poll/View_all_poll_page.dart';
