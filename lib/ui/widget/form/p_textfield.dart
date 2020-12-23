@@ -15,6 +15,7 @@ class PTextField extends StatelessWidget {
       this.onSubmit,
       this.suffixIcon,
       this.onChange,
+      this.obscureText = false,
       this.padding = const EdgeInsets.all(0)})
       : super(key: key);
   final TextEditingController controller;
@@ -23,6 +24,7 @@ class PTextField extends StatelessWidget {
   final int maxLines;
   final double height;
   final Widget suffixIcon;
+  final bool obscureText;
   final Function(String) onSubmit;
   final EdgeInsetsGeometry padding;
   final Function(String) onChange;
@@ -50,9 +52,7 @@ class PTextField extends StatelessWidget {
                 onSubmit(val);
               }
             },
-            obscureText: (type == Type.password || type == Type.confirmPassword)
-                ? true
-                : false,
+            obscureText: obscureText,
             maxLines: maxLines,
             onChanged: onChange,
             keyboardType: getKeyboardType(type),

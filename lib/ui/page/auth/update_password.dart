@@ -37,11 +37,24 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
   TextEditingController confirmPassword;
   TextEditingController password;
 
+  ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
+  ValueNotifier<bool> confirmPasswordVisibility = ValueNotifier<bool>(true);
+
   @override
   void initState() {
     confirmPassword = TextEditingController();
     password = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    isLoading.dispose();
+    password.dispose();
+    confirmPassword.dispose();
+    passwordVisibility.dispose();
+    confirmPasswordVisibility.dispose();
+    super.dispose();
   }
 
   Widget _title(String text) {
@@ -148,23 +161,50 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            // SizedBox(height: 20),
-            Image.asset(AppConfig.of(context).config.appIcon, width: 150),
+            SizedBox(height: 30),
+            Image.asset(AppConfig.of(context).config.appIcon, height: 150),
             // Image.asset(Images.logoText, height: 30),
             SizedBox(height: 20),
-            PTextField(
-              type: Type.password,
-              controller: password,
-              label: "New password",
-              hintText: "Enter new password",
-            ).hP16,
-            // SizedBox(height: 10),
-            PTextField(
-              type: Type.password,
-              controller: confirmPassword,
-              label: "Confirm password",
-              hintText: "Enter confirm password here",
-            ).hP16,
+            ValueListenableBuilder<bool>(
+              valueListenable: passwordVisibility,
+              builder: (context, value, child) {
+                return PTextField(
+                    type: Type.password,
+                    controller: password,
+                    label: "New password",
+                    hintText: "Enter new password",
+                    height: null,
+                    obscureText: value,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        passwordVisibility.value = !passwordVisibility.value;
+                      },
+                      icon:
+                          Icon(value ? Icons.visibility_off : Icons.visibility),
+                    )).hP16;
+              },
+            ),
+            SizedBox(height: 20),
+            ValueListenableBuilder<bool>(
+              valueListenable: confirmPasswordVisibility,
+              builder: (context, value, child) {
+                return PTextField(
+                    type: Type.password,
+                    controller: confirmPassword,
+                    label: "Confirm password",
+                    hintText: "Enter confirm password here",
+                    height: null,
+                    obscureText: value,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        confirmPasswordVisibility.value =
+                            !confirmPasswordVisibility.value;
+                      },
+                      icon:
+                          Icon(value ? Icons.visibility_off : Icons.visibility),
+                    )).hP16;
+              },
+            ),
 
             SizedBox(height: 14),
             Padding(

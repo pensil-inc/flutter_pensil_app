@@ -47,6 +47,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    useMobile.dispose();
+    isLoading.dispose();
+    mobile.dispose();
+    email.dispose();
+    super.dispose();
+  }
+
   Widget _title(String text) {
     return Padding(
       padding: EdgeInsets.only(
@@ -103,8 +112,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            // SizedBox(height: 30),
-            Image.asset(AppConfig.of(context).config.appIcon, width: 150),
+            SizedBox(height: 30),
+            Image.asset(AppConfig.of(context).config.appIcon, height: 150),
             // Image.asset(Images.logoText, height: 30),
             SizedBox(height: 40),
             ValueListenableBuilder<bool>(

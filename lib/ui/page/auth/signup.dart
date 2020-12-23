@@ -38,6 +38,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController name;
   TextEditingController password;
   TextEditingController mobile;
+  ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
 
   @override
   void initState() {
@@ -46,6 +47,18 @@ class _SignUpState extends State<SignUp> {
     password = TextEditingController();
     mobile = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    isLoading.dispose();
+    password.dispose();
+    name.dispose();
+    email.dispose();
+    password.dispose();
+    mobile.dispose();
+    passwordVisibility.dispose();
+    super.dispose();
   }
 
   Positioned _background(BuildContext context) {
@@ -92,7 +105,7 @@ class _SignUpState extends State<SignUp> {
             SizedBox(height: 30),
             Image.asset(AppConfig.of(context).config.appIcon, height: 150),
             // Image.asset(Images.logoText, height: 30),
-            SizedBox(height: 10),
+            // SizedBox(height: 10),
             SizedBox(height: 30),
             PTextField(
               type: Type.text,
@@ -115,12 +128,25 @@ class _SignUpState extends State<SignUp> {
               hintText: "Enter mobile here",
             ).hP16,
             SizedBox(height: 10),
-            PTextField(
-              type: Type.password,
-              controller: password,
-              label: "Password",
-              hintText: "Enter password here",
-            ).hP16,
+            ValueListenableBuilder<bool>(
+              valueListenable: passwordVisibility,
+              builder: (context, value, child) {
+                return PTextField(
+                    type: Type.password,
+                    controller: password,
+                    label: "Password",
+                    hintText: "Enter password here",
+                    height: null,
+                    obscureText: value,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        passwordVisibility.value = !passwordVisibility.value;
+                      },
+                      icon:
+                          Icon(value ? Icons.visibility_off : Icons.visibility),
+                    )).hP16;
+              },
+            ),
             // SizedBox(height: 10),
 
             SizedBox(height: 30),

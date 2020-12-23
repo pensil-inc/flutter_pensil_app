@@ -37,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   ValueNotifier<bool> useMobile = ValueNotifier<bool>(false);
+  ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
 
   TextEditingController email;
   TextEditingController password;
@@ -56,6 +57,9 @@ class _LoginPageState extends State<LoginPage> {
     email.dispose();
     password.dispose();
     mobile.dispose();
+    useMobile.dispose();
+    isLoading.dispose();
+    passwordVisibility.dispose();
     super.dispose();
   }
 
@@ -189,13 +193,24 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 }),
             // SizedBox(height: 10),
-            PTextField(
-                    type: Type.password,
-                    controller: password,
-                    label: "Password",
-                    hintText: "Enter password here",
-                    height: null)
-                .hP16,
+            ValueListenableBuilder<bool>(
+                valueListenable: passwordVisibility,
+                builder: (context, value, child) {
+                  return PTextField(
+                      type: Type.password,
+                      controller: password,
+                      label: "Password",
+                      hintText: "Enter password here",
+                      height: null,
+                      obscureText: value,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          passwordVisibility.value = !passwordVisibility.value;
+                        },
+                        icon: Icon(
+                            value ? Icons.visibility_off : Icons.visibility),
+                      )).hP16;
+                }),
             Align(
               alignment: Alignment.centerRight,
               child: Text("Forgot password?",
