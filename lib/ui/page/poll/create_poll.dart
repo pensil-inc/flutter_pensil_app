@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/poll_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
@@ -133,21 +132,11 @@ class _CreateBatchState extends State<CreatePoll> {
 
   void createPoll() async {
     FocusManager.instance.primaryFocus.unfocus();
-    final state = Provider.of<PollState>(context, listen: false);
+    final state = context.read<PollState>();
     // validate batch name and batch description
     final isTrue = _formKey.currentState.validate();
 
     if (!isTrue) {
-      return;
-    }
-    if (state.lastDate == null) {
-      Utility.displaySnackbar(context,
-          msg: "Please select poll expiry date!!", key: scaffoldKey);
-      return;
-    }
-    if (state.lastTime == null) {
-      Utility.displaySnackbar(context,
-          msg: "Please select poll expiry time!!", key: scaffoldKey);
       return;
     }
     isLoading.value = true;
@@ -157,7 +146,7 @@ class _CreateBatchState extends State<CreatePoll> {
     if (newPoll != null) {
       // Alert.sucess(context,
       //     message: "Poll created sucessfully!!", title: "Message");
-      final homeState = Provider.of<HomeState>(context, listen: false);
+      final homeState = context.read<HomeState>();
       homeState.getPollList();
       Navigator.pop(context);
     } else {
@@ -191,33 +180,60 @@ class _CreateBatchState extends State<CreatePoll> {
                 ),
                 SizedBox(height: 15),
                 _title(context, "Poll Expire time"),
-                SizedBox(height: 5),
+                SizedBox(height: 8),
                 Container(
+                  height: 50,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: AppTheme.outline(context),
+                  child: Container(
                     width: AppTheme.fullWidth(context) - 32,
-                    height: 50,
-                    child: Consumer<PollState>(
-                      builder: (context, state, child) {
-                        return Row(
-                          children: [
-                            _day(state.lastPollDate, onPressed: () async {
-                              final setLastDate = await getDate();
-                              if (setLastDate != null) {
-                                state.setLastDate = setLastDate;
-                              }
-                            }).extended,
-                            SizedBox(
-                              width: 20,
-                            ),
-                            _day(state.lastPollTime, onPressed: () async {
-                              final time = await getTime(context);
-                              if (time != null) {
-                                state.setPollExpireTime = time;
-                              }
-                            }).extended
-                          ],
-                        );
-                      },
-                    )),
+                    child: DropdownButtonHideUnderline(
+                      child: new DropdownButton<String>(
+                        icon: SizedBox(
+                            height: 50,
+                            child: Stack(
+                              overflow: Overflow.clip,
+                              alignment: Alignment.center,
+                              children: <Widget>[
+                                Align(
+                                    alignment: Alignment.centerRight,
+                                    child: SizedBox(
+                                      width: 15,
+                                      child: Icon(Icons.arrow_drop_up, size: 30)
+                                          .pB(10),
+                                    )),
+                                Align(
+                                    alignment: Alignment.centerRight,
+                                    child: SizedBox(
+                                      width: 15,
+                                      child:
+                                          Icon(Icons.arrow_drop_down, size: 30)
+                                              .pT(10),
+                                    ))
+                              ],
+                            )),
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        value: context.watch<PollState>().pollExpiry,
+                        items: <String>[
+                          '12 Hours',
+                          '24 Hours',
+                          '36 Hours',
+                          '48 Hours',
+                          "60 Hours",
+                        ].map((String value) {
+                          return new DropdownMenuItem<String>(
+                            value: value,
+                            child: new Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          context.read<PollState>().setPollExpiry = val;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 15),
                 _title(context, "Options"),
                 SizedBox(height: 5),
@@ -232,8 +248,7 @@ class _CreateBatchState extends State<CreatePoll> {
                   },
                 ),
                 _secondaryButton(context, label: "Add option", onPressed: () {
-                  Provider.of<PollState>(context, listen: false)
-                      .addPollOptions();
+                  context.read<PollState>().addPollOptions();
                 }),
                 SizedBox(height: 150),
                 PFlatButton(

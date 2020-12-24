@@ -9,16 +9,11 @@ import 'package:get_it/get_it.dart';
 class PollState extends ChangeNotifier {
   List<String> pollOptions = ["", ""];
   String question;
-  DateTime lastDate;
+  String pollExpiry = "24 Hours";
   String lastTime;
 
-  set setLastDate(DateTime value) {
-    lastDate = value;
-    notifyListeners();
-  }
-
-  set setPollExpireTime(String value) {
-    lastTime = value;
+  set setPollExpiry(String value) {
+    pollExpiry = value;
     notifyListeners();
   }
 
@@ -37,16 +32,6 @@ class PollState extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get lastPollDate {
-    var date = lastDate != null ? Utility.toDMYformate(lastDate) : "Date";
-    return date;
-  }
-
-  String get lastPollTime {
-    var date = lastTime != null ? lastTime : "Time";
-    return date;
-  }
-
   Future<PollModel> createPoll(String question) async {
     try {
       pollOptions.removeWhere((element) => element.isEmpty);
@@ -54,9 +39,11 @@ class PollState extends ChangeNotifier {
       var model = PollModel(
           // title:title,
           batches: [""],
-          endTime: lastDate.add(Duration(
-              hours: int.parse(lastTime.split(":")[0]),
-              minutes: int.tryParse(lastTime.split(":")[1]))),
+          endTime: DateTime.now().add(
+            Duration(
+              hours: int.parse(pollExpiry.split(" ")[0]),
+            ),
+          ),
           isForAll: true,
           options: pollOptions,
           question: question);
