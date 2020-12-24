@@ -24,6 +24,7 @@ class _QuizListPageState extends State<QuizListPage> {
     return Container(
         decoration: AppTheme.decoration(context),
         margin: EdgeInsets.only(bottom: 12),
+        padding: EdgeInsets.symmetric(vertical: 8),
         // height: 50,
         alignment: Alignment.center,
         child: Row(
@@ -45,16 +46,16 @@ class _QuizListPageState extends State<QuizListPage> {
                     style: Theme.of(context).textTheme.subtitle2,
                     maxLines: 3,
                   ).vP4,
-                  Text(
-                    "Subject: Englishhss",
-                    style: Theme.of(context).textTheme.subtitle2,
-                    maxLines: 3,
-                  ).vP4,
-                  Text(
-                    "Time Alloted: ${model.duration} min",
-                    style: Theme.of(context).textTheme.subtitle2,
-                    maxLines: 3,
-                  ).vP4
+                  // Text(
+                  //   "Subject: Englishhss",
+                  //   style: Theme.of(context).textTheme.subtitle2,
+                  //   maxLines: 3,
+                  // ).vP4,
+                  // Text(
+                  //   "Time Alloted: ${model.duration} min",
+                  //   style: Theme.of(context).textTheme.subtitle2,
+                  //   maxLines: 3,
+                  // ).vP4
                 ],
               ),
             ).ripple(() {
