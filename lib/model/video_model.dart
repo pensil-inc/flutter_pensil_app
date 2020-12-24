@@ -30,7 +30,7 @@ class VideosRsponseModel {
 class VideoModel {
   VideoModel({
     this.id,
-    this.batch,
+    this.batchId,
     this.title,
     this.subject,
     this.description,
@@ -45,7 +45,7 @@ class VideoModel {
   });
 
   final String id;
-  final String batch;
+  final String batchId;
   final String title;
   final String subject;
   final String description;
@@ -65,7 +65,7 @@ class VideoModel {
 
   factory VideoModel.fromJson(Map<String, dynamic> json) => VideoModel(
         id: json["id"] == null ? null : json["id"],
-        batch: json["batch"] == null ? null : json["batch"],
+        batchId: json["batchId"] == null ? null : json["batchId"],
         title: json["title"] == null ? null : json["title"],
         subject: json["subject"] == null ? null : json["subject"],
         description: json["description"] == null ? null : json["description"],
@@ -86,7 +86,7 @@ class VideoModel {
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
-        "batch": batch == null ? null : batch,
+        "batchId": batchId == null ? null : batchId,
         "title": title == null ? null : title,
         "subject": subject == null ? null : subject,
         "description": description == null ? null : description,
@@ -104,7 +104,7 @@ class VideoModel {
     String id,
     String title,
     String subject,
-    String batch,
+    String batchId,
     String description,
     String duration,
     String video,
@@ -118,7 +118,7 @@ class VideoModel {
   }) =>
       VideoModel(
         id: id ?? this.id,
-        batch: batch ?? this.batch,
+        batchId: batchId ?? this.batchId,
         title: title ?? this.title,
         subject: subject ?? this.subject,
         description: description ?? this.description,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:add_thumbnail/add_thumbnail.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_pensil_app/helper/images.dart';
@@ -47,7 +48,7 @@ class AddVideoPage extends StatefulWidget {
       builder: (_) => ChangeNotifierProvider<VideoState>(
         create: (context) => VideoState(
           subject: videoModel.subject,
-          batchId: videoModel.batch,
+          batchId: videoModel.batchId,
           videoModel: videoModel,
           isEditMode: true,
         ),
@@ -132,14 +133,18 @@ class _AddVideoPageState extends State<AddVideoPage> {
   }
 
   void saveVideo() async {
-    final state = Provider.of<VideoState>(context, listen: false);
+    final state = context.read<VideoState>();
     // validate batch name and batch description
     final isTrue = _formKey.currentState.validate();
     FocusManager.instance.primaryFocus.unfocus();
     if (!isTrue) {
       return;
     }
-
+    if (state.file == null && state.videoUrl == null) {
+      Utility.displaySnackbar(context,
+          msg: "please add a video link or upload a video", key: scaffoldKey);
+      return;
+    }
     isLoading.value = true;
 
     final isOk = await state.addVideo(_title.text, _description.text);
@@ -149,8 +154,10 @@ class _AddVideoPageState extends State<AddVideoPage> {
       if (state.isEditMode) {
         message = "Video updated sucessfully!!";
       }
-      Alert.sucess(context, message: message, title: "Message");
       widget.state.getVideosList();
+      Alert.sucess(context, message: message, title: "Message", onPressed: () {
+        Navigator.pop(context);
+      });
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",
@@ -189,9 +196,9 @@ class _AddVideoPageState extends State<AddVideoPage> {
                         ),
                         SizedBox(height: 16),
                         PTextField(
-                            type: Type.text,
+                            type: Type.optional,
                             controller: _description,
-                            label: "Description",
+                            label: "Description1",
                             hintText: "Enter here",
                             maxLines: null,
                             height: null,

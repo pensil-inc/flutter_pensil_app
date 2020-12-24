@@ -52,16 +52,13 @@ class VideoState extends BaseState {
 
   Future<bool> addVideo(String title, String description) async {
     try {
-      if (file == null && videoUrl == null) {
-        return false;
-      }
       assert(subject != null);
       var model = videoModel.copyWith(
           title: title,
           description: description,
           subject: subject,
           videoUrl: videoUrl ?? "",
-          batch: batchId,
+          batchId: batchId,
           thumbnailUrl: thumbnailUrl);
       final repo = getit.get<TeacherRepository>();
 

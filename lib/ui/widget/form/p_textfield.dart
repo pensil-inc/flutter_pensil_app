@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/ui/widget/form/validator.dart';
 
-enum Type { name, email, phone, password, confirmPassword, reset, text }
+enum Type {
+  name,
+  email,
+  phone,
+  password,
+  confirmPassword,
+  reset,
+  text,
+  optional
+}
 
 class PTextField extends StatelessWidget {
   const PTextField(
@@ -122,6 +131,8 @@ class PTextField extends StatelessWidget {
       case Type.confirmPassword:
         return PValidator.buildValidators(context, choice);
       case Type.reset:
+        return PValidator.buildValidators(context, choice);
+      case Type.optional:
         return PValidator.buildValidators(context, choice);
       default:
         return PValidator.buildValidators(context, choice);

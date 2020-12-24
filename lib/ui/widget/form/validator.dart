@@ -4,6 +4,7 @@ import 'package:flutter_pensil_app/ui/widget/form/p_textfield.dart';
 class PValidator {
   static Function(String) buildValidators(BuildContext context, Type choice) {
     // final "Invalid =" AppLocalizations.of(context);
+    Function(String) optional = (String val) => null;
 
     Function(String) emailValidators = (String value) {
       if (!RegExp(
@@ -162,6 +163,7 @@ class PValidator {
     if (choice == Type.confirmPassword) return confirmPasswordValidators;
     if (choice == Type.reset) return forgotPasswordValidators;
     if (choice == Type.text) return canNotEmptyTextValidator;
+    if (choice == Type.optional) return optional;
 
     return nameValidators;
   }
