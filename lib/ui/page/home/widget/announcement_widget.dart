@@ -23,7 +23,7 @@ class AnnouncementWidget extends StatelessWidget {
   final AnnouncementModel model;
   final CustomLoader loader;
   final List<String> actions;
-  final Function(AnnouncementModel) onAnnouncementDeleted;
+  final Future Function(AnnouncementModel) onAnnouncementDeleted;
   final Function(AnnouncementModel) onAnnouncementEdit;
 
   void deleteAnnouncement(BuildContext context, String id) async {
@@ -37,7 +37,7 @@ class AnnouncementWidget extends StatelessWidget {
           .deleteAnnouncement(id);
       if (isDeleted) {
         Utility.displaySnackbar(context, msg: "Annoucement Deleted");
-        if (onAnnouncementDeleted != null) onAnnouncementDeleted(model);
+        if (onAnnouncementDeleted != null) await onAnnouncementDeleted(model);
       }
       loader.hideLoader();
     });

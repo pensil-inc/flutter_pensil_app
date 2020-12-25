@@ -64,7 +64,6 @@ class _BatchVideosPageState extends State<BatchVideosPage> {
               return BatchVideoCard(
                 model: state.list[index],
                 loader: widget.loader,
-                displayActionButtons: true,
               );
             },
           );

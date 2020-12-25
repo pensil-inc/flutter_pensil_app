@@ -67,9 +67,10 @@ class BatchDetailPage extends StatelessWidget {
         .p16;
   }
 
-  void onAnnouncementDeleted(BuildContext context, AnnouncementModel model) {
+  Future onAnnouncementDeleted(
+      BuildContext context, AnnouncementModel model) async {
     context.read<AnnouncementState>().onAnnouncementDeleted(model);
-    context.read<BatchDetailState>().getBatchTimeLine();
+    await context.read<BatchDetailState>().getBatchTimeLine();
   }
 
   @override
@@ -157,8 +158,8 @@ class BatchDetailPage extends StatelessWidget {
                     return AnnouncementWidget(
                       state.batchAnnouncementList[index - 1],
                       loader: loader,
-                      onAnnouncementDeleted: (model) {
-                        onAnnouncementDeleted(context, model);
+                      onAnnouncementDeleted: (model) async {
+                        await onAnnouncementDeleted(context, model);
                       },
                       onAnnouncementEdit: (model) {
                         Navigator.push(
@@ -197,9 +198,11 @@ class BatchDetailPage extends StatelessWidget {
                   return _title(context, "Batch Timeline", fontSize: 18).p16;
                 final model = state.timeLineList[index - 1];
                 if (model.datum is VideoModel) {
-                  return BatchVideoCard(model: model.datum, loader: loader)
-                      .hP16
-                      .vP4;
+                  return BatchVideoCard(
+                    model: model.datum,
+                    loader: loader,
+                    actions: ["Delete"],
+                  ).hP16.vP4;
                 }
                 if (model.datum is AnnouncementModel) {
                   return AnnouncementWidget(
@@ -212,9 +215,11 @@ class BatchDetailPage extends StatelessWidget {
                   ).vP4;
                 }
                 if (model.datum is BatchMaterialModel) {
-                  return BatchMaterialCard(model: model.datum, loader: loader)
-                      .hP16
-                      .vP4;
+                  return BatchMaterialCard(
+                    model: model.datum,
+                    loader: loader,
+                    actions: ["Delete"],
+                  ).hP16.vP4;
                 }
                 print(
                     "Unknown item found on batch timeline\n Type: ${model.type}");

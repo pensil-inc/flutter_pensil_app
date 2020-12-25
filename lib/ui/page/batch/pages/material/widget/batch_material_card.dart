@@ -3,6 +3,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/batch_meterial_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
+import 'package:flutter_pensil_app/states/teacher/batch_detail_state.dart';
 import 'package:flutter_pensil_app/states/teacher/material/batch_material_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
@@ -15,11 +16,14 @@ import 'package:provider/provider.dart';
 
 class BatchMaterialCard extends StatelessWidget {
   const BatchMaterialCard(
-      {Key key, this.loader, this.model, this.displayActionButtons = false})
+      {Key key,
+      this.loader,
+      this.model,
+      this.actions = const ["Edit", "Delete"]})
       : super(key: key);
   final CustomLoader loader;
+  final List<String> actions;
   final BatchMaterialModel model;
-  final bool displayActionButtons;
 
   Widget _picture(context, String type) {
     if (type == null && model.articleUrl != null) {
@@ -77,7 +81,7 @@ class BatchMaterialCard extends StatelessWidget {
     }
   }
 
-  void deleteVideo(context, String id) async {
+  void deleteVideo(BuildContext context, String id) async {
     Alert.yesOrNo(context,
         message: "Are you sure, you want to delete this material ?",
         title: "Message",
@@ -85,8 +89,8 @@ class BatchMaterialCard extends StatelessWidget {
         onCancel: () {}, onYes: () async {
       loader.showLoader(context);
       final isDeleted =
-          await Provider.of<BatchMaterialState>(context, listen: false)
-              .deleteMaterial(id);
+          await context.read<BatchMaterialState>().deleteMaterial(id);
+      await context.read<BatchDetailState>().getBatchTimeLine();
       if (isDeleted) {
         Utility.displaySnackbar(context, msg: "Material Deleted");
       }
@@ -173,8 +177,9 @@ class BatchMaterialCard extends StatelessWidget {
               ),
             ),
           ),
-          if (Provider.of<HomeState>(context).isTeacher && displayActionButtons)
+          if (Provider.of<HomeState>(context).isTeacher)
             TileActionWidget(
+              list: actions,
               onDelete: () => deleteVideo(context, model.id),
               onEdit: () => editMaterial(context, model),
             ),

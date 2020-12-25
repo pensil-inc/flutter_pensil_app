@@ -3,6 +3,7 @@ import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
+import 'package:flutter_pensil_app/states/teacher/batch_detail_state.dart';
 import 'package:flutter_pensil_app/states/teacher/video/video_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
 import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
@@ -16,12 +17,15 @@ import 'package:provider/provider.dart';
 
 class BatchVideoCard extends StatelessWidget {
   const BatchVideoCard(
-      {Key key, this.model, this.loader, this.displayActionButtons = false})
+      {Key key,
+      this.model,
+      this.loader,
+      this.actions = const ["Edit", "Delete"]})
       : super(key: key);
 
   final VideoModel model;
   final CustomLoader loader;
-  final bool displayActionButtons;
+  final List<String> actions;
 
   Widget _picture(String url) {
     // return empty widget if space has no pictures
@@ -85,8 +89,8 @@ class BatchVideoCard extends StatelessWidget {
         barrierDismissible: true,
         onCancel: () {}, onYes: () async {
       loader.showLoader(context);
-      final isDeleted =
-          await Provider.of<VideoState>(context, listen: false).deleteVideo(id);
+      final isDeleted = await context.read<VideoState>().deleteVideo(id);
+      await context.read<BatchDetailState>().getBatchTimeLine();
       if (isDeleted) {
         Utility.displaySnackbar(context, msg: "Video Deleted");
       }
@@ -168,8 +172,9 @@ class BatchVideoCard extends StatelessWidget {
               ),
             ),
           )),
-          if (Provider.of<HomeState>(context).isTeacher && displayActionButtons)
+          if (context.watch<HomeState>().isTeacher)
             TileActionWidget(
+              list: actions,
               onDelete: () => deleteVideo(context, model.id),
               onEdit: () => editVideo(context, model),
             ),

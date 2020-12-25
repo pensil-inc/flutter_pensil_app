@@ -57,7 +57,6 @@ class BatchStudyMaterialPage extends StatelessWidget {
               return BatchMaterialCard(
                 model: state.list[index],
                 loader: loader,
-                displayActionButtons: true,
               );
             },
           );
