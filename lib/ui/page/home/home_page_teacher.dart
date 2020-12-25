@@ -297,7 +297,6 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                           "${state.announcementList.length} Announcement");
                     return AnnouncementWidget(
                       state.announcementList[index - 1],
-                      isTeacher: true,
                       loader: loader,
                     );
                   },

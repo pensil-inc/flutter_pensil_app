@@ -18,8 +18,9 @@ class BatchRepository {
     return gatway.createBatch(model);
   }
 
-  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model) {
-    return gatway.createAnnouncement(model);
+  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model,
+      {bool isEdit}) {
+    return gatway.createAnnouncement(model, isEdit: isEdit);
   }
 
   Future<bool> login(ActorModel model) async {

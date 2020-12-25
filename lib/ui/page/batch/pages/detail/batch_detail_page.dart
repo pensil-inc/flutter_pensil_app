@@ -6,10 +6,10 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/batch_time_slot_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/video_model.dart';
-import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
 import 'package:flutter_pensil_app/states/teacher/batch_detail_state.dart';
 import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
+import 'package:flutter_pensil_app/ui/page/announcement/create_announcement.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/detail/student_list.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/material/widget/batch_material_card.dart';
 import 'package:flutter_pensil_app/ui/page/batch/pages/video/widget/batch_video_Card.dart';
@@ -22,11 +22,13 @@ import 'package:provider/provider.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 
 class BatchDetailPage extends StatelessWidget {
-  const BatchDetailPage({Key key, this.model, this.loader}) : super(key: key);
-  final BatchModel model;
+  const BatchDetailPage({Key key, this.batchModel, this.loader})
+      : super(key: key);
+  final BatchModel batchModel;
   final CustomLoader loader;
   static MaterialPageRoute getRoute(BatchModel model) {
-    return MaterialPageRoute(builder: (_) => BatchDetailPage(model: model));
+    return MaterialPageRoute(
+        builder: (_) => BatchDetailPage(batchModel: model));
   }
 
   Widget _title(context, String text, {double fontSize = 22}) {
@@ -48,7 +50,7 @@ class BatchDetailPage extends StatelessWidget {
 
   Widget _students(ThemeData theme) {
     return Wrap(
-            children: model.studentModel
+            children: batchModel.studentModel
                 .map((model) => SizedBox(
                       height: 35,
                       child: Padding(
@@ -66,8 +68,8 @@ class BatchDetailPage extends StatelessWidget {
   }
 
   void onAnnouncementDeleted(BuildContext context, AnnouncementModel model) {
-    Provider.of<AnnouncementState>(context, listen: false)
-        .onAnnouncementDeleted(model);
+    context.read<AnnouncementState>().onAnnouncementDeleted(model);
+    context.read<BatchDetailState>().getBatchTimeLine();
   }
 
   @override
@@ -81,15 +83,16 @@ class BatchDetailPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _title(context, model.name).vP8,
+                  _title(context, batchModel.name).vP8,
                   Wrap(
                     children: <Widget>[
                       PChip(
                         style: theme.textTheme.bodyText1
                             .copyWith(color: theme.colorScheme.onPrimary),
                         borderColor: Colors.transparent,
-                        label: model.subject,
-                        backgroundColor: PColors.randomColor(model.subject),
+                        label: batchModel.subject,
+                        backgroundColor:
+                            PColors.randomColor(batchModel.subject),
                       ),
                     ],
                   ),
@@ -98,7 +101,7 @@ class BatchDetailPage extends StatelessWidget {
                     children: <Widget>[
                       Image.asset(Images.calender, width: 20),
                       SizedBox(width: 10),
-                      _title(context, "${model.classes.length} Classes",
+                      _title(context, "${batchModel.classes.length} Classes",
                           fontSize: 18),
                     ],
                   )
@@ -107,8 +110,9 @@ class BatchDetailPage extends StatelessWidget {
               SizedBox(height: 11),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                    model.classes.map((e) => _timing(context, e).vP4).toList(),
+                children: batchModel.classes
+                    .map((e) => _timing(context, e).vP4)
+                    .toList(),
               ).hP16,
               SizedBox(height: 16),
               Row(
@@ -116,7 +120,7 @@ class BatchDetailPage extends StatelessWidget {
                 children: <Widget>[
                   Image.asset(Images.peopleBlack, width: 20),
                   SizedBox(width: 10),
-                  _title(context, "${model.studentModel.length} Student",
+                  _title(context, "${batchModel.studentModel.length} Student",
                       fontSize: 18),
                   Spacer(),
                   SizedBox(
@@ -124,7 +128,7 @@ class BatchDetailPage extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         Navigator.push(context,
-                            StudentListPage.getRoute(model.studentModel));
+                            StudentListPage.getRoute(batchModel.studentModel));
                       },
                       child: Text("View All"),
                     ),
@@ -151,11 +155,30 @@ class BatchDetailPage extends StatelessWidget {
                               fontSize: 18)
                           .p16;
                     return AnnouncementWidget(
-                        state.batchAnnouncementList[index - 1],
-                        isTeacher: Provider.of<HomeState>(context).isTeacher,
-                        loader: loader,
-                        onAnnouncementDeleted: (model) =>
-                            onAnnouncementDeleted(context, model));
+                      state.batchAnnouncementList[index - 1],
+                      loader: loader,
+                      onAnnouncementDeleted: (model) {
+                        onAnnouncementDeleted(context, model);
+                      },
+                      onAnnouncementEdit: (model) {
+                        Navigator.push(
+                          context,
+                          CreateAnnouncement.getEditRoute(
+                            batch: batchModel,
+                            announcementModel: model,
+                            onAnnouncementCreated: () {
+                              print(
+                                  "-------------------------------------------");
+                              // if an announcement is created or edited then
+                              // refresh timelime api
+                              context
+                                  .read<BatchDetailState>()
+                                  .getBatchTimeLine();
+                            },
+                          ),
+                        );
+                      },
+                    );
                   },
                   childCount: state.batchAnnouncementList.length + 1,
                 ),
@@ -167,7 +190,7 @@ class BatchDetailPage extends StatelessWidget {
         // SliverToBoxAdapter(child: Divider()),
         // Batch video, announcement, study material timeline
         Consumer<BatchDetailState>(builder: (context, state, child) {
-          if (state.timeLineList != null) {
+          if (state.timeLineList != null && state.timeLineList.isNotEmpty) {
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 if (index == 0)
@@ -179,7 +202,14 @@ class BatchDetailPage extends StatelessWidget {
                       .vP4;
                 }
                 if (model.datum is AnnouncementModel) {
-                  return AnnouncementWidget(model.datum).vP4;
+                  return AnnouncementWidget(
+                    model.datum,
+                    actions: ["Delete"],
+                    loader: loader,
+                    onAnnouncementDeleted: (model) {
+                      onAnnouncementDeleted(context, model);
+                    },
+                  ).vP4;
                 }
                 if (model.datum is BatchMaterialModel) {
                   return BatchMaterialCard(model: model.datum, loader: loader)

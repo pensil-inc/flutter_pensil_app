@@ -15,7 +15,22 @@ class AnnouncementState extends BaseState {
   bool isForAll = true;
   List<AnnouncementModel> batchAnnouncementList;
 
-  AnnouncementState({this.batchId});
+  // Used when announcement is in edit mode`
+  String title;
+  String description;
+  final bool isEditMode;
+
+  AnnouncementModel announcementModel;
+
+  AnnouncementState(
+      {this.batchId, this.announcementModel, this.isEditMode = false}) {
+    if (isEditMode) {
+      this.announcementModel = announcementModel;
+    } else {
+      announcementModel = AnnouncementModel();
+    }
+  }
+
   set setImageForAnnouncement(File io) {
     imagefile = io;
     docfile = null;
@@ -62,23 +77,20 @@ class AnnouncementState extends BaseState {
       {String title, String description, List<BatchModel> batches}) async {
     try {
       assert(title != null);
-      var model = AnnouncementModel(
-          // title:title,
-          batches: batches == null
-              ? null
-              : batches
-                  .where((element) => element.isSelected)
-                  .map((e) => e.id)
-                  .toList(),
-          description: description,
-          isForAll: batches == null
-              ? true
-              : batches.every((element) => !element.isSelected)
-                  ? true
-                  : isForAll);
+      var model = announcementModel.copyWith(
+        // title:title,
+        batches: batches == null
+            ? null
+            : batches
+                .where((element) => element.isSelected)
+                .map((e) => e.id)
+                .toList(),
+        description: description,
+        isForAll: false,
+      );
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
-      final data = await repo.createAnnouncement(model);
+      final data = await repo.createAnnouncement(model, isEdit: isEditMode);
       if (data != null) {
         if (imagefile != null || docfile != null) {
           var ok = await upload(

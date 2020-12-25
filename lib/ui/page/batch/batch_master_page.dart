@@ -103,6 +103,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
     if (_animationController != null) _animationController.dispose();
     _tabController.dispose();
     if (_controller != null) _controller.dispose();
+    currentPageNo.dispose();
     super.dispose();
   }
 
@@ -209,7 +210,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
             Navigator.push(
                 context,
                 CreateAnnouncement.getRoute(
-                  selectedBatch: model,
+                  batch: model,
                   onAnnouncementCreated: onAnnouncementCreated,
                 ));
           },
@@ -218,9 +219,13 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
     ];
   }
 
+  // if an announcement is created or edited then
+  // refresh timelime api
   void onAnnouncementCreated() async {
     Provider.of<AnnouncementState>(context, listen: false)
         .getBatchAnnouncementList();
+
+    context.read<BatchDetailState>().getBatchTimeLine();
   }
 
   void deleteBatch() async {
@@ -301,7 +306,7 @@ class _BatchMasterDetailPageState extends State<BatchMasterDetailPage>
             TabBarView(
               controller: _tabController,
               children: [
-                BatchDetailPage(model: model, loader: loader),
+                BatchDetailPage(batchModel: model, loader: loader),
                 BatchVideosPage(loader: loader),
                 BatchAssignmentPage(loader: loader),
                 BatchStudyMaterialPage(model: model, loader: loader)

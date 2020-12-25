@@ -85,4 +85,28 @@ class AnnouncementModel {
         "owner": owner == null ? null : owner.toJson(),
         "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
       };
+
+  AnnouncementModel copyWith({
+    List<String> batches,
+    String description,
+    String title,
+    String image,
+    String file,
+    bool isForAll,
+    ActorModel owner,
+    DateTime createdAt,
+    DateTime updatedAt,
+    String id,
+  }) =>
+      AnnouncementModel(
+        batches: batches ?? this.batches,
+        description: description ?? this.description,
+        image: image ?? this.image,
+        file: file ?? this.file,
+        isForAll: isForAll ?? this.isForAll,
+        owner: owner ?? this.owner,
+        createdAt: createdAt ?? this.createdAt,
+        title: title ?? this.title,
+        id: id ?? this.id,
+      );
 }

@@ -47,12 +47,16 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
-  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model) async {
+  Future<AnnouncementModel> createAnnouncement(AnnouncementModel model,
+      {bool isEdit = false}) async {
     try {
       final mapJson = model.toJson();
       String token = await pref.getAccessToken();
       final header = {"Authorization": "Bearer " + token};
-      var response = await _dioClient.post(Constants.annoucenment,
+      final endpoint = isEdit
+          ? Constants.crudAnnouncement(model.id)
+          : Constants.annoucenment;
+      var response = await _dioClient.post(endpoint,
           data: mapJson, options: Options(headers: header));
       final map = _dioClient.getJsonBody(response);
       final data = AnnouncementModel.fromJson(map["announcement"]);

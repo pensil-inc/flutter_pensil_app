@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';
 import 'package:flutter_pensil_app/model/batch_model.dart';
+import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
 import 'package:flutter_pensil_app/states/teacher/announcement_state.dart';
 import 'package:flutter_pensil_app/ui/kit/alert.dart';
@@ -17,18 +18,43 @@ import 'package:flutter_pensil_app/ui/widget/secondary_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class CreateAnnouncement extends StatefulWidget {
-  CreateAnnouncement({Key key, this.selectedBatch, this.onAnnouncementCreated})
+  CreateAnnouncement(
+      {Key key,
+      this.selectedBatch,
+      this.announcementModel,
+      this.onAnnouncementCreated})
       : super(key: key);
   final BatchModel selectedBatch;
   final Function onAnnouncementCreated;
+  final AnnouncementModel announcementModel;
   static MaterialPageRoute getRoute(
-      {BatchModel selectedBatch, Function onAnnouncementCreated}) {
+      {BatchModel batch, Function onAnnouncementCreated}) {
     return MaterialPageRoute(
       builder: (_) => ChangeNotifierProvider<AnnouncementState>(
         create: (context) => AnnouncementState(),
         child: CreateAnnouncement(
-            selectedBatch: selectedBatch,
-            onAnnouncementCreated: onAnnouncementCreated),
+            selectedBatch: batch, onAnnouncementCreated: onAnnouncementCreated),
+      ),
+    );
+  }
+
+  /// callback function `onAnnouncementCreated()` will invoke when announcement is created or edited
+  static MaterialPageRoute getEditRoute(
+      {BatchModel batch,
+      AnnouncementModel announcementModel,
+      Function onAnnouncementCreated}) {
+    return MaterialPageRoute(
+      builder: (_) => ChangeNotifierProvider<AnnouncementState>(
+        create: (context) => AnnouncementState(
+          announcementModel: announcementModel,
+          isEditMode: true,
+          batchId: batch.id,
+        ),
+        child: CreateAnnouncement(
+          selectedBatch: batch,
+          announcementModel: announcementModel,
+          onAnnouncementCreated: onAnnouncementCreated,
+        ),
       ),
     );
   }
@@ -47,17 +73,21 @@ class _CreateBatchState extends State<CreateAnnouncement> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
-    _description = TextEditingController();
-    _title = TextEditingController();
+    var state = Provider.of<AnnouncementState>(context, listen: false);
+    _description =
+        TextEditingController(text: state.announcementModel.description ?? "");
+    _title = TextEditingController(text: state.announcementModel.title ?? "");
     if (widget.selectedBatch != null) batchList.value = [widget.selectedBatch];
     super.initState();
   }
 
   @override
   void dispose() {
+    isLoading.dispose();
     _title.dispose();
     batchList.dispose();
     _description.dispose();
+    _title.dispose();
     super.dispose();
   }
 
@@ -118,7 +148,7 @@ class _CreateBatchState extends State<CreateAnnouncement> {
   }
 
   void createAnnouncement() async {
-    final state = Provider.of<AnnouncementState>(context, listen: false);
+    final state = context.read<AnnouncementState>();
     // validate batch name and batch description
     final isTrue = _formKey.currentState.validate();
 
@@ -135,13 +165,18 @@ class _CreateBatchState extends State<CreateAnnouncement> {
     if (addNewAnnouncment != null) {
       Alert.sucess(
         context,
-        message: "Announcement created sucessfully!!",
+        message: state.isEditMode
+            ? "Announcement created sucessfully!!"
+            : "Announcement updated sucessfully!!",
         title: "Message",
         onPressed: () {
           if (widget.onAnnouncementCreated != null) {
+            /// Refresh announcement on batch detail screen
             widget.onAnnouncementCreated();
           }
-          final homeState = Provider.of<HomeState>(context, listen: false);
+
+          /// Refresh announcement on home screen
+          final homeState = context.read<HomeState>();
           homeState.getAnnouncemantList();
           Navigator.pop(context);
         },
@@ -187,9 +222,15 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    _titleText(context, "Add Batch"),
-                    _secondaryButton(context,
-                        label: "Pick Batch", onPressed: displayBatchList),
+                    _titleText(context, "All Batch"),
+
+                    /// Hide Pick Batch button if
+                    /// If announcement is created from batch detail screen
+                    /// If announcement is in edit mode
+                    if (widget.selectedBatch == null &&
+                        !context.watch<AnnouncementState>().isEditMode)
+                      _secondaryButton(context,
+                          label: "Pick Batch", onPressed: displayBatchList),
                   ],
                 ),
                 if (batchList != null)
@@ -205,22 +246,22 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                                 .toList());
                       }),
                 SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("For all batches",
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
-                    Switch(
-                      value: Provider.of<AnnouncementState>(
-                        context,
-                      ).isForAll,
-                      onChanged: Provider.of<AnnouncementState>(
-                        context,
-                      ).setIsForAll,
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: <Widget>[
+                //     Text("For all batches",
+                //         style: Theme.of(context).textTheme.bodyText1.copyWith(
+                //             fontWeight: FontWeight.bold, fontSize: 16)),
+                //     Switch(
+                //       value: Provider.of<AnnouncementState>(
+                //         context,
+                //       ).isForAll,
+                //       onChanged: Provider.of<AnnouncementState>(
+                //         context,
+                //       ).setIsForAll,
+                //     ),
+                //   ],
+                // ),
 
                 Consumer<AnnouncementState>(
                   builder: (context, state, child) {
@@ -357,7 +398,9 @@ class _CreateBatchState extends State<CreateAnnouncement> {
                 ),
                 SizedBox(height: 40),
                 PFlatButton(
-                  label: "Create",
+                  label: context.watch<AnnouncementState>().isEditMode
+                      ? "Update"
+                      : "Create",
                   isLoading: isLoading,
                   onPressed: createAnnouncement,
                 ),
