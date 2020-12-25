@@ -62,25 +62,9 @@ class BatchMaterialState extends BaseState {
     /// If received data from api and we have material to upload
     if (data != null && file != null) {
       await upload(data.id);
-      isBusy = false;
-      return true;
     }
-
-    /// In material edit mode file url is not null
-    /// It means a file is already avilable at server
-    else if (materialModel.file != null) {
-      isBusy = false;
-      return true;
-    }
-
-    /// If we have article Url
-    else if (fileUrl != null) {
-      isBusy = false;
-      return true;
-    } else {
-      isBusy = false;
-      return false;
-    }
+    isBusy = false;
+    return true;
   }
 
   Future<bool> upload(String id) async {

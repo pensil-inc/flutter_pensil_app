@@ -89,11 +89,20 @@ class AnnouncementWidget extends StatelessWidget {
                             SizedBox(height: 8),
                           ],
                           if (model.file != null)
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Icon(Icons.attach_file_outlined)
-                                  .ripple(() {}),
-                            ).alignCenterRight,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Image.asset(
+                                    Images.getfiletypeIcon(null,
+                                        path: model.file),
+                                    height: 20),
+                                SizedBox(width: 8),
+                                RotatedBox(
+                                  quarterTurns: 1,
+                                  child: Icon(Icons.attach_file_outlined),
+                                )
+                              ],
+                            ),
                           Align(
                             alignment: Alignment.bottomRight,
                             child: Row(

@@ -22,6 +22,9 @@ class BatchMaterialCard extends StatelessWidget {
   final bool displayActionButtons;
 
   Widget _picture(context, String type) {
+    if (type == null && model.articleUrl != null) {
+      type = "link";
+    }
     // return empty widget if space has no pictures
     return // Picture
         Container(
@@ -63,7 +66,8 @@ class BatchMaterialCard extends StatelessWidget {
   void openMaterial(context, BatchMaterialModel model) {
     if (model.file != null || model.articleUrl != null) {
       if (model.articleUrl != null) {
-        Utility.launchURL(context, model.articleUrl ?? model.file);
+        // Utility.launchURL(context, model.articleUrl ?? model.file);
+        Utility.launchOnWeb(model.articleUrl ?? model.file);
       } else if (model.file.contains("pdf")) {
         Navigator.push(
             context, PdfViewPage.getRoute(model.file, title: model.title));

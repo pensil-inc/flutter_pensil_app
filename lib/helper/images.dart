@@ -14,6 +14,7 @@ class Images {
   static const String calender = 'assets/images/icons/calender.png';
   static const String uploadVideo = 'assets/images/icons/upload.png';
   static const String edit = 'assets/images/icons/edit.png';
+  static const String link = 'assets/images/icons/link.png';
   static const String upload = 'assets/images/icons/upload_ios.png';
   static const String pdf = 'assets/images/icons/pdf.png';
   static const String image = 'assets/images/icons/image.png';
@@ -30,7 +31,10 @@ class Images {
   static const String skipped = 'assets/images/icons/skipped.png';
   static const String videoPlay = 'assets/images/icons/video_play.jpeg';
 
-  static getfiletypeIcon(String type) {
+  static getfiletypeIcon(String type, {String path}) {
+    if (type == null && path != null) {
+      type = path.split(".").last;
+    }
     switch (type) {
       case "pdf":
         return pdf;
@@ -50,6 +54,10 @@ class Images {
         return audio;
       case "docx":
         return doc;
+      case "xls":
+        return doc;
+      case "link":
+        return link;
       default:
         return doc;
     }

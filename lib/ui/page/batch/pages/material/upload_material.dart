@@ -128,12 +128,12 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
       state.setArticleUrl(_link.text);
     }
 
-    if (_link.text.isEmpty &&
-        state.file == null &&
-        state.materialModel.file == null) {
-      print("Add one resource");
-      return;
-    }
+    // if (_link.text.isEmpty &&
+    //     state.file == null &&
+    //     state.materialModel.file == null) {
+    //   print("Add one resource");
+    //   return;
+    // }
     isLoading.value = true;
 
     final isOk = await state.uploadMaterial(_title.text, _description.text);
@@ -143,8 +143,10 @@ class _UploadMaterialPageState extends State<UploadMaterialPage> {
       if (state.isEditMode) {
         message = "Material updated sucessfully!!";
       }
-      Alert.sucess(context, message: message, title: "Message");
       await widget.state.getBatchMaterialList();
+      Alert.sucess(context, message: message, title: "Message", onPressed: () {
+        Navigator.pop(context);
+      });
     } else {
       Alert.sucess(context,
           message: "Some error occured. Please try again in some time!!",
