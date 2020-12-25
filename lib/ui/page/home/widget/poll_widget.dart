@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
 import 'package:flutter_pensil_app/states/home_state.dart';
+import 'package:flutter_pensil_app/ui/kit/overlay_loader.dart';
+import 'package:flutter_pensil_app/ui/page/batch/widget/tile_action_widget.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 import 'package:provider/provider.dart';
 
 class PollWidget extends StatelessWidget {
-  const PollWidget({Key key, this.model, this.hideFinishButton = true})
+  const PollWidget(
+      {Key key, this.model, this.loader, this.hideFinishButton = true})
       : super(key: key);
   final PollModel model;
+  final CustomLoader loader;
   final bool hideFinishButton;
 
   Widget _secondaryButton(BuildContext context,
@@ -98,17 +102,37 @@ class PollWidget extends StatelessWidget {
     final state = Provider.of<HomeState>(context, listen: false);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: AppTheme.decoration(context),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(model.question),
+          Row(
+            children: [
+              Text(model.question).pL(16).extended,
+              if (context.watch<HomeState>().isTeacher)
+                TileActionWidget(
+                  list: ["End Poll", "Delete"],
+                  // End poll method
+                  onCustomIconPressed: () async {
+                    loader.showLoader(context);
+                    await context.read<HomeState>().expirePoll(model.id);
+                    loader.hideLoader();
+                  },
+                  onDelete: () async {
+                    loader.showLoader(context);
+                    await context.read<HomeState>().deletePoll(model.id);
+                    loader.hideLoader();
+                  },
+                )
+              else
+                SizedBox(width: 16)
+            ],
+          ),
           SizedBox(height: 10),
           Column(
               children: model.options.map((e) {
-            return _option(context, e);
+            return _option(context, e).hP16;
           }).toList()),
 
           /// Restrict user to vote If
@@ -125,7 +149,8 @@ class PollWidget extends StatelessWidget {
                 label: "Submit", onPressed: () {
               submitVote(context, model.selection.choice);
             })
-          ]
+          ],
+          SizedBox(height: 16)
         ],
       ),
     );

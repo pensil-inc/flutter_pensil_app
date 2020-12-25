@@ -87,6 +87,10 @@ class Constants {
     return "$batch/$batchId";
   }
 
+  static String crudePoll(String pollId) {
+    return "$poll/$pollId";
+  }
+
   static String crudVideo(String id) {
     return "$video/$id";
   }

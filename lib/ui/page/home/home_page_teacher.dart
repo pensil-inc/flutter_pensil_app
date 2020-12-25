@@ -278,7 +278,8 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                           ).hP16
                         ],
                       );
-                    return PollWidget(model: state.polls[index - 1]);
+                    return PollWidget(
+                        model: state.polls[index - 1], loader: loader);
                   },
                   childCount: state.polls.length + 1,
                 ),

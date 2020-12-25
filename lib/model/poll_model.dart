@@ -57,19 +57,19 @@ class PollModel {
   final DateTime updatedAt;
   MySelection selection;
 
-  PollModel copyWith({
-    String id,
-    String question,
-    List<String> options,
-    DateTime endTime,
-    List<dynamic> batches,
-    bool isForAll,
-    List<dynamic> answers,
-    int totalVotes,
-    Map<String, double> votes,
-    DateTime createdAt,
-    DateTime updatedAt,
-  }) =>
+  PollModel copyWith(
+          {String id,
+          String question,
+          List<String> options,
+          DateTime endTime,
+          List<dynamic> batches,
+          bool isForAll,
+          List<dynamic> answers,
+          int totalVotes,
+          Map<String, double> votes,
+          DateTime createdAt,
+          DateTime updatedAt,
+          MySelection selection}) =>
       PollModel(
         id: id ?? this.id,
         question: question ?? this.question,
@@ -82,6 +82,7 @@ class PollModel {
         votes: votes ?? this.votes,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        selection: selection ?? this.selection,
       );
 
   factory PollModel.fromRawJson(String str) =>

@@ -5,10 +5,12 @@ class TileActionWidget extends StatelessWidget {
       {Key key,
       this.onDelete,
       this.onEdit,
+      this.onCustomIconPressed,
       this.list = const ["Edit", "Delete"]})
       : super(key: key);
   final Function onDelete;
   final Function onEdit;
+  final Function onCustomIconPressed;
   final List<String> list;
 
   @override
@@ -24,6 +26,7 @@ class TileActionWidget extends StatelessWidget {
             onEdit();
             break;
           default:
+            if (onCustomIconPressed != null) onCustomIconPressed();
         }
       },
       padding: EdgeInsets.zero,

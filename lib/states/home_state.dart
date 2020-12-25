@@ -121,6 +121,44 @@ class HomeState extends BaseState {
     }
   }
 
+  Future<bool> deletePoll(String pollId) async {
+    try {
+      final repo = getit.get<BatchRepository>();
+      var isDeleted = await repo.deleteById(Constants.crudePoll(pollId));
+      if (isDeleted) {
+        polls.removeWhere((element) => element.id == pollId);
+      }
+      notifyListeners();
+      return true;
+    } catch (error) {
+      log("deleteBatch", error: error, name: this.runtimeType.toString());
+      return false;
+    }
+  }
+
+  Future<bool> expirePoll(String pollId) async {
+    try {
+      final repo = getit.get<BatchRepository>();
+      // var isDeleted = await repo.deleteById(Constants.crudePoll(pollId));
+      // if (isDeleted) {
+      //   var oldModel = polls.firstWhere((element) => element.id == pollId);
+      //   oldModel.copyWith(
+      //     endTime:DateTime.now()
+      //   );
+      // }
+      var oldModel = polls.firstWhere((element) => element.id == pollId);
+      var index = polls.indexOf(oldModel);
+      oldModel = oldModel.copyWith(endTime: DateTime.now());
+      polls[index] = oldModel;
+      // polls.
+      notifyListeners();
+      return true;
+    } catch (error) {
+      log("deleteBatch", error: error, name: this.runtimeType.toString());
+      return false;
+    }
+  }
+
   Future<bool> deleteAnnouncement(String announcementId) async {
     try {
       var isDeleted =
