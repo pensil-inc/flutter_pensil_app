@@ -37,33 +37,35 @@ class BatchMaterialCard extends StatelessWidget {
       decoration: AppTheme.decoration(context),
       alignment: Alignment.center,
       child: ClipRRect(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-          child: Stack(
-            // fit: StackFit.expand,
-            alignment: Alignment.centerLeft,
-            children: <Widget>[
-              Container(
-                width: 5,
-                decoration: BoxDecoration(
-                  border:
-                      Border(left: BorderSide(color: PColors.blue, width: 6)),
-                ),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+        child: Stack(
+          // fit: StackFit.expand,
+          alignment: Alignment.centerLeft,
+          children: <Widget>[
+            Container(
+              width: 5,
+              decoration: BoxDecoration(
+                border: Border(left: BorderSide(color: PColors.blue, width: 6)),
               ),
-              Container(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: Image.asset(
-                    Images.getfiletypeIcon(type),
-                    fit: BoxFit.fitHeight,
-                    width: 50,
-                  ),
-                ),
-              )
-            ],
-          )),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: type == null
+                    ? SizedBox()
+                    : Image.asset(
+                        Images.getfiletypeIcon(type),
+                        fit: BoxFit.fitHeight,
+                        width: 50,
+                      ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
