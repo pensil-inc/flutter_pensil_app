@@ -34,6 +34,10 @@ class TeacherRepository {
     return gatway.createPoll(model);
   }
 
+  Future<bool> expirePollById(String pollId) {
+    return gatway.expirePollById(pollId);
+  }
+
   Future<VideoModel> addVideo(VideoModel model, {bool isEdit}) {
     return gatway.addVideo(model, isEdit: isEdit);
   }

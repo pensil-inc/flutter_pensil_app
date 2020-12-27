@@ -7,6 +7,7 @@ import 'package:flutter_pensil_app/model/batch_model.dart';
 import 'package:flutter_pensil_app/model/create_announcement_model.dart';
 import 'package:flutter_pensil_app/model/poll_model.dart';
 import 'package:flutter_pensil_app/resources/repository/batch_repository.dart';
+import 'package:flutter_pensil_app/resources/repository/teacher/teacher_repository.dart';
 import 'package:flutter_pensil_app/states/base_state.dart';
 import 'package:get_it/get_it.dart';
 
@@ -39,7 +40,8 @@ class HomeState extends BaseState {
       final getit = GetIt.instance;
       final repo = getit.get<BatchRepository>();
       announcementList = await repo.getAnnouncemantList();
-      announcementList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      if (announcementList != null && announcementList.isNotEmpty)
+        announcementList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       notifyListeners();
     } catch (error) {
       log("getAnnouncemantList",
@@ -138,14 +140,12 @@ class HomeState extends BaseState {
 
   Future<bool> expirePoll(String pollId) async {
     try {
-      final repo = getit.get<BatchRepository>();
-      // var isDeleted = await repo.deleteById(Constants.crudePoll(pollId));
-      // if (isDeleted) {
-      //   var oldModel = polls.firstWhere((element) => element.id == pollId);
-      //   oldModel.copyWith(
-      //     endTime:DateTime.now()
-      //   );
-      // }
+      final repo = getit.get<TeacherRepository>();
+      var isExpired = await repo.expirePollById(pollId);
+      if (isExpired) {
+        var oldModel = polls.firstWhere((element) => element.id == pollId);
+        oldModel.copyWith(endTime: DateTime.now());
+      }
       var oldModel = polls.firstWhere((element) => element.id == pollId);
       var index = polls.indexOf(oldModel);
       oldModel = oldModel.copyWith(endTime: DateTime.now());

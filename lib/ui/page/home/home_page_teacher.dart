@@ -47,9 +47,9 @@ class _TeacherHomePageState extends State<TeacherHomePage>
     super.initState();
     setupAnimations();
     loader = CustomLoader();
-    Provider.of<HomeState>(context, listen: false).getBatchList();
-    Provider.of<HomeState>(context, listen: false).getAnnouncemantList();
-    Provider.of<HomeState>(context, listen: false).getPollList();
+    context.read<HomeState>().getBatchList();
+    context.read<HomeState>().getAnnouncemantList();
+    context.read<HomeState>().getPollList();
   }
 
   @override
@@ -299,6 +299,17 @@ class _TeacherHomePageState extends State<TeacherHomePage>
                     return AnnouncementWidget(
                       state.announcementList[index - 1],
                       loader: loader,
+                      onAnnouncementEdit: (model) {
+                        Navigator.push(
+                          context,
+                          CreateAnnouncement.getEditRoute(
+                            announcementModel: model,
+                            onAnnouncementCreated: () {
+                              context.read<HomeState>().getAnnouncemantList();
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                   childCount: state.announcementList.length + 1,

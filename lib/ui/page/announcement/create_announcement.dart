@@ -48,7 +48,7 @@ class CreateAnnouncement extends StatefulWidget {
         create: (context) => AnnouncementState(
           announcementModel: announcementModel,
           isEditMode: true,
-          batchId: batch.id,
+          batchId: batch?.id,
         ),
         child: CreateAnnouncement(
           selectedBatch: batch,
@@ -166,8 +166,8 @@ class _CreateBatchState extends State<CreateAnnouncement> {
       Alert.sucess(
         context,
         message: state.isEditMode
-            ? "Announcement created sucessfully!!"
-            : "Announcement updated sucessfully!!",
+            ? "Announcement updated sucessfully!!"
+            : "Announcement created sucessfully!!",
         title: "Message",
         onPressed: () {
           if (widget.onAnnouncementCreated != null) {

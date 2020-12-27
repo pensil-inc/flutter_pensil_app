@@ -25,6 +25,7 @@ abstract class ApiGateway {
   Future<List<BatchModel>> getBatches();
   Future<bool> deleteBatch(String batchId);
   Future<bool> createPoll(PollModel model);
+  Future<bool> expirePollById(String pollId);
   Future<List<AnnouncementModel>> getAnnouncemantList();
   Future<List<PollModel>> getPollList();
   Future<List<ActorModel>> getStudentList();

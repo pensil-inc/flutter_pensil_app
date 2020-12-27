@@ -220,6 +220,19 @@ class ApiGatewayImpl implements ApiGateway {
   }
 
   @override
+  Future<bool> expirePollById(String pollId) async {
+    try {
+      String token = await pref.getAccessToken();
+      final header = {"Authorization": "Bearer " + token};
+      await _dioClient.post(Constants.crudePoll(pollId) + "/end",
+          options: Options(headers: header));
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
   Future<List<AnnouncementModel>> getAnnouncemantList() async {
     try {
       String token = await pref.getAccessToken();
