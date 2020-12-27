@@ -193,24 +193,24 @@ class _CreateBatchState extends State<CreateBatch> {
     if (!isTrue) {
       return;
     }
-    if (!isValidTimeSlots) {
+    if (isValidTimeSlots) {
       return;
     }
     //validate Subjects
-    if (state.selectedSubjects == null) {
-      Utility.displaySnackbar(context,
-          msg: "Please select a subject", key: scaffoldKey);
-      return;
-    }
-    //validate Students
-    if (!(state.contactList != null && state.contactList.isNotEmpty) &&
-        deviceContact.value.isEmpty) {
-      if (state.studentsList.every((element) => !element.isSelected)) {
-        Utility.displaySnackbar(context,
-            msg: "Please Add students to batch", key: scaffoldKey);
-        return;
-      }
-    }
+    // if (state.selectedSubjects == null) {
+    //   Utility.displaySnackbar(context,
+    //       msg: "Please select a subject", key: scaffoldKey);
+    //   return;
+    // }
+    // //validate Students
+    // if (!(state.contactList != null && state.contactList.isNotEmpty) &&
+    //     deviceContact.value.isEmpty) {
+    //   if (state.studentsList.every((element) => !element.isSelected)) {
+    //     Utility.displaySnackbar(context,
+    //         msg: "Please Add students to batch", key: scaffoldKey);
+    //     return;
+    //   }
+    // }
 
     isLoading.value = true;
     state.setBatchName = _name.text;
@@ -262,7 +262,7 @@ class _CreateBatchState extends State<CreateBatch> {
                   hintText: "Enter batch name",
                 ),
                 PTextField(
-                  type: Type.text,
+                  type: Type.optional,
                   controller: _description,
                   label: "Description",
                   hintText: "Description",
@@ -291,9 +291,8 @@ class _CreateBatchState extends State<CreateBatch> {
                             var model = state.timeSlots[index];
                             return Dismissible(
                               confirmDismiss: (val) async {
-                                var isRemoved = Provider.of<CreateBatchStates>(
-                                        context,
-                                        listen: false)
+                                var isRemoved = context
+                                    .read<CreateBatchStates>()
                                     .removeTimeSlot(model);
                                 return Future.value(isRemoved);
                               },

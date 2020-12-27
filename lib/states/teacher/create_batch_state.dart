@@ -28,20 +28,23 @@ class CreateBatchStates extends BaseState {
     }
     isEditBatch = true;
     editBatch = model;
-    selectedStudentsList = model.studentModel;
     batchName = model.name;
-    timeSlots = List.from(model.classes);
     description = model.description;
     var counter = 0;
-    timeSlots.forEach((clas) {
-      clas.index = counter;
-      counter++;
-      clas.key = UniqueKey().toString();
-    });
+    if (model.classes != null) {
+      timeSlots = List.from(model.classes);
+      timeSlots.forEach((clas) {
+        clas.index = counter;
+        counter++;
+        clas.key = UniqueKey().toString();
+      });
+    }
+
     selectedSubjects = model.subject;
-    selectedStudentsList.forEach((model) {
-      print(model.id);
-    });
+    selectedStudentsList = model.studentModel;
+    // if (model.studentModel != null){
+    //    selectedStudentsList.forEach((model) {});
+    // }
   }
 
   List<Subject> availableSubjects;
@@ -75,9 +78,9 @@ class CreateBatchStates extends BaseState {
   }
 
   bool removeTimeSlot(BatchTimeSlotModel model) {
-    if (timeSlots.length == 1) {
-      return false;
-    }
+    // if (timeSlots.length == 1) {
+    //   return false;
+    // }
     timeSlots.removeWhere((element) => element.key == model.key);
     timeSlots.forEach((element) {
       element.index = timeSlots.indexOf(element);
@@ -162,7 +165,8 @@ class CreateBatchStates extends BaseState {
       checkSlotsModel(model);
     });
     notifyListeners();
-    return allGood;
+    return timeSlots.any(
+        (element) => !element.isValidEndEntry || !element.isValidStartEntry);
   }
 
   /// If any time slot has default values then it should display error
@@ -270,7 +274,7 @@ class CreateBatchStates extends BaseState {
             index: index,
             name: list[index],
             isSelected: selectedSubjects == null
-                ? index == 0
+                ? false
                 : selectedSubjects == list[index]
                     ? true
                     : false,

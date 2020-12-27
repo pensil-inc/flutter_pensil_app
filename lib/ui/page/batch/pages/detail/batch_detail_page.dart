@@ -85,18 +85,19 @@ class BatchDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _title(context, batchModel.name).vP8,
-                  Wrap(
-                    children: <Widget>[
-                      PChip(
-                        style: theme.textTheme.bodyText1
-                            .copyWith(color: theme.colorScheme.onPrimary),
-                        borderColor: Colors.transparent,
-                        label: batchModel.subject,
-                        backgroundColor:
-                            PColors.randomColor(batchModel.subject),
-                      ),
-                    ],
-                  ),
+                  if (batchModel.subject != null)
+                    Wrap(
+                      children: <Widget>[
+                        PChip(
+                          style: theme.textTheme.bodyText1
+                              .copyWith(color: theme.colorScheme.onPrimary),
+                          borderColor: Colors.transparent,
+                          label: batchModel.subject,
+                          backgroundColor:
+                              PColors.randomColor(batchModel.subject),
+                        ),
+                      ],
+                    ),
                   SizedBox(height: 19),
                   Row(
                     children: <Widget>[

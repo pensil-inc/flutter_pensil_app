@@ -31,13 +31,14 @@ class BatchWidget extends StatelessWidget {
                   .headline6
                   .copyWith(fontSize: 15, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
-          PChip(
-            label: model.subject,
-            backgroundColor: Color(0xffF67619),
-            borderColor: Colors.transparent,
-            style: theme.textTheme.bodyText1
-                .copyWith(fontSize: 14, color: theme.colorScheme.onSecondary),
-          ),
+          if (model.subject != null)
+            PChip(
+              label: model.subject,
+              backgroundColor: Color(0xffF67619),
+              borderColor: Colors.transparent,
+              style: theme.textTheme.bodyText1
+                  .copyWith(fontSize: 14, color: theme.colorScheme.onSecondary),
+            ),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
