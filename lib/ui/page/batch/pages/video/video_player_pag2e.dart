@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pensil_app/ui/theme/theme.dart';
 
 class VideoPlayerPage2 extends StatefulWidget {
@@ -12,10 +13,11 @@ class VideoPlayerPage2 extends StatefulWidget {
 
   static MaterialPageRoute getRoute(String path, {String title}) {
     return MaterialPageRoute(
-        builder: (_) => VideoPlayerPage2(
-              path: path,
-              title: title,
-            ));
+      builder: (_) => VideoPlayerPage2(
+        path: path,
+        title: title,
+      ),
+    );
   }
 
   @override
@@ -24,7 +26,8 @@ class VideoPlayerPage2 extends StatefulWidget {
 
 class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
   BetterPlayerController _betterPlayerController;
-  StreamController<bool> _fileVideoStreamController = StreamController.broadcast();
+  StreamController<bool> _fileVideoStreamController =
+      StreamController.broadcast();
   bool _fileVideoShown = false;
   void initState() {
     super.initState();
@@ -32,44 +35,41 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
   }
 
   Future<BetterPlayerController> _setupDefaultVideoData() async {
-    var dataSource = BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, widget.path
-        // "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4"
-        // "https://pensil-staging.herokuapp.com/videos/408853c4-945b-4085-ab09-7bb378fea72c.flv"
-        // "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-        // resolutions: {
-        //   "LOW": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4",
-        //   "MEDIUM": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
-        //   "LARGE": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
-        //   "EXTRA_LARGE": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1920_18MG.mp4"
-        // },
-        );
-    _betterPlayerController = BetterPlayerController(
-        BetterPlayerConfiguration(
-          controlsConfiguration: BetterPlayerControlsConfiguration(
-            enableProgressText: true,
-            enablePlaybackSpeed: true,
-            enableSubtitles: true,
-          ),
-        ),
-        betterPlayerDataSource: dataSource);
-    _betterPlayerController.addEventsListener((event) {
-      print("Better player event: ${event.betterPlayerEventType}");
-    });
-    return _betterPlayerController;
-  }
-
-  Future<BetterPlayerController> _setupFileVideoData() async {
-    // final directory = await getApplicationDocumentsDirectory();
-
     var dataSource = BetterPlayerDataSource(
-      BetterPlayerDataSourceType.NETWORK,
-      "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+      BetterPlayerDataSourceType.network,
+      widget.path,
+      cacheConfiguration: BetterPlayerCacheConfiguration(
+        maxCacheSize: 1e+8.toInt(),
+        useCache: true,
+      ),
     );
     _betterPlayerController = BetterPlayerController(
-      BetterPlayerConfiguration(),
+      BetterPlayerConfiguration(
+        controlsConfiguration: BetterPlayerControlsConfiguration(
+          enableProgressText: true,
+          enablePlaybackSpeed: true,
+          enableSubtitles: true,
+          enableSkips: false,
+          showControlsOnInitialize: false,
+        ),
+        fit: BoxFit.contain,
+        startAt: const Duration(milliseconds: 1000),
+        looping: true,
+        autoPlay: true,
+        deviceOrientationsAfterFullScreen: [
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ],
+        deviceOrientationsOnFullScreen: [
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ],
+      ),
       betterPlayerDataSource: dataSource,
     );
-
+    // _betterPlayerController.addEventsListener((event) {
+    //   print("Better player event: ${event.betterPlayerEventType}");
+    // });
     return _betterPlayerController;
   }
 
@@ -97,52 +97,9 @@ class _VideoPlayerPage2State extends State<VideoPlayerPage2> {
             child: CircularProgressIndicator(),
           );
         } else {
-          return AspectRatio(
-            aspectRatio: 16 / 9,
-            child: BetterPlayer(
-              controller: snapshot.data,
-            ),
+          return BetterPlayer(
+            controller: snapshot.data,
           );
-        }
-      },
-    );
-  }
-
-  // Widget _buildShowFileVideoButton() {
-  //   return Column(children: [
-  //     RaisedButton(
-  //       child: Text("Show video from file"),
-  //       onPressed: () {
-  //         _fileVideoShown = !_fileVideoShown;
-  //         _fileVideoStreamController.add(_fileVideoShown);
-  //       },
-  //     ),
-  //     _buildFileVideo()
-  //   ]);
-  // }
-
-  Widget _buildFileVideo() {
-    return StreamBuilder<bool>(
-      stream: _fileVideoStreamController.stream,
-      builder: (context, snapshot) {
-        if (snapshot?.data == true) {
-          return FutureBuilder<BetterPlayerController>(
-            future: _setupFileVideoData(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              } else {
-                return AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: BetterPlayer(
-                    controller: snapshot.data,
-                  ),
-                );
-              }
-            },
-          );
-        } else {
-          return const SizedBox();
         }
       },
     );
