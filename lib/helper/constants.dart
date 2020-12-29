@@ -4,6 +4,7 @@ class Constants {
   static const String shaanAppBaseUrl = "http://34.222.54.250:3002/api/";
   static const String sucessHaryanaAppBaseUrl =
       "http://34.222.54.250:3003/api/";
+  static const String prefaceAppBaseUrl = "http://34.222.54.250:3004/api/";
 
   static const String developmentBaseUrl =
       "https://pensil-staging.herokuapp.com/api";

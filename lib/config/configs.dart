@@ -36,4 +36,12 @@ class Configs {
         apiLogging: false,
         diagnostic: false,
       );
+  static prefqaceAppConfig() => Config(
+        appName: 'Preface IAS Coaching',
+        appIcon: Images.logoPreface,
+        apiBaseUrl: Constants.prefaceAppBaseUrl,
+        appToken: '',
+        apiLogging: false,
+        diagnostic: false,
+      );
 }

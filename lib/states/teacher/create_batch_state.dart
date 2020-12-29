@@ -281,7 +281,7 @@ class CreateBatchStates extends BaseState {
           ),
         ).toList();
 
-        if (selectedSubjects == null) {
+        if (selectedSubjects == null && availableSubjects.isNotEmpty) {
           selectedSubjects = availableSubjects.first.name;
         }
       }

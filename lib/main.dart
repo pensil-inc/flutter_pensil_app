@@ -8,7 +8,8 @@ import 'package:flutter_pensil_app/ui/page/common/splash.dart';
 
 void main() async {
   // final config = Configs.sucessHaryanaAppConfig();
-  final config = Configs.devConfig();
+  // final config = Configs.devConfig();
+  final config = Configs.prefqaceAppConfig();
   // final config = Configs.bramhAppConfig();
   // final config = Configs.shaanAppConfig();
 

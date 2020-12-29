@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "680271036691-ik80ejmkskkcto890e2q4t6hte972uc9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pensil.brahmApp",
+            "certificate_hash": "3884e6086a21479f4cff554e02413c8fb09aa33e"
+          }
+        },
+        {
           "client_id": "680271036691-t5o9tevqn2kjeoveqd6qsiksn1lc389c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -90,6 +98,51 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:680271036691:android:d7e07f8c0947a0fe619ae6",
+        "android_client_info": {
+          "package_name": "com.pensil.prefaceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680271036691-0djtma3vlso8t4dnl6qugjph5rfvrldq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pensil.prefaceapp",
+            "certificate_hash": "885ceb669e7b9b429164f385a1495804cc885f5b"
+          }
+        },
+        {
+          "client_id": "680271036691-grrq2er0mpfofkkjpbogk33sgnoa3d76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pensil.prefaceapp",
+            "certificate_hash": "9de309e80db3f39ce864ebdb5eb057b1201d3eb0"
+          }
+        },
+        {
+          "client_id": "680271036691-48s384oggpmp6cp59a8dgsg0aplng95b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvhdfnReuUbbGGHdxah1CNHIVo7R1Mf54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680271036691-48s384oggpmp6cp59a8dgsg0aplng95b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:680271036691:android:7fde0d3db3d3f95e619ae6",
         "android_client_info": {
           "package_name": "com.pensil.shaanApp"
@@ -102,6 +155,14 @@
           "android_info": {
             "package_name": "com.pensil.shaanApp",
             "certificate_hash": "53c87b233a9147760219cf17e49e43954e4c68da"
+          }
+        },
+        {
+          "client_id": "680271036691-j1s76t82bmj7sg0crt1od5a9uuf52ahb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pensil.shaanApp",
+            "certificate_hash": "3884e6086a21479f4cff554e02413c8fb09aa33e"
           }
         },
         {
@@ -147,6 +208,14 @@
           "android_info": {
             "package_name": "com.pensil.successHaryanaApp",
             "certificate_hash": "03ad72e22b6c5cc482743891b0445869f3c99f07"
+          }
+        },
+        {
+          "client_id": "680271036691-bqaach96tso38t34op188tr70avl9sdj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pensil.successHaryanaApp",
+            "certificate_hash": "3884e6086a21479f4cff554e02413c8fb09aa33e"
           }
         },
         {
