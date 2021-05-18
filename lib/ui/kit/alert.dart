@@ -12,7 +12,7 @@ class Alert {
     final theme = Theme.of(context);
     await showDialog(
       context: context,
-      child: Dialog(
+      builder: (_) => Dialog(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         child: Container(
@@ -71,7 +71,7 @@ class Alert {
     await showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
-      child: Dialog(
+      builder: (_) => Dialog(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         child: Container(
@@ -143,7 +143,7 @@ class Alert {
     await showDialog(
       barrierDismissible: false,
       context: context,
-      child: Dialog(
+      builder: (_) => Dialog(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         child: Wrap(

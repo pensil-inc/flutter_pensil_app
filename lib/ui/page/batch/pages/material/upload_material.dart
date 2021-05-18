@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:add_thumbnail/add_thumbnail.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/images.dart';

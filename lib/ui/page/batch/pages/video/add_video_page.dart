@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:add_thumbnail/add_thumbnail.dart';
+// import 'package:add_thumbnail/add_thumbnail.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pensil_app/helper/utility.dart';
@@ -107,17 +107,17 @@ class _AddVideoPageState extends State<AddVideoPage> {
   }
 
   void addLink() async {
-    await Thumbnail.addLink(
-      context: context,
-      onLinkAdded: (mediaInfo) {
-        final state = Provider.of<VideoState>(context, listen: false);
-        state.setUrl(
-          thumbnailUrl: mediaInfo.thumbnailUrl,
-          title: mediaInfo.title,
-          videoUrl: mediaInfo.url,
-        );
-      },
-    );
+    // await Thumbnail.addLink(
+    //   context: context,
+    //   onLinkAdded: (mediaInfo) {
+    //     final state = Provider.of<VideoState>(context, listen: false);
+    //     state.setUrl(
+    //       thumbnailUrl: mediaInfo.thumbnailUrl,
+    //       title: mediaInfo.title,
+    //       videoUrl: mediaInfo.url,
+    //     );
+    //   },
+    // );
   }
 
   void pickFile() async {
