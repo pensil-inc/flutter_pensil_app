@@ -29,7 +29,6 @@ dependencies:
   cached_network_image: ^2.2.0+1
   contacts_service: ^0.4.6
   cupertino_icons: ^1.0.0
-  dash_chat: ^1.1.15
   dio: ^3.0.10
   equatable: ^1.2.5
   file_picker: ^2.0.7
@@ -37,21 +36,17 @@ dependencies:
   firebase_auth: ^0.18.3+1
   firebase_core: ^0.5.2+1
   firebase_messaging: ^7.0.3
-  flutter_custom_tabs: ^0.6.0
   flutter_launcher_icons: ^0.7.3
-  focus_detector: ^1.0.3
   get_it: ^5.0.1
   google_sign_in: ^4.5.1
   image_picker: ^0.6.7+11
   intl: ^0.16.1
   permission_handler: ^5.0.1+1
   provider: ^4.3.2+2
-  sendbird_chat: ^0.0.2
   share: ^0.6.5
   shared_preferences: ^0.5.12
   url_launcher: ^5.7.2
   webview_flutter: ^0.3.22+1
-  # yoyo_player: ^0.1.0
   freezed_annotation: ^0.12.0
   json_annotation: ^3.1.1
   dartz: ^0.9.2
