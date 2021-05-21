@@ -35,7 +35,7 @@ $ git clone https://github.com/pensil-inc/flutter_pensil_app.git
 $ cd flutter_pensil_app/
 ```
 
-#### 3. Setup the firebase app
+#### 3. Setup the firebase app (Used for Google authentication)
 
 1. You'll need to create a Firebase instance. Follow the instructions at https://console.firebase.google.com.
 2. Once your Firebase instance is created, you'll need to enable Google authentication.
@@ -44,13 +44,6 @@ $ cd flutter_pensil_app/
 * Click "Authentication" in the left-hand menu
 * Click the "sign-in method" tab
 * Click "Google" and enable it
-
-3. Enable the Firebase Database
-* Go to the Firebase Console
-* Click "Database" in the left-hand menu
-* Click the "Create Database" button
-* It will prompt you to set up, rules, for the sake of simplicity, let us choose test mode, for now.
-* On the next screen select any of the locations you prefer.
 
 * Create an app within your Firebase instance for Android, with package name > `com.pensil.pensilapp`
 * Run the following command to get your SHA-1 key:
