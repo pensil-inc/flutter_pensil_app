@@ -2,6 +2,25 @@
 
 Pensil Teach App is an education platform created specifically for the tutors of the digital age. Pensil Teaching app reduce gap between tutor and students and form a bridge no matter how far they are.
 
+## App Screenshots
+
+Login                |  Verify OTP                | Home                |  Batch Detail 
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-1.jpg?raw=true) | ![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-2.jpg?raw=true)|![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-3.jpg?raw=true)|![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-4.jpg?raw=true)
+
+
+Assignment List               |  Videos List              | Docs List             |  Create Batch
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-5.jpg?raw=true) | ![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-6.jpg?raw=true)|![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-7.jpg?raw=true)|![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-8.jpg?raw=true)
+
+Create Batch                |  Select Students               | Select Students               |  Upload Material
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-9.jpg?raw=true) | ![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-10.jpg?raw=true)|![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-11.jpg?raw=true)|![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-12.jpg?raw=true)
+
+Upload Study Material                |  Upload Video               | Upload Assignment
+:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-13.jpg?raw=true) | ![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-14.jpg?raw=true)|![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-15.jpg?raw=true)
+
 ## Project Setup
 
 <details>
