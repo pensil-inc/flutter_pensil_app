@@ -267,6 +267,10 @@ keytool -exportcert -list -v \
      
 </details>
 
+## Server
+This Pensil teaching app uses Node.JS + V8-Engine (Based on Express) in backend to store,retrive and perform logical operation on data for the application.
+The [pensil-app-backend](https://github.com/pensil-inc/pensil-app-backend) repo contains the server side code. 
+
 ## Contributing
 
 If you wish to contribute a change to any of the existing feature or add new in this repo, send a pull request. We welcome and encourage all pull requests. It usually will take us within 24-48 hours to respond to any issue or request.
