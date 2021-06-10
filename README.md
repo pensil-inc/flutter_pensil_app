@@ -1,5 +1,14 @@
 # Pensil Teaching App
 
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/pensil-inc/flutter_pensil_app)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fpensil-inc%2Fflutter_pensil_app&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+![GitHub last commit](https://img.shields.io/github/last-commit/pensil-inc/flutter_pensil_app) 
+![GitHub](https://img.shields.io/github/license/pensil-inc/flutter_pensil_app) 
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/pensil-inc/flutter_pensil_app.svg)](https://github.com/pensil-inc/flutter_pensil_app)
+
+[![GitHub stars](https://img.shields.io/github/stars/pensil-inc/flutter_pensil_app?style=social)](https://github.com/login?return_to=https://github.com/pensil-inc/flutter_pensil_app) 
+![GitHub forks](https://img.shields.io/github/forks/pensil-inc/flutter_pensil_app?style=social)
+
 Pensil Teach App is an education platform created specifically for the tutors of the digital age. Pensil Teaching app reduce gap between tutor and students and form a bridge no matter how far they are.
 
 ## App Screenshots
